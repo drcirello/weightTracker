@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#039BE5</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#4FC3F7</color>
+
+    <!-- Blue Button Pressed -->
+    <color name="colorBlueButtonPressedStart">#FF73A3BF</color>
+    <color name="colorBlueButtonPressedEnd">#FF008080</color>
+
+    <!-- Blue Button Focused-->
+    <color name="colorBlueButtonFocusedStart">#FF87BFE0</color>
+    <color name="colorBlueButtonFocusedEnd">#FF008080</color>
+
+    <!-- Edit Text -->
+    <color name="colorEditTextBackground">#E8E8E8</color>
+
 </resources>
+

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Weight Tracker</string>
+
+    <!-- Account Management -->
+    <string name="login">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_password_helper_line1">Issues logging in?</string>
+    <string name="reset_password_helper_line2">Reset password here.</string>
+    <string name="send_password_reset">Send</string>
+    <string name="create_password">Choose a Password</string>
+
+
+
+
 </resources>

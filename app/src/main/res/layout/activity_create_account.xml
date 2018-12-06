@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/secondary_wallpaper" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/secondary_wallpaper">
+
+        <Button
+            android:id="@+id/create_account_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back" />
+        <TextView
+            android:text="@string/create_account"
+            style="@style/AccountManagementHeaderText" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            style="@style/AccountManagementSecondaryHeaderText"/>
+        <EditText
+            android:id="@+id/create_account_useremail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            style="@style/AccountManagementEditText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_password"
+            style="@style/AccountManagementSecondaryHeaderText" />
+        <EditText
+            android:id="@+id/create_account_userpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            style="@style/AccountManagementEditText" />
+
+        <Button
+            android:id="@+id/create_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:background="@drawable/rounded_button"
+            style="@style/AccountManagementButtons" />
+
+    </LinearLayout>
+</FrameLayout>
