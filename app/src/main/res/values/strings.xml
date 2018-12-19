@@ -2,7 +2,7 @@
     <string name="app_name">Weight Tracker</string>
 
     <!-- Account Management -->
-    <string name="login">Login</string>
+    <string name="login">Log in</string>
     <string name="create_account">Create Account</string>
     <string name="email">Email Address</string>
     <string name="password">Password</string>
@@ -11,8 +11,23 @@
     <string name="reset_password_helper_line2">Reset password here.</string>
     <string name="send_password_reset">Send</string>
     <string name="create_password">Choose a Password</string>
+    <string name="login_failed">Log in Failed. Please try again.</string>
 
+    <!-- Shared Preferences Strings-->
+    <string name="token">com.drcir.weighttracker.TOKEN</string>
+    <string name="token_date">com.drcir.weighttracker.TOKEN_DATE</string>
 
+    <!-- Navigation Bar -->
+    <string name="navigate_charts">Charts</string>
+    <string name="navigate_create">Enter Weight</string>
+    <string name="navigate_view">View Entries</string>
+    <string name="navigate_settings">Settings</string>
 
+    <!-- Weight Entry Page -->
+    <string name="entries_title">Weight Entries</string>
+    <string name="entries_date">Date:</string>
+    <string name="entries_weight">Weight:</string>
+    <string name="entries_date_entered">Recorded:</string>
+    <string name="entries_helper">Note: Inactive Entries will not be displayed in charts</string>
 
 </resources>

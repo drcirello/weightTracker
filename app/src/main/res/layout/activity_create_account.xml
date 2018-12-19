@@ -18,45 +18,62 @@
         android:orientation="vertical"
         android:background="@drawable/secondary_wallpaper">
 
-        <Button
+        <ImageView
             android:id="@+id/create_account_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Back" />
-        <TextView
-            android:text="@string/create_account"
-            style="@style/AccountManagementHeaderText" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            style="@style/AccountManagementSecondaryHeaderText"/>
-        <EditText
-            android:id="@+id/create_account_useremail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/account_management_edittext"
-            style="@style/AccountManagementEditText" />
+            style="@style/BackChevron"
+            android:src="@drawable/back_chevron" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_password"
-            style="@style/AccountManagementSecondaryHeaderText" />
-        <EditText
-            android:id="@+id/create_account_userpass"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/account_management_edittext"
-            style="@style/AccountManagementEditText" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:text="@string/create_account"
+                style="@style/AccountManagementHeaderText" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/create_account_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/create_account"
-            android:background="@drawable/rounded_button"
-            style="@style/AccountManagementButtons" />
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                style="@style/AccountManagementSecondaryHeaderText"/>
+            <EditText
+                android:id="@+id/create_account_useremail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/account_management_edittext"
+                style="@style/AccountManagementEditText" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_password"
+                style="@style/AccountManagementSecondaryHeaderText" />
+            <EditText
+                android:id="@+id/create_account_userpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/account_management_edittext"
+                style="@style/AccountManagementEditText" />
+         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/create_account_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_account"
+                android:background="@drawable/rounded_button"
+                style="@style/AccountManagementButtons" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

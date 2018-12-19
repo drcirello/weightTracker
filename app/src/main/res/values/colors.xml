@@ -15,5 +15,18 @@
     <!-- Edit Text -->
     <color name="colorEditTextBackground">#E8E8E8</color>
 
+    <!-- Chevron -->
+    <color name="colorChevron">#E8E8E8</color>
+
+
+    <!-- Navigation Bar -->
+    <color name="colorNavigationBackground">#212121</color>
+    <color name="colorNavigationUnselected">#999999</color>
+    <color name="colorNavigationSelected">#FFFFFF</color>
+
+    <!-- Recycler Divider -->
+    <color name="colorRecyclerDivider">#999999</color>
+
+
 </resources>
 

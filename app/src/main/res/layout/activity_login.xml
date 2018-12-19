@@ -18,70 +18,86 @@
         android:layout_height="match_parent"
         android:background="@drawable/secondary_wallpaper">
 
-        <Button
-            android:id="@+id/login_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Back" />
-        <TextView
-            android:text="@string/login"
-            style="@style/AccountManagementHeaderText" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            style="@style/AccountManagementSecondaryHeaderText" />
-        <EditText
-            android:id="@+id/login_useremail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/account_management_edittext"
-            style="@style/AccountManagementEditText" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/password"
-            style="@style/AccountManagementSecondaryHeaderText" />
-
-        <EditText
-            android:id="@+id/login_userpass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/account_management_edittext"
-            style="@style/AccountManagementEditText" />
-
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:background="@drawable/rounded_button"
-            style="@style/AccountManagementButtons" />
+            <ImageView
+                android:id="@+id/login_back"
+                style="@style/BackChevron"
+                android:src="@drawable/back_chevron" />
 
         <LinearLayout
-            android:id="@+id/resetPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reset_password_helper_line1"
-                style="@style/AccountManagementHelperText"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reset_password_helper_line2"
-                style="@style/AccountManagementHelperText"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+                <TextView
+                    android:text="@string/login"
+                    style="@style/AccountManagementHeaderText" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/test"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                style="@style/AccountManagementSecondaryHeaderText" />
+            <EditText
+                android:id="@+id/login_useremail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/account_management_edittext"
+                style="@style/AccountManagementEditText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                style="@style/AccountManagementSecondaryHeaderText" />
+
+            <EditText
+                android:id="@+id/login_userpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/account_management_edittext"
+                android:inputType="textPassword"
+                style="@style/AccountManagementEditText" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:background="@drawable/rounded_button"
+                style="@style/AccountManagementButtons"
+                android:layout_marginBottom="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/resetPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reset_password_helper_line1"
+                    style="@style/AccountManagementHelperText"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reset_password_helper_line2"
+                    style="@style/AccountManagementHelperText"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

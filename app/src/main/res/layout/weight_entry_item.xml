@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeightEntry"
+                    android:text="@string/entries_date"/>
+                <TextView
+                    android:id="@+id/entries_date_response"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeightEntry"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeightEntry"
+                    android:text="@string/entries_weight"/>
+                <TextView
+                    android:id="@+id/entries_weight_response"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeightEntry"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/WeightEntry"
+                android:text="@string/entries_date_entered"/>
+            <TextView
+                android:id="@+id/entries_date_entered_response"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/WeightEntry"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:id="@+id/vertical_separator"
+        android:layout_height="match_parent"
+        style="@style/RecyclerVertDivider" />
+
+    <android.widget.Switch
+        android:id="@+id/entries_active_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"/>
+
+</LinearLayout>
