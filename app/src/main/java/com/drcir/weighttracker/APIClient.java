@@ -1,7 +1,5 @@
 package com.example.drcir.weighttracker;
 
-import com.example.drcir.weighttracker.MultipleResource;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -9,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 class APIClient {
 
+    static final String BASE_URL = "https://www.pokergraph.net";
     private static Retrofit retrofit = null;
 
     static Retrofit getClient() {
@@ -19,7 +18,7 @@ class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.pokergraph.net")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

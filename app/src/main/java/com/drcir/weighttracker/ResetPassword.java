@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class ResetPassword extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class ResetPassword extends AppCompatActivity {
 
         EditText useremail = findViewById(R.id.reset_password_useremail);
 
-        Button back = findViewById(R.id.reset_password_back);
+        ImageView back = findViewById(R.id.reset_password_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

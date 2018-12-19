@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class CreateAccount extends AppCompatActivity {
@@ -18,7 +19,7 @@ public class CreateAccount extends AppCompatActivity {
         EditText useremail = findViewById(R.id.create_account_useremail);
         EditText userpass = findViewById(R.id.create_account_userpass);
 
-        Button back = findViewById(R.id.create_account_back);
+        ImageView back = findViewById(R.id.create_account_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
