@@ -1,9 +1,10 @@
-package com.example.drcir.weighttracker;
+package com.drcir.weighttracker;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,29 +61,32 @@ public class Login extends AppCompatActivity {
         }
 
         public void login(String username, String userpass){
+
+            //TODO testing
+            username = "dave";
+            userpass = "password";
+
             Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
             call.enqueue(new Callback<AccountManagement>() {
                 @Override
                 public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-
                     response.body();
-                    if(response.body() != null) {
+                    if(response.isSuccessful() && response.body() != null) {
                         token = response.body().getToken();
                         user = response.body().getUser();
-                        //STORE TOKEN
-                    }
-                    //IF VALID RESPONSE
-                    if(token != null) {
-                        Intent i = new Intent(Login.this, EnterWeight.class);
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.token), token).apply();
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(getResources().getString(R.string.token_date), System.currentTimeMillis()).apply();
+                        Intent i = new Intent(Login.this, WeightEntries.class);
                         Login.this.startActivity(i);
                     }
                     else{
-                        Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<AccountManagement> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
                     call.cancel();
                 }
             });

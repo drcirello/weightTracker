@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.drcir.weighttracker">
+    package="com.drcir.weighttracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Main"
+        <activity android:name="com.drcir.weighttracker.Main"
             android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,16 +19,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
+        <activity android:name="com.drcir.weighttracker.Login"
             android:theme="@style/NoActionBarTheme">
         </activity>
-        <activity android:name=".CreateAccount"
+        <activity android:name="com.drcir.weighttracker.CreateAccount"
             android:theme="@style/NoActionBarTheme">
         </activity>
-        <activity android:name=".ResetPassword"
+        <activity android:name="com.drcir.weighttracker.ResetPassword"
             android:theme="@style/NoActionBarTheme">
         </activity>
-        <activity android:name=".EnterWeight">
+        <activity android:name="com.drcir.weighttracker.WeightEntries"
+            android:label="@string/entries_title">
+        </activity>
+        <activity android:name="com.drcir.weighttracker.EnterWeight">
         </activity>
     </application>
 
