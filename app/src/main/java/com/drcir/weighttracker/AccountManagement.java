@@ -1,4 +1,4 @@
-package com.example.drcir.weighttracker;
+package com.drcir.weighttracker;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

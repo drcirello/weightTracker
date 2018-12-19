@@ -1,4 +1,4 @@
-package com.example.drcir.weighttracker;
+package com.drcir.weighttracker;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.drcir.weighttracker;
+package com.drcir.weighttracker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
