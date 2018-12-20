@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_charts"
-        android:icon="@drawable/back_chevron"
+        android:icon="@drawable/ic_action_line_chart"
         android:title="@string/navigate_charts"/>
     <item android:id="@+id/action_create"
-        android:icon="@drawable/back_chevron"
+        android:icon="@drawable/ic_action_add"
         android:title="@string/navigate_create" />
     <item android:id="@+id/action_view"
-        android:icon="@drawable/back_chevron"
+        android:icon="@drawable/ic_action_list_2"
         android:title="@string/navigate_view" />
     <item android:id="@+id/action_settings"
-        android:icon="@drawable/back_chevron"
+        android:icon="@drawable/ic_action_settings"
         android:title="@string/navigate_settings" />
 </menu>
