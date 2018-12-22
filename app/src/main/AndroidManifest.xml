@@ -11,22 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.drcir.weighttracker.Main"
-            android:theme="@style/NoActionBarTheme">
+        <activity android:name="com.drcir.weighttracker.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.drcir.weighttracker.Login"
-            android:theme="@style/NoActionBarTheme">
+        <activity android:name="com.drcir.weighttracker.Login">
         </activity>
-        <activity android:name="com.drcir.weighttracker.CreateAccount"
-            android:theme="@style/NoActionBarTheme">
+        <activity android:name="com.drcir.weighttracker.CreateAccount">
         </activity>
-        <activity android:name="com.drcir.weighttracker.ResetPassword"
-            android:theme="@style/NoActionBarTheme">
+        <activity android:name="com.drcir.weighttracker.ResetPassword">
         </activity>
         <activity android:name="com.drcir.weighttracker.WeightEntries"
             android:label="@string/entries_title">

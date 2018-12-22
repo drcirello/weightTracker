@@ -21,7 +21,7 @@
 
     <!-- Title Bar -->
     <color name="colorTitleBar">#212121</color>
-    <color name="colorTitleBarText">#212121</color>
+    <color name="colorTitleBarText">#4FC3F7</color>
 
     <!-- Navigation Bar -->
     <color name="colorNavigationBackground">#212121</color>
