@@ -3,6 +3,7 @@
     <color name="colorPrimary">#039BE5</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#4FC3F7</color>
+    <color name="colorMainBackground">#131419</color>
 
     <!-- Blue Button Pressed -->
     <color name="colorBlueButtonPressedStart">#FF73A3BF</color>
@@ -18,11 +19,18 @@
     <!-- Chevron -->
     <color name="colorChevron">#E8E8E8</color>
 
+    <!-- Title Bar -->
+    <color name="colorTitleBar">#212121</color>
+    <color name="colorTitleBarText">#4FC3F7</color>
 
     <!-- Navigation Bar -->
     <color name="colorNavigationBackground">#212121</color>
-    <color name="colorNavigationUnselected">#999999</color>
-    <color name="colorNavigationSelected">#FFFFFF</color>
+    <color name="colorNavigationUnselected">#9C9C9C</color>
+    <color name="colorNavigationSelected">#F3F3F3</color>
+
+    <!-- Weight Entries -->
+    <color name="colorEntryPrimaryText">#8C8B90</color>
+    <color name="colorEntrySecondaryText">#6A686B</color>
 
     <!-- Recycler Divider -->
     <color name="colorRecyclerDivider">#999999</color>
