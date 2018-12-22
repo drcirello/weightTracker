@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +31,8 @@ public class WeightEntries extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weight_entries_recycler);
+        Toolbar myTitlebar = (Toolbar) findViewById(R.id.titleBar);
+        setSupportActionBar(myTitlebar);
         mRecyclerView = (RecyclerView) findViewById(R.id.weight_entries_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this);
