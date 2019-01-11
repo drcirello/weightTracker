@@ -14,6 +14,7 @@
         <activity android:name="com.drcir.weighttracker.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,7 +27,14 @@
         <activity android:name="com.drcir.weighttracker.WeightEntries"
             android:label="@string/entries_title">
         </activity>
-        <activity android:name="com.drcir.weighttracker.EnterWeight">
+        <activity android:name="com.drcir.weighttracker.Charts"
+            android:label="@string/charts_title">
+        </activity>
+        <activity android:name="com.drcir.weighttracker.EnterWeight"
+            android:label="@string/enter_weight_title">
+        </activity>
+        <activity android:name="com.drcir.weighttracker.Settings"
+            android:label="@string/settings_title">
         </activity>
     </application>
 

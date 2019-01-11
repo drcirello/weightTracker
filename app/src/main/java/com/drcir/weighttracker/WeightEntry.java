@@ -7,23 +7,25 @@ public class WeightEntry {
 
     @SerializedName("date")
     @Expose
-    private String date;
+    private long date;
+
     @SerializedName("weight")
     @Expose
     private Integer weight;
+
     @SerializedName("dateEntered")
     @Expose
-    private String dateEntered;
+    private long dateEntered;
 
     @SerializedName("active")
     @Expose
     private Boolean active;
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -35,11 +37,11 @@ public class WeightEntry {
         this.weight = weight;
     }
 
-    public String getDateEntered() {
+    public long getDateEntered() {
         return dateEntered;
     }
 
-    public void setDateEntered(String dateEntered) {
+    public void setDateEntered(long dateEntered) {
         this.dateEntered = dateEntered;
     }
 

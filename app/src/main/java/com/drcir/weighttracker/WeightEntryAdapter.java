@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.WeightEntryViewHolder> {
@@ -40,9 +43,9 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
 
     @Override
     public void onBindViewHolder(WeightEntryViewHolder holder, int position) {
-        holder.mDate.setText(mDataset.get(position).getDate());
+        holder.mDate.setText(Utils.formatDate(mDataset.get(position).getDate()));
         holder.mWeight.setText(mDataset.get(position).getWeight().toString());
-        holder.mEnteredDate.setText(mDataset.get(position).getDateEntered());
+        holder.mEnteredDate.setText(Utils.formatDate(mDataset.get(position).getDateEntered()));
         holder.mActive.setChecked(mDataset.get(position).getActive());
     }
 

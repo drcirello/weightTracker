@@ -75,10 +75,50 @@
         <item name="android:background">@color/colorRecyclerDivider</item>
     </style>
 
+    <!-- Charts Page -->
+    <style name="CurrentWeight">
+        <item name="android:textSize">72sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="CurrentWeightTitleText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">-5dp</item>
+    </style>
+
+    <style name="StatsText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+    </style>
+
+
+    <style name="SettingsOptionsHeaderText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SettingsOptionsSelectedText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorEntryPrimaryText</item>
+        <item name="android:popupBackground">@color/colorTitleBar</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
     <style name="BackChevron">
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_margin">15dp</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColor">@color/colorTitleBarText</item>
+        <item name="android:headerDividersEnabled">true</item>
     </style>
 
 

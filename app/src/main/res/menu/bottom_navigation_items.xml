@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_charts"
         android:icon="@drawable/ic_action_line_chart"
+        android:orderInCategory="1"
         android:title="@string/navigate_charts"/>
     <item android:id="@+id/action_create"
         android:icon="@drawable/ic_action_add"
+        android:orderInCategory="2"
         android:title="@string/navigate_create" />
     <item android:id="@+id/action_view"
         android:icon="@drawable/ic_action_list_2"
+        android:orderInCategory="3"
         android:title="@string/navigate_view" />
     <item android:id="@+id/action_settings"
         android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="4"
         android:title="@string/navigate_settings" />
 </menu>
