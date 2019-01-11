@@ -1,13 +1,11 @@
 package com.drcir.weighttracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.gson.JsonObject;
 
@@ -22,12 +20,14 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String token = sharedPref.getString(getString(R.string.token), null);
-        Long tokenDate = sharedPref.getLong(getString(R.string.token_date), System.currentTimeMillis());
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        String token = mSharedPreferences.getString(getString(R.string.token_preference), null);
+        Long tokenDate = mSharedPreferences.getLong(getString(R.string.token_date_preference), System.currentTimeMillis());
 
         Intent i = new Intent(Main.this, Login.class);
         Main.this.startActivity(i);
+        finish();
 
         /*
         if(token != null){
@@ -89,8 +89,10 @@ public class Main extends AppCompatActivity {
                 response.body();
                 if(response.isSuccessful() && response.body() != null) {
                     String token = response.body().getToken();
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.token), token).apply();
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(getResources().getString(R.string.token_date), System.currentTimeMillis()).apply();
+                    SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+                    mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
+                    mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
                 }
             }
 

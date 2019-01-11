@@ -14,8 +14,12 @@
     <string name="login_failed">Log in Failed. Please try again.</string>
 
     <!-- Shared Preferences Strings-->
-    <string name="token">com.drcir.weighttracker.TOKEN</string>
-    <string name="token_date">com.drcir.weighttracker.TOKEN_DATE</string>
+    <string name="token_preferences">com.drcir.weighttracker.TOKEN_PREFERENCES</string>
+    <string name="token_preference">com.drcir.weighttracker.TOKEN</string>
+    <string name="token_date_preference">com.drcir.weighttracker.TOKEN_DATE</string>
+    <string name="unit_preferences">com.drcir.weighttracker.UNIT_PREFERENCES</string>
+    <string name="unit_type_preference">com.drcir.weighttracker.UNIT_TYPE</string>
+    <string name="chart_range_preference">com.drcir.weighttracker.CHART_RANGE</string>
 
     <!-- Navigation Bar -->
     <string name="navigate_charts">Charts</string>
@@ -24,10 +28,53 @@
     <string name="navigate_settings">Settings</string>
 
     <!-- Weight Entry Page -->
-    <string name="entries_title">Weight Entries</string>
     <string name="entries_date">Date:</string>
     <string name="entries_weight">Weight:</string>
     <string name="entries_date_entered">Recorded:</string>
     <string name="entries_helper">Note: Inactive Entries will not be displayed in charts</string>
+
+    <!-- Charts Page -->
+    <string name="charts_current">Current Weight</string>
+    <string name="charts_high">High</string>
+    <string name="charts_low">Low</string>
+    <string name="charts_year_high">52wk High</string>
+    <string name="charts_year_low">52wk Low</string>
+    <string name="charts_six_mo_change">6mo Change</string>
+    <string name="charts_year_change">1yr Change</string>
+    <string name="button_one_week">7D</string>
+    <string name="button_one_month">1M</string>
+    <string name="button_three_month">3M</string>
+    <string name="button_six_month">6M</string>
+    <string name="button_one_year">1Y</string>
+    <string name="button_ytd">YTD</string>
+    <string name="button_max">MAX</string>
+
+    <!-- Toolbar Titles -->
+    <string name="charts_title">Charts</string>
+    <string name="entries_title">Weight Entries</string>
+    <string name="enter_weight_title">Enter Weight</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Settings Page -->
+    <string name="settings_units">Units Type</string>
+    <string name="settings_chart_range">Default Chart Range</string>
+    <string name="settings_logout">Logout</string>
+    <string name="settings_default_units">Pounds</string>
+    <string name="settings_default_range">Max</string>
+
+    <string-array name="chart_ranges">
+        <item>7 days</item>
+        <item>1 Month</item>
+        <item>3 Months</item>
+        <item>6 Months</item>
+        <item>1 Year</item>
+        <item>YTD</item>
+        <item>Max</item>
+    </string-array>
+
+    <string-array name="unit_types">
+        <item>Pounds</item>
+        <item>Kilograms</item>
+    </string-array>
 
 </resources>

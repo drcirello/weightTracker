@@ -1,8 +1,8 @@
 package com.drcir.weighttracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,12 +70,15 @@ public class Login extends AppCompatActivity {
                 public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
                     response.body();
                     if(response.isSuccessful() && response.body() != null) {
-                        token = response.body().getToken();
+                        token = "JWT " + response.body().getToken();
                         user = response.body().getUser();
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.token), token).apply();
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(getResources().getString(R.string.token_date), System.currentTimeMillis()).apply();
-                        Intent i = new Intent(Login.this, WeightEntries.class);
+                        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+                        mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
+                        mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
+                        Intent i = new Intent(Login.this, Charts.class);
                         Login.this.startActivity(i);
+                        finish();
                     }
                     else{
                         Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();

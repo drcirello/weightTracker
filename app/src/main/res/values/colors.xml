@@ -35,6 +35,17 @@
     <!-- Recycler Divider -->
     <color name="colorRecyclerDivider">#999999</color>
 
+    <!-- Chart Background -->
+    <color name="colorChartBackground">#FFFFFF</color>
+
+    <!-- Chart Background -->
+    <color name="colorChartButtonBackground">#F7F7F7</color>
+    <color name="colorChartButtonSelected">#212121</color>
+
+    <!-- Text -->
+    <color name="colorWhiteText">#FFFFFF</color>
+
+    <color name="colorDivider">#9C9C9C</color>
 
 </resources>
 
