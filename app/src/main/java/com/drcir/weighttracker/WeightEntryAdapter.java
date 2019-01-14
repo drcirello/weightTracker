@@ -8,8 +8,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.WeightEntryViewHolder> {
 
@@ -32,6 +35,7 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     }
 
     public WeightEntryAdapter(List<WeightEntry> weightEntries) {
+        Collections.reverse(weightEntries);
         mDataset = weightEntries;
     }
 
@@ -44,9 +48,15 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     @Override
     public void onBindViewHolder(WeightEntryViewHolder holder, int position) {
         holder.mDate.setText(Utils.formatDate(mDataset.get(position).getDate()));
-        holder.mWeight.setText(mDataset.get(position).getWeight().toString());
-        holder.mEnteredDate.setText(Utils.formatDate(mDataset.get(position).getDateEntered()));
-        holder.mActive.setChecked(mDataset.get(position).getActive());
+        holder.mWeight.setText(Float.toString(mDataset.get(position).getWeight()));
+        if(mDataset.get(position).getDateEntered() != 0)
+            holder.mEnteredDate.setText(Utils.formatDate(mDataset.get(position).getDateEntered()));
+        else
+            holder.mEnteredDate.setText(Utils.formatDate(mDataset.get(position).getDate()));
+        if(mDataset.get(position).getActive() != null)
+            holder.mActive.setChecked(mDataset.get(position).getActive());
+        else
+            holder.mActive.setChecked(true);
     }
 
     @Override

@@ -1,13 +1,9 @@
 package com.drcir.weighttracker;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +27,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +41,36 @@ import retrofit2.Response;
 
 public class Charts extends AppCompatActivity {
 
-    APIInterface apiInterface;
     LineChart chart;
     XAxis xAxis;
-    List<WeightEntry> dataSet;
+    static List<WeightEntry> dataSet;
     //Maximum chartSize
     float chartMaxSize;
     Button selectedButton = null;
+    ChartStatistics stats;
+    LineDataSet entrySet;
+    List<Entry> entries;
+    RelativeLayout chartFrame;
+    String token;
+
+    Button viewOneWeek;
+    Button viewOneMonth;
+    Button viewThreeMonth;
+    Button viewSixMonth;
+    Button viewYear;
+    Button viewYtd;
+    Button viewMax;
+
+    TextView charts_current_weight;
+    TextView charts_high_response;
+    TextView charts_low_response;
+    TextView charts_year_high_response;
+    TextView charts_year_low_response;
+    TextView charts_six_mo_change_response;
+    TextView charts_year_change_response;
+    LinearLayout charts_failed_message;
+
+    ProgressBar pBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -94,114 +111,30 @@ public class Charts extends AppCompatActivity {
                 });
 
         SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
+        token = sharedPrefToken.getString(getString(R.string.token_preference), null);
 
-        String token = sharedPrefToken.getString(getString(R.string.token_preference), null);
-        Utils.getWeightEntries(apiInterface, token);
+        getWeightEntries(token);
 
-        //TODO setup real data
-        dataSet = TestData.getTestData();
-        Collections.sort(dataSet, new Comparator<WeightEntry>(){
-            @Override
-            public int compare(WeightEntry data1, WeightEntry data2){
-                return (int)(data1.getDate() - (int)(data2.getDate()));
-            }
-        });
+        viewOneWeek = findViewById(R.id.viewOneWeek);
+        viewOneMonth = findViewById(R.id.viewOneMonth);
+        viewThreeMonth = findViewById(R.id.viewThreeMonth);
+        viewSixMonth = findViewById(R.id.viewSixMonth);
+        viewYear = findViewById(R.id.viewYear);
+        viewYtd = findViewById(R.id.viewYtd);
+        viewMax = findViewById(R.id.viewMax);
 
-        ChartStatistics stats = new ChartStatistics(dataSet);
+        charts_current_weight = findViewById(R.id.currentWeight);
+        charts_high_response = findViewById(R.id.charts_high_response);
+        charts_low_response = findViewById(R.id.charts_low_response);
+        charts_year_high_response = findViewById(R.id.charts_year_high_response);
+        charts_year_low_response = findViewById(R.id.charts_year_low_response);
+        charts_six_mo_change_response = findViewById(R.id.charts_six_mo_change_response);
+        charts_year_change_response = findViewById(R.id.charts_year_change_response);
+        charts_failed_message = findViewById(R.id.failedMessage);
+        pBar = findViewById(R.id.pBar);
 
-        TextView charts_current_weight = findViewById(R.id.currentWeight);
-        TextView charts_high_response = findViewById(R.id.charts_high_response);
-        TextView charts_low_response = findViewById(R.id.charts_low_response);
-        TextView charts_year_high_response = findViewById(R.id.charts_year_high_response);
-        TextView charts_year_low_response = findViewById(R.id.charts_year_low_response);
-        TextView charts_six_mo_change_response = findViewById(R.id.charts_six_mo_change_response);
-        TextView charts_year_change_response = findViewById(R.id.charts_year_change_response);
-
-        charts_current_weight.setText(String.valueOf(stats.getCurrentWeight()));
-        charts_high_response.setText(String.valueOf(stats.getHighMax()));
-        charts_low_response.setText(String.valueOf(stats.getLowMax()));
-        charts_year_high_response.setText(String.valueOf(stats.getHigh1y()));
-        charts_year_low_response.setText(String.valueOf(stats.getLow1y()));
-        charts_six_mo_change_response.setText(String.valueOf(stats.getChange6mo()));
-        charts_year_change_response.setText(String.valueOf(stats.getChange1y()));
-
-        //Set Chart Entries
-        List<Entry> entries = new ArrayList<Entry>();
-        for(int i = 0; i < dataSet.size(); i++){
-            entries.add(i, new Entry((float)dataSet.get(i).getDate(), dataSet.get(i).getWeight()));
-        }
-
-        final LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
-        //entriesSet options
-        entrySet.setDrawValues(false);
-        entrySet.setDrawFilled(true);
-        entrySet.setDrawCircles(false);
-        LineData lineData = new LineData(entrySet);
         chart = findViewById(R.id.lineChart);
-        //chart options
-        //Disable Chart Interactions
-        chart.setTouchEnabled(false);
-        chart.getDescription().setEnabled(false);
-        chart.setScaleEnabled(false);
-
-        Legend l = chart.getLegend();
-        l.setEnabled(false);
-
-        //Axis options
-        YAxis leftAxis = chart.getAxisLeft();
-        YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setEnabled(false);
-
-        xAxis  = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(true);
-
-        chart.setData(lineData);
-        chartMaxSize = chart.getHighestVisibleX();
-
-        FrameLayout chartFrame = findViewById(R.id.chartFrame);
-        chartFrame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Charts.this, "This is my Toast message!",
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-        final Button viewOneWeek = findViewById(R.id.viewOneWeek);
-        final Button viewOneMonth = findViewById(R.id.viewOneMonth);
-        final Button viewThreeMonth = findViewById(R.id.viewThreeMonth);
-        final Button viewSixMonth = findViewById(R.id.viewSixMonth);
-        final Button viewYear = findViewById(R.id.viewYear);
-        final Button viewYtd = findViewById(R.id.viewYtd);
-        final Button viewMax = findViewById(R.id.viewMax);
-        //Set Chart Range to Preference Size, default Max
-        int defaultRange;
-        try {
-            defaultRange = sharedPrefUnit.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
-        }
-        catch (Exception e){
-            defaultRange = DataDefinitions.MAX;
-        }
-
-        Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
-        ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
-        ranges.put(DataDefinitions.ONE_MONTH, R.id.viewOneMonth);
-        ranges.put(DataDefinitions.THREE_MONTHS, R.id.viewThreeMonth);
-        ranges.put(DataDefinitions.SIX_MONTHS, R.id.viewSixMonth);
-        ranges.put(DataDefinitions.ONE_YEAR, R.id.viewYear);
-        ranges.put(DataDefinitions.YTD, R.id.viewYtd);
-        ranges.put(DataDefinitions.MAX, R.id.viewMax);
-
-        int resource_id = ranges.get(defaultRange);
-        try {
-            setViewport((Button) findViewById(resource_id));
-        }
-        catch (Exception e){
-            setViewport(viewMax);
-        }
+        chartFrame = findViewById(R.id.chartFrame);
 
         //Chart Button Handling
         viewOneWeek.setOnClickListener(new View.OnClickListener() {
@@ -260,55 +193,85 @@ public class Charts extends AppCompatActivity {
         setXaxisScale(chartMaxSize);
     }
 
+    public void setInitialViewport(){
+        Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
+        ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
+        ranges.put(DataDefinitions.ONE_MONTH, R.id.viewOneMonth);
+        ranges.put(DataDefinitions.THREE_MONTHS, R.id.viewThreeMonth);
+        ranges.put(DataDefinitions.SIX_MONTHS, R.id.viewSixMonth);
+        ranges.put(DataDefinitions.ONE_YEAR, R.id.viewYear);
+        ranges.put(DataDefinitions.YTD, R.id.viewYtd);
+        ranges.put(DataDefinitions.MAX, R.id.viewMax);
+        int defaultRange;
+        //Set Chart Range to Preference Size, default Max
+        try {
+            SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
+            defaultRange = sharedPrefUnit.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
+        }
+        catch (Exception e){
+            defaultRange = DataDefinitions.MAX;
+        }
+
+        int resource_id = ranges.get(defaultRange);
+        try {
+            setViewport((Button) findViewById(resource_id));
+        }
+        catch (Exception e){
+            setViewport(viewMax);
+        }
+    }
+
     public void setViewport(Button button){
-        if(selectedButton != null)
-            selectedButton.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorChartButtonBackground));
-        selectedButton = button;
-        button.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorTitleBar));
-        switch(button.getId()){
-            case R.id.viewOneWeek:
-                if(chartMaxSize < TimeConversions.SEVEN_DAYS_MILLI)
+        if(dataSet != null) {
+            if (selectedButton != null)
+                selectedButton.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorChartButtonBackground));
+            selectedButton = button;
+            button.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorTitleBar));
+            switch (button.getId()) {
+                case R.id.viewOneWeek:
+                    if (chartMaxSize < TimeConversions.SEVEN_DAYS_MILLI)
+                        maxView();
+                    else
+                        updateChartViewport(TimeConversions.SEVEN_DAYS_MILLI);
+                    break;
+                case R.id.viewOneMonth:
+                    if (chartMaxSize < TimeConversions.ONE_MONTH_MILLI)
+                        maxView();
+                    else
+                        updateChartViewport(TimeConversions.ONE_MONTH_MILLI);
+                    break;
+                case R.id.viewThreeMonth:
+                    if (chartMaxSize < TimeConversions.THREE_MONTHS_MILLI)
+                        maxView();
+                    else
+                        updateChartViewport(TimeConversions.THREE_MONTHS_MILLI);
+                    break;
+                case R.id.viewSixMonth:
+                    if (chartMaxSize < TimeConversions.SIX_MONTHS_MILLI + TimeConversions.ONE_DAY_MILLI)
+                        maxView();
+                    else
+                        updateChartViewport(TimeConversions.SIX_MONTHS_MILLI);
+                    break;
+                case R.id.viewYear:
+                    if (chartMaxSize < TimeConversions.ONE_YEAR_MILLI)
+                        maxView();
+                    else
+                        updateChartViewport(TimeConversions.ONE_YEAR_MILLI);
+                    break;
+                case R.id.viewYtd:
+                    Calendar cal = Calendar.getInstance();
+                    int days = cal.get(cal.DAY_OF_YEAR);
+                    float ytd = days * TimeConversions.ONE_DAY_MILLI;
+                    if (chartMaxSize < ytd)
+                        maxView();
+                    else
+                        updateChartViewport(ytd);
+                    break;
+                case R.id.viewMax:
                     maxView();
-                else
-                    updateChartViewport(TimeConversions.SEVEN_DAYS_MILLI);
-                break;
-            case R.id.viewOneMonth:
-                if(chartMaxSize < TimeConversions.ONE_MONTH_MILLI)
-                    maxView();
-                else
-                    updateChartViewport(TimeConversions.ONE_MONTH_MILLI);
-                break;
-            case R.id.viewThreeMonth:
-                if(chartMaxSize < TimeConversions.THREE_MONTHS_MILLI)
-                    maxView();
-                else
-                    updateChartViewport(TimeConversions.THREE_MONTHS_MILLI);
-                break;
-            case R.id.viewSixMonth:
-                if(chartMaxSize < TimeConversions.SIX_MONTHS_MILLI + TimeConversions.ONE_DAY_MILLI)
-                    maxView();
-                else
-                    updateChartViewport(TimeConversions.SIX_MONTHS_MILLI);
-                break;
-            case R.id.viewYear:
-                if(chartMaxSize < TimeConversions.ONE_YEAR_MILLI)
-                    maxView();
-                else
-                    updateChartViewport(TimeConversions.ONE_YEAR_MILLI);
-                break;
-            case R.id.viewYtd:
-                Calendar cal = Calendar.getInstance();
-                int days = cal.get(cal.DAY_OF_YEAR);
-                float ytd = days * TimeConversions.ONE_DAY_MILLI;
-                if(chartMaxSize < ytd)
-                    maxView();
-                else
-                    updateChartViewport(ytd);
-                break;
-            case R.id.viewMax:
-                maxView();
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -340,6 +303,116 @@ public class Charts extends AppCompatActivity {
         }
     }
 
+    public void setChartStatistics(){
+        stats = new ChartStatistics(dataSet);
+        DecimalFormat form = Utils.getDecimalFormat();
+        charts_current_weight.setText(form.format(stats.getCurrentWeight()));
+        charts_high_response.setText(form.format(stats.getHighMax()));
+        charts_low_response.setText(form.format(stats.getLowMax()));
+        charts_year_high_response.setText(form.format(stats.getHigh1y()));
+        charts_year_low_response.setText(form.format(stats.getLow1y()));
+        charts_six_mo_change_response.setText(form.format(stats.getChange6mo()));
+        charts_year_change_response.setText(form.format(stats.getChange1y()));
+    }
+
+    public void createChart(){
+        //Set Chart Entries
+        List<Entry> entries = new ArrayList<Entry>();
+        for(int i = 0; i < dataSet.size(); i++){
+            entries.add(i, new Entry((float)dataSet.get(i).getDate(), dataSet.get(i).getWeight()));
+        }
+        LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
+
+        //entriesSet options
+        entrySet.setDrawValues(false);
+        entrySet.setDrawFilled(true);
+        entrySet.setDrawCircles(false);
+
+        LineData lineData = new LineData(entrySet);
+        //chart options
+        //Disable Chart Interactions
+        chart.setTouchEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.setScaleEnabled(false);
+
+        Legend l = chart.getLegend();
+        l.setEnabled(false);
+
+        //Axis options
+        YAxis leftAxis = chart.getAxisLeft();
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        xAxis  = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(true);
+
+        chart.setData(lineData);
+        chartMaxSize = chart.getHighestVisibleX();
+
+        chartFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Charts.this, "This is my Toast message!",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void removeLoadingScreen(){
+        chart.setVisibility(View.VISIBLE);
+        pBar.setVisibility(View.GONE);
+        charts_failed_message.setVisibility(View.GONE);
+        LinearLayout buttonBar = findViewById(R.id.buttonBar);
+        buttonBar.setVisibility(View.VISIBLE);
+    }
+
+    public void dataRetrievalFailure(){
+        String failedText = getString(R.string.charts_api_failed_fields);
+        charts_current_weight.setText(failedText);
+        charts_high_response.setText(failedText);
+        charts_low_response.setText(failedText);
+        charts_year_high_response.setText(failedText);
+        charts_year_low_response.setText(failedText);
+        charts_six_mo_change_response.setText(failedText);
+        charts_year_change_response.setText(failedText);
+
+        chart.setVisibility(View.INVISIBLE);
+        pBar.setVisibility(View.GONE);
+        charts_failed_message.setVisibility(View.VISIBLE);
+        chartFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getWeightEntries(token);
+            }
+        });
+    }
+
+    public void getWeightEntries(String token){
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+        call.enqueue(new Callback<List<WeightEntry>>() {
+            @Override
+            public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                if(response.isSuccessful()) {
+                    pBar.setVisibility(View.VISIBLE);
+                    charts_failed_message.setVisibility(View.GONE);
+                    dataSet = response.body();
+                    setChartStatistics();
+                    createChart();
+                    setInitialViewport();
+                    removeLoadingScreen();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                call.cancel();
+                dataRetrievalFailure();
+            }
+        });
+    };
+
     public void updateChartViewportFullscreen(float scale){
         //get current right side of viewport
         float highViewX = chart.getHighestVisibleX();
@@ -356,29 +429,4 @@ public class Charts extends AppCompatActivity {
         chart.setVisibleXRangeMaximum(maxScale);
     }
 
-    public void getWeightEntries(){
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        String token = mSharedPreferences.getString(getString(R.string.token_preference), null);
-
-        Call<WeightEntry> call = apiInterface.getWeightData(token);
-        call.enqueue(new Callback<WeightEntry>() {
-            @Override
-            public void onResponse(Call<WeightEntry> call, Response<WeightEntry> response) {
-                if(response.isSuccessful()) {
-                    response.body();
-
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<WeightEntry>>(){}.getType();
-                    //List<WeightEntry> we = gson.fromJson(response.body(), listType);
-                    //dataset = we;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WeightEntry> call, Throwable t) {
-                call.cancel();
-            }
-        });
-    };
 }

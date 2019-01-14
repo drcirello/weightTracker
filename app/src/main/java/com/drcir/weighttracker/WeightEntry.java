@@ -9,7 +9,7 @@ public class WeightEntry {
     @Expose
     private long date;
 
-    @SerializedName("weight")
+    @SerializedName("weight_times_10")
     @Expose
     private Integer weight;
 
@@ -29,8 +29,8 @@ public class WeightEntry {
         this.date = date;
     }
 
-    public Integer getWeight() {
-        return weight;
+    public float getWeight() {
+        return weight / (float)10.0;
     }
 
     public void setWeight(Integer weight) {

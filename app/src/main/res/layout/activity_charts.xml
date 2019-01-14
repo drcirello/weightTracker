@@ -38,7 +38,7 @@
             android:layout_marginTop="5dp"
             android:background="@color/colorDivider" />
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/chartFrame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,16 +49,46 @@
                 android:id="@+id/lineChart"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/colorChartBackground" />
-        </FrameLayout>
+                android:background="@color/colorChartBackground"
+                android:visibility="invisible"/>
+            <ProgressBar
+                android:id="@+id/pBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="visible"/>
+            <LinearLayout
+                android:id="@+id/failedMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ChartsLoadingFailed"
+                    android:text="@string/charts_api_failed_message_part1" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ChartsLoadingFailed"
+                    android:text="@string/charts_api_failed_message_part2" />
+            </LinearLayout>
+        </RelativeLayout>
         <LinearLayout
+            android:id="@+id/buttonBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/colorChartBackground"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            style="?android:attr/buttonBarStyle">
+            style="?android:attr/buttonBarStyle"
+            android:visibility="invisible">
             <Button
                 android:id="@+id/viewOneWeek"
                 android:layout_width="0dp"
@@ -236,7 +266,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
     <android.support.design.widget.BottomNavigationView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

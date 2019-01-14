@@ -2,6 +2,8 @@ package com.drcir.weighttracker;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -18,6 +20,10 @@ interface APIInterface {
     Call<JsonObject> postLogout(@Header("Authorization") String token);
 
     @FormUrlEncoded
+    @POST("/tracker/weight/create/")
+    Call<JsonObject> createWeight(@Header("Authorization") String token, @Field("active") Boolean active, @Field("player") int player, @Field("date") long date, @Field("weight") int weight);
+
+    @FormUrlEncoded
     @POST("/rest-auth/refresh-token/")
     Call<AccountManagement> postRefreshToken(@Field("token") String token);
 
@@ -25,7 +31,7 @@ interface APIInterface {
     @POST("/rest-auth/verify-token/")
     Call<JsonObject> postLogin(@Field("token") String token);
 
-    @POST("/tracker/weight/data/rest/")
-    Call<WeightEntry> getWeightData(@Header("Authorization") String token);
+    @POST("/tracker/weight/data/user/")
+    Call<List<WeightEntry>> getWeightData(@Header("Authorization") String token);
 
 }

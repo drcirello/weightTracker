@@ -1,9 +1,8 @@
 package com.drcir.weighttracker;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,11 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,15 +25,21 @@ import retrofit2.Response;
 
 public class WeightEntries extends AppCompatActivity {
 
-    List<WeightEntry> dataset;
-    APIInterface apiInterface;
+    static List<WeightEntry> dataSet;
+    String token;
+
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+
+    RelativeLayout entriesFrame;
+    LinearLayout entriesFailedMessage;
+    ProgressBar pBar;
+
+    int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        RecyclerView mRecyclerView;
-        RecyclerView.Adapter mAdapter;
         RecyclerView.LayoutManager mLayoutManager;
 
         setContentView(R.layout.weight_entries_recycler);
@@ -71,47 +76,60 @@ public class WeightEntries extends AppCompatActivity {
                 });
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.weight_entries_recycler_view);
+        entriesFailedMessage = findViewById(R.id.failedMessage);
+        pBar = findViewById(R.id.pBar);
+        entriesFrame = (RelativeLayout) findViewById(R.id.entriesFrame);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.weight_entries_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        dataset = TestData.getTestData();
-        //getWeightEntries();
-
-        mAdapter = new WeightEntryAdapter (dataset);
-        mRecyclerView.setAdapter(mAdapter);
-
+        SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        token = sharedPrefToken.getString(getString(R.string.token_preference), null);
+        getWeightEntries(token);
 
     }
 
-    /*
-    public void getWeightEntries(){
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String token = sharedPref.getString(getString(R.string.token), null);
-        Call<WeightEntry> call = apiInterface.getWeightData(token);
-        call.enqueue(new Callback<WeightEntry>() {
+    public void dataRetrievalFailure(){
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        pBar.setVisibility(View.GONE);
+        entriesFailedMessage.setVisibility(View.VISIBLE);
+        entriesFrame.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<WeightEntry> call, Response<WeightEntry> response) {
-                if(response.isSuccessful()) {
-                    response.body();
+            public void onClick(View v) {
+                getWeightEntries(token);
+                entriesFrame.setOnClickListener(null);
+            }
+        });
+    }
 
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<WeightEntry>>(){}.getType();
-                    //List<WeightEntry> we = gson.fromJson(response.body(), listType);
-                    //dataset = we;
+    public void getWeightEntries(String token){
+        pBar.setVisibility(View.VISIBLE);
+        entriesFailedMessage.setVisibility(View.GONE);
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+        call.enqueue(new Callback<List<WeightEntry>>() {
+            @Override
+            public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                if(response.isSuccessful()) {
+                    dataSet = response.body();
+                    mAdapter = new WeightEntryAdapter (dataSet);
+                    mRecyclerView.setAdapter(mAdapter);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    pBar.setVisibility(View.GONE);
+                    entriesFailedMessage.setVisibility(View.GONE);
                 }
             }
 
             @Override
-            public void onFailure(Call<WeightEntry> call, Throwable t) {
+            public void onFailure(Call<List<WeightEntry>> call, Throwable t)
+            {
+                dataRetrievalFailure();
                 call.cancel();
             }
         });
     };
-    */
 }
