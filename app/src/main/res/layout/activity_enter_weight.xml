@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/TitleBar" />
+    <ru.cleverpumpkin.calendar.CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/CalendarViewCustomStyle" />
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,36 +24,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context="com.drcir.weighttracker.EnterWeight">
-
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
-
-        <TextView
-            android:id="@+id/dateEntry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/weightEntry"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/EntryStyle"
+                android:text="@string/enter_weight_selected" />
+            <View
+                android:layout_height="match_parent"
+                style="@style/EnterWeightVertDivider" />
 
+            <TextView
+                android:id="@+id/selectedDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/EntryStyle" />
+        </LinearLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivider" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/EntryStyle"
+                android:text="@string/enter_weight_weight" />
+            <View
+                android:layout_height="match_parent"
+                style="@style/EnterWeightVertDivider" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="numberDecimal"
+                style="@style/EntryStyle"
+                android:text="200" />
+        </LinearLayout>
         <Button
+            android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit Entry"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View All Entries" />
+            android:background="@drawable/submit_button"
+            android:text="@string/enter_weight_submit"/>
     </LinearLayout>
-
     <android.support.design.widget.BottomNavigationView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -55,4 +91,4 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_items" />
 
-</FrameLayout>
+</LinearLayout>
