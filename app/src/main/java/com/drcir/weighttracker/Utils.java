@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,34 +19,19 @@ public class Utils {
     //converts to Month DD, YYYY format
     public static String formatDate(long unixDate){
         Date date = new java.util.Date(unixDate);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         return sdf.format(date);
     }
 
+    public static String formatSelectedDate(long unixDate){
+        Date date = new java.util.Date(unixDate);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("EEE, MMMM dd yyyy", Locale.US);
+        return sdf.format(date);
+    }
 
-
-    public static void getWeightEntries(APIInterface apiInterface, String token){
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<WeightEntry> call = apiInterface.getWeightData(token);
-        call.enqueue(new Callback<WeightEntry>() {
-            @Override
-            public void onResponse(Call<WeightEntry> call, Response<WeightEntry> response) {
-                if(response.isSuccessful()) {
-                    response.body();
-
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<WeightEntry>>(){}.getType();
-                    //List<WeightEntry> we = gson.fromJson(response.body(), listType);
-                    //dataset = we;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WeightEntry> call, Throwable t) {
-                call.cancel();
-            }
-        });
-    };
+    public static DecimalFormat getDecimalFormat(){
+        return new DecimalFormat("0.0");
+    }
 
     /*public void refreshToken(String token){
         APIInterface apiInterface;
