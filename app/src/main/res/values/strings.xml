@@ -48,12 +48,20 @@
     <string name="button_one_year">1Y</string>
     <string name="button_ytd">YTD</string>
     <string name="button_max">MAX</string>
+    <string name="charts_api_failed_fields">---</string>
+    <string name="charts_api_failed_message_part1">Failed to retrieve data.</string>
+    <string name="charts_api_failed_message_part2">Click here to try again.</string>
 
     <!-- Toolbar Titles -->
     <string name="charts_title">Charts</string>
     <string name="entries_title">Weight Entries</string>
     <string name="enter_weight_title">Enter Weight</string>
     <string name="settings_title">Settings</string>
+
+    <!-- Enter Weight Page -->
+    <string name="enter_weight_selected">Selected Date</string>
+    <string name="enter_weight_weight">Enter Weight</string>
+    <string name="enter_weight_submit">Submit</string>
 
     <!-- Settings Page -->
     <string name="settings_units">Units Type</string>
