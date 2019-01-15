@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorChartBackground" />
+    </FrameLayout>
+    <LinearLayout
+    android:id="@+id/buttonBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/colorChartBackground"
+    style="?android:attr/buttonBarStyle">
+    <Button
+        android:id="@+id/viewOneWeek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_one_week" />
+    <Button
+        android:id="@+id/viewOneMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_one_month" />
+    <Button
+        android:id="@+id/viewThreeMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_three_month" />
+    <Button
+        android:id="@+id/viewSixMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_six_month" />
+    <Button
+        android:id="@+id/viewYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_one_year" />
+    <Button
+        android:id="@+id/viewYtd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_ytd" />
+    <Button
+        android:id="@+id/viewMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorChartButtonBackground"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/button_max" />
+    </LinearLayout>
+</LinearLayout>

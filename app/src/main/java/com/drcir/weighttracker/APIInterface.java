@@ -21,7 +21,7 @@ interface APIInterface {
 
     @FormUrlEncoded
     @POST("/tracker/weight/create/")
-    Call<JsonObject> createWeight(@Header("Authorization") String token, @Field("active") Boolean active, @Field("player") int player, @Field("date") long date, @Field("weight") int weight);
+    Call<JsonObject> createWeight(@Header("Authorization") String token, @Field("active") Boolean active, @Field("player") int player, @Field("date") long date, @Field("weight") float weight);
 
     @FormUrlEncoded
     @POST("/rest-auth/refresh-token/")
