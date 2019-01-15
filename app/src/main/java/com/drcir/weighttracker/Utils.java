@@ -1,13 +1,14 @@
 package com.drcir.weighttracker;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
-import java.lang.reflect.Type;
+import com.google.gson.JsonObject;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -33,26 +34,28 @@ public class Utils {
         return new DecimalFormat("0.0");
     }
 
-    /*public void refreshToken(String token){
-        APIInterface apiInterface;
-        Call<AccountManagement> call = apiInterface.postRefreshToken(token);
-        call.enqueue(new Callback<AccountManagement>() {
+    public static void logout(SharedPreferences sharedPrefToken, final Context context, final Intent intent){
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        String token = sharedPrefToken.getString(context.getString(R.string.token_JWT_preference), null);
+        SharedPreferences.Editor mEditorToken = sharedPrefToken.edit();
+        mEditorToken.clear();
+        mEditorToken.commit();
+
+
+        Call<JsonObject> call = apiInterface.postLogout(token);
+        call.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-                response.body();
-                if(response.isSuccessful() && response.body() != null) {
-                    String token = response.body().getToken();
-                    SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                    mEditor..putString(getResources().getString(R.string.token), token).apply();
-                    mEditor.putLong(getResources().getString(R.string.token_date), System.currentTimeMillis()).apply();
-                }
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                context.startActivity(intent);
             }
 
             @Override
-            public void onFailure(Call<AccountManagement> call, Throwable t) {
-                call.cancel();
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                context.startActivity(intent);
             }
         });
-    };*/
+    };
+
 }

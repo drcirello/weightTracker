@@ -125,31 +125,9 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                logout(sharedPrefToken.getString(getString(R.string.token_preference), null));
+                Intent intent = new Intent(Settings.this, Main.class);
+                Utils.logout(sharedPrefToken, Settings.this, intent);
             }
         });
     }
-
-    public void logout(String token){
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        SharedPreferences.Editor mEditorToken = sharedPrefToken.edit();
-        mEditorToken.clear();
-        mEditorToken.commit();
-        Call<JsonObject> call = apiInterface.postLogout(token);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Intent intent = new Intent(Settings.this, Main.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                Settings.this.startActivity(intent);
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Intent i = new Intent(Settings.this, Login.class);
-                Settings.this.startActivity(i);
-            }
-        });
-    };
 }
