@@ -1,6 +1,8 @@
 package com.drcir.weighttracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
+import java.text.DecimalFormat;
 import java.util.*;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.cleverpumpkin.calendar.CalendarDate;
 import ru.cleverpumpkin.calendar.CalendarView;
 
@@ -86,8 +95,29 @@ public class EnterWeight extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EnterWeight.this, "Submit!",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Entry Created", Toast.LENGTH_LONG).show();
+                /*
+                SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+                String token = sharedPrefToken.getString(getString(R.string.token_preference), null);
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
+                final EditText enteredWeightView = findViewById(R.id.enteredWeight);
+                DecimalFormat form = Utils.getDecimalFormat();
+                float enteredWeight = Float.parseFloat(form.format(enteredWeightView.getText().toString()));
+                Call<JsonObject> call = apiInterface.createWeight(token, true, 1, selectedDate, enteredWeight);
+                call.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Toast.makeText(getApplicationContext(), "Entry Created", Toast.LENGTH_LONG).show();
+                        enteredWeightView.setText(null);
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "FAILED", Toast.LENGTH_LONG).show();
+                        call.cancel();
+                    }
+                });*/
             }
         });
 

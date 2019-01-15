@@ -64,12 +64,12 @@
                 android:layout_height="match_parent"
                 style="@style/EnterWeightVertDivider" />
             <EditText
+                android:id="@+id/enteredWeight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="numberDecimal"
-                style="@style/EntryStyle"
-                android:text="200" />
+                style="@style/EntryStyle" />
         </LinearLayout>
         <Button
             android:id="@+id/submit"
