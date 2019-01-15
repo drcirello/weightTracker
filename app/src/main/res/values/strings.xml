@@ -16,6 +16,7 @@
     <!-- Shared Preferences Strings-->
     <string name="token_preferences">com.drcir.weighttracker.TOKEN_PREFERENCES</string>
     <string name="token_preference">com.drcir.weighttracker.TOKEN</string>
+    <string name="token_JWT_preference">com.drcir.weighttracker.TOKEN_JWT</string>
     <string name="token_date_preference">com.drcir.weighttracker.TOKEN_DATE</string>
     <string name="unit_preferences">com.drcir.weighttracker.UNIT_PREFERENCES</string>
     <string name="unit_type_preference">com.drcir.weighttracker.UNIT_TYPE</string>

@@ -98,7 +98,7 @@ public class EnterWeight extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Entry Created", Toast.LENGTH_LONG).show();
                 /*
                 SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                String token = sharedPrefToken.getString(getString(R.string.token_preference), null);
+                String token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
 
                 final EditText enteredWeightView = findViewById(R.id.enteredWeight);

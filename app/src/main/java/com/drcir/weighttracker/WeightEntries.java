@@ -88,7 +88,7 @@ public class WeightEntries extends AppCompatActivity {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        token = sharedPrefToken.getString(getString(R.string.token_preference), null);
+        token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
         getWeightEntries(token);
 
     }
