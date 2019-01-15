@@ -34,8 +34,10 @@ public class Login extends AppCompatActivity {
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(Login.this, Main.class);
-                    Login.this.startActivity(i);
+                    Intent intent = new Intent(Login.this, Main.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    Login.this.startActivity(intent);
+                    finish();
                 }
             });
 
@@ -69,18 +71,20 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
                     response.body();
-                    if(response.isSuccessful() && response.body() != null) {
-                        token = "JWT " + response.body().getToken();
+                    try{
+                        token =response.body().getToken();
                         user = response.body().getUser();
                         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
                         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
                         mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
+                        mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
                         mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                        Intent i = new Intent(Login.this, Charts.class);
-                        Login.this.startActivity(i);
+                        Intent intent = new Intent(Login.this, Charts.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Login.this.startActivity(intent);
                         finish();
                     }
-                    else{
+                    catch(Exception e){
                         Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
                     }
                 }

@@ -23,8 +23,10 @@ public class CreateAccount extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(CreateAccount.this, Main.class);
-                CreateAccount.this.startActivity(i);
+                Intent intent = new Intent(CreateAccount.this, Main.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                CreateAccount.this.startActivity(intent);
+                finish();
             }
         });
 
@@ -33,7 +35,11 @@ public class CreateAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //attempt account creation
+                Intent intent = new Intent(CreateAccount.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                CreateAccount.this.startActivity(intent);
                 Toast.makeText(CreateAccount.this, "Created!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

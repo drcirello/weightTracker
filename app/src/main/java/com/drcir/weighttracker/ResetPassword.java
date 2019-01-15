@@ -22,8 +22,10 @@ public class ResetPassword extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ResetPassword.this, Login.class);
-                ResetPassword.this.startActivity(i);
+                Intent intent = new Intent(ResetPassword.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ResetPassword.this.startActivity(intent);
+                finish();
             }
         });
 
@@ -33,8 +35,10 @@ public class ResetPassword extends AppCompatActivity {
             public void onClick(View v) {
                 //Generate and send Password
                 Toast.makeText(ResetPassword.this, "Password Reset!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(ResetPassword.this, Login.class);
-                ResetPassword.this.startActivity(i);
+                Intent intent = new Intent(ResetPassword.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                ResetPassword.this.startActivity(intent);
+                finish();
             }
         });
     }
