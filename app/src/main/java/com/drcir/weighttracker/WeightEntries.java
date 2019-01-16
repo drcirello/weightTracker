@@ -110,7 +110,7 @@ public class WeightEntries extends AppCompatActivity {
         pBar.setVisibility(View.VISIBLE);
         entriesFailedMessage.setVisibility(View.GONE);
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+        Call<List<WeightEntry>> call = apiInterface.getWeightEntries(token);
         call.enqueue(new Callback<List<WeightEntry>>() {
             @Override
             public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {

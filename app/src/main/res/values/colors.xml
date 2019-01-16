@@ -29,7 +29,7 @@
     <color name="colorNavigationSelected">#F3F3F3</color>
 
     <!-- Weight Entries -->
-    <color name="colorEntryPrimaryText">#8C8B90</color>
+    <color name="colorEntryPrimaryText">#FFFFFF</color>
     <color name="colorEntrySecondaryText">#6A686B</color>
 
 
@@ -50,6 +50,10 @@
     <color name="colorCalendarMonth">#4FC3F7</color>
     <color name="colorCalendarSubmitButton">#4FC3F7</color>
     <color name="colorWeekdayBar">#6A686B</color>
+
+    <color name="colorDeleteButton">#FF008080</color>
+    <color name="colorDeleteButtonFocused">#FF558080</color>
+    <color name="colorDeleteButtonPressed">#FF0080</color>
 
 
 </resources>

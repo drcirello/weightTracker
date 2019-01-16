@@ -13,13 +13,9 @@ public class WeightEntry {
     @Expose
     private Integer weight;
 
-    @SerializedName("dateEntered")
+    @SerializedName("weight_id")
     @Expose
-    private long dateEntered;
-
-    @SerializedName("active")
-    @Expose
-    private Boolean active;
+    private int weightId;
 
     public long getDate() {
         return date;
@@ -37,20 +33,11 @@ public class WeightEntry {
         this.weight = weight;
     }
 
-    public long getDateEntered() {
-        return dateEntered;
+    public int getWeightId() {
+        return weightId;
     }
 
-    public void setDateEntered(long dateEntered) {
-        this.dateEntered = dateEntered;
+    public void setWeightId(int weightId) {
+        this.weightId = weightId;
     }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
 }

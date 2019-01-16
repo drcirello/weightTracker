@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 interface APIInterface {
 
@@ -24,6 +25,10 @@ interface APIInterface {
     Call<JsonObject> createWeight(@Header("Authorization") String token, @Field("active") Boolean active, @Field("player") int player, @Field("date") long date, @Field("weight") float weight);
 
     @FormUrlEncoded
+    @POST("/tracker/weight/data/delete/")
+    Call<JsonObject> deleteWeight(@Header("Authorization") String token, @Field("weight_id") int weight_id);
+
+    @FormUrlEncoded
     @POST("/rest-auth/refresh-token/")
     Call<AccountManagement> postRefreshToken(@Field("token") String token);
 
@@ -33,5 +38,8 @@ interface APIInterface {
 
     @POST("/tracker/weight/data/user/")
     Call<List<WeightEntry>> getWeightData(@Header("Authorization") String token);
+
+    @POST("/tracker/weight/data/entries/")
+    Call<List<WeightEntry>> getWeightEntries(@Header("Authorization") String token);
 
 }
