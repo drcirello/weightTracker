@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/EntryStyle"
+                style="@style/EnterWeightTextStyle"
                 android:text="@string/enter_weight_selected" />
             <View
                 android:layout_height="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/EntryStyle" />
+                style="@style/EnterWeightTextStyle" />
         </LinearLayout>
         <View
             android:id="@+id/divider"
@@ -58,24 +58,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                style="@style/EntryStyle"
+                style="@style/EnterWeightTextStyle"
                 android:text="@string/enter_weight_weight" />
             <View
                 android:layout_height="match_parent"
                 style="@style/EnterWeightVertDivider" />
-            <EditText
-                android:id="@+id/enteredWeight"
+            <FrameLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
-                style="@style/EntryStyle" />
+                android:background="@color/colorTitleBar">
+                <EditText
+                    android:id="@+id/enteredWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/enter_weight_hint"
+                    style="@style/EnterWeightEditTextStyle" />
+            </FrameLayout>
         </LinearLayout>
         <Button
             android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/submit_button"
+            android:theme="@style/AppTheme.SubmitButton"
             android:text="@string/enter_weight_submit"/>
     </LinearLayout>
     <android.support.design.widget.BottomNavigationView

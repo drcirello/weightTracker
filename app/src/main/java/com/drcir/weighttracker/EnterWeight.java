@@ -3,11 +3,13 @@ package com.drcir.weighttracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import kotlin.Unit;
@@ -34,6 +37,8 @@ public class EnterWeight extends AppCompatActivity {
 
     Long selectedDate;
     TextView selectedDateView;
+    float enteredWeight;
+    EditText enteredWeightView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,9 @@ public class EnterWeight extends AppCompatActivity {
                     }
                 });
 
+        enteredWeightView = findViewById(R.id.enteredWeight);
+
+        //setup calendar
         final CalendarView calendarView = findViewById(R.id.calendarView);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
         CalendarDate initialDate = new CalendarDate(calendar.getTime());
@@ -77,7 +85,6 @@ public class EnterWeight extends AppCompatActivity {
         List<CalendarDate> preselectedDates = new ArrayList<>();
         preselectedDates.add(initialDate);
         calendarView.setupCalendar(initialDate, null, null, CalendarView.SelectionMode.SINGLE, preselectedDates, firstDayOfWeek, false);
-
         selectedDate = initialDate.getTimeInMillis();
         selectedDateView = findViewById(R.id.selectedDate);
         selectedDateView.setText(Utils.formatSelectedDate(selectedDate));
@@ -95,31 +102,60 @@ public class EnterWeight extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Entry Created", Toast.LENGTH_LONG).show();
-                /*
                 SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
                 String token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
 
-                final EditText enteredWeightView = findViewById(R.id.enteredWeight);
-                DecimalFormat form = Utils.getDecimalFormat();
-                float enteredWeight = Float.parseFloat(form.format(enteredWeightView.getText().toString()));
-                Call<JsonObject> call = apiInterface.createWeight(token, true, 1, selectedDate, enteredWeight);
-                call.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        Toast.makeText(getApplicationContext(), "Entry Created", Toast.LENGTH_LONG).show();
-                        enteredWeightView.setText(null);
-                    }
+                Date date = new Date(selectedDate);
+                String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
+                if(verifyWeight(enteredWeightView.getText().toString())){
+                    Call<Void> call = apiInterface.createWeight(token, modifiedDate, enteredWeight);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful())
+                                Toast.makeText(getApplicationContext(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
+                            else
+                                createFailed();
+                        }
 
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "FAILED", Toast.LENGTH_LONG).show();
-                        call.cancel();
-                    }
-                });*/
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            createFailed();
+                            call.cancel();
+                        }
+                    });
+                }
+                else {
+                    createInvalid();
+                }
+                enteredWeightView.setText(null);
             }
         });
-
     }
+
+    public void createFailed(){
+        Toast.makeText(getApplicationContext(), getString(R.string.enter_weight_failed), Toast.LENGTH_LONG).show();
+    }
+
+    public void createInvalid(){
+        Toast.makeText(getApplicationContext(), getString(R.string.enter_weight_invalid), Toast.LENGTH_LONG).show();
+    }
+
+    public boolean verifyWeight(String entry){
+        boolean verified = true;
+        try {
+            DecimalFormat form = Utils.getDecimalFormat();
+            String preciseWeight = form.format(Float.parseFloat(entry));
+            enteredWeight = Float.parseFloat(preciseWeight);
+            if(enteredWeight < 0 || enteredWeight >= 1000)
+                verified = false;
+        }
+        catch (Exception e){
+            verified = false;
+        }
+
+        return verified;
+    }
+
 }
