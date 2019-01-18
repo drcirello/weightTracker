@@ -51,17 +51,18 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
 
     @Override
     public void onBindViewHolder(final WeightEntryViewHolder holder, int position) {
+            final View viewThemeContext = holder.itemView;
             holder.mDate.setText(Utils.formatDate(mDataSet.get(position).getDate()));
-            holder.mWeight.setText(String.format("%f", mDataSet.get(position).getWeight()));
+            holder.mWeight.setText(Float.toString(mDataSet.get(position).getWeight()));
             holder.mDelete.setOnClickListener(new View.OnClickListener() {
-                public void onClick(final View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(viewThemeContext.getContext());
                     builder.setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 int currentPosition = holder.getAdapterPosition();
-                                removeEntry(v.getContext(), currentPosition);
+                                removeEntry(viewThemeContext.getContext(), currentPosition);
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -81,19 +82,13 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     public void removeEntry(final Context context, final int position){
         int weightId = mDataSet.get(position).getWeightId();
 
-        mDataSet.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mDataSet.size());
-        Toast.makeText(context, "Entry Deleted", Toast.LENGTH_LONG).show();
-
-        /*TODO
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         SharedPreferences sharedPrefToken = context.getSharedPreferences(context.getString(R.string.token_preferences), Context.MODE_PRIVATE);
         String token = sharedPrefToken.getString(context.getString(R.string.token_JWT_preference), null);
-        Call<JsonObject> call = apiInterface.deleteWeight(token, weightId);
-        call.enqueue(new Callback<JsonObject>() {
+        Call<Void> call = apiInterface.deleteWeight(token, weightId);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()) {
                     mDataSet.remove(position);
                     notifyItemRemoved(position);
@@ -103,13 +98,13 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
+            public void onFailure(Call<Void> call, Throwable t)
             {
                 Toast.makeText(context, "Error Deleting Entry", Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });
-        */
+
     }
 
 }
