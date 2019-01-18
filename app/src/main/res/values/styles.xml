@@ -117,11 +117,6 @@
         <item name="android:layout_margin">15dp</item>
     </style>
 
-    <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog">
-        <item name="android:textColor">@color/colorTitleBarText</item>
-        <item name="android:headerDividersEnabled">true</item>
-    </style>
-
     <style name="ChartsLoadingFailed">
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">16sp</item>
@@ -154,9 +149,39 @@
         <item name="android:background">@color/colorRecyclerDivider</item>
     </style>
 
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+    <style name="AppTheme.DeleteButton" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@android:color/holo_red_dark</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.SubmitButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorCalendarSubmitButton</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="EnterWeightTextStyle">
+        <item name="android:background">@color/colorTitleBar</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="EnterWeightEditTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLength">6</item>
+    </style>
+
+    <style name="RecyclerEmptyText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
 </resources>

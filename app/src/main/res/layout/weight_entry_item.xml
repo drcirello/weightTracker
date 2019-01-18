@@ -60,7 +60,7 @@
         android:id="@+id/entries_delete_entry"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:theme="@style/AppTheme.Button"
+        android:theme="@style/AppTheme.DeleteButton"
         android:text="@string/entries_delete_button"/>
 
 </LinearLayout>

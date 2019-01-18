@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class WeightEntries extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
+    RelativeLayout emptyView;
 
     RelativeLayout entriesFrame;
     LinearLayout entriesFailedMessage;
@@ -81,6 +83,7 @@ public class WeightEntries extends AppCompatActivity {
         entriesFrame = (RelativeLayout) findViewById(R.id.entriesFrame);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.weight_entries_recycler_view);
+        emptyView = (RelativeLayout) findViewById(R.id.empty_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
@@ -118,7 +121,16 @@ public class WeightEntries extends AppCompatActivity {
                     dataSet = response.body();
                     mAdapter = new WeightEntryAdapter (dataSet);
                     mRecyclerView.setAdapter(mAdapter);
-                    mRecyclerView.setVisibility(View.VISIBLE);
+                    if (dataSet.isEmpty()) {
+                        mRecyclerView.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        emptyView.setVisibility(View.GONE);
+                    }
+
+
                     pBar.setVisibility(View.GONE);
                     entriesFailedMessage.setVisibility(View.GONE);
                 }

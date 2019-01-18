@@ -33,6 +33,8 @@
     <string name="entries_weight">Weight:\u0020</string>
     <string name="entries_helper">Note: Inactive Entries will not be displayed in charts</string>
     <string name="entries_delete_button">Delete</string>
+    <string name="no_data_available_line_one">Looks like you haven\'t entered any weights!</string>
+    <string name="no_data_available_line_two">Make some entries and check back here.</string>
 
     <!-- Charts Page -->
     <string name="charts_current">Current Weight</string>
@@ -63,6 +65,10 @@
     <string name="enter_weight_selected">Selected Date</string>
     <string name="enter_weight_weight">Enter Weight</string>
     <string name="enter_weight_submit">Submit</string>
+    <string name="enter_weight_hint">0</string>
+    <string name="enter_weight_created">Entry Created</string>
+    <string name="enter_weight_failed">Failed to Create Entry</string>
+    <string name="enter_weight_invalid">\u0020\u0020\u0020Invalid Weight Entered.\nMust be between 0 and 999.</string>
 
     <!-- Settings Page -->
     <string name="settings_units">Units Type</string>
