@@ -5,6 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class WeightEntry {
 
+    public WeightEntry(long date, Integer weight){
+        this.setDate(date);
+        this.setWeight(weight);
+    }
+
     @SerializedName("date")
     @Expose
     private long date;

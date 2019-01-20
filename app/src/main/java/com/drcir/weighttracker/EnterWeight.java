@@ -37,7 +37,7 @@ public class EnterWeight extends AppCompatActivity {
 
     Long selectedDate;
     TextView selectedDateView;
-    float enteredWeight;
+    int enteredWeight;
     EditText enteredWeightView;
 
     @Override
@@ -108,7 +108,8 @@ public class EnterWeight extends AppCompatActivity {
 
                 Date date = new Date(selectedDate);
                 String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
-                if(verifyWeight(enteredWeightView.getText().toString())){
+                enteredWeight = Integer.parseInt(enteredWeightView.getText().toString());
+                if(verifyWeight()){
                     Call<Void> call = apiInterface.createWeight(token, modifiedDate, enteredWeight);
                     call.enqueue(new Callback<Void>() {
                         @Override
@@ -126,9 +127,6 @@ public class EnterWeight extends AppCompatActivity {
                         }
                     });
                 }
-                else {
-                    createInvalid();
-                }
                 enteredWeightView.setText(null);
             }
         });
@@ -138,24 +136,17 @@ public class EnterWeight extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), getString(R.string.enter_weight_failed), Toast.LENGTH_LONG).show();
     }
 
-    public void createInvalid(){
-        Toast.makeText(getApplicationContext(), getString(R.string.enter_weight_invalid), Toast.LENGTH_LONG).show();
+    public void createInvalid(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
-    public boolean verifyWeight(String entry){
+    public boolean verifyWeight(){
         boolean verified = true;
-        try {
-            DecimalFormat form = Utils.getDecimalFormat();
-            String preciseWeight = form.format(Float.parseFloat(entry));
-            enteredWeight = Float.parseFloat(preciseWeight);
-            if(enteredWeight < 0 || enteredWeight >= 1000)
-                verified = false;
-        }
-        catch (Exception e){
+        if(enteredWeight < 0 || enteredWeight >= 1000) {
+            createInvalid(getString(R.string.enter_weight_invalid));
             verified = false;
         }
 
         return verified;
     }
-
 }

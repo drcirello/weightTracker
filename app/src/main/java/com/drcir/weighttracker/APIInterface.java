@@ -30,7 +30,7 @@ interface APIInterface {
 
     @FormUrlEncoded
     @POST("/tracker/weight/data/create/")
-    Call<Void> createWeight(@Header("Authorization") String token, @Field("date") String date, @Field("weight") float weight);
+    Call<Void> createWeight(@Header("Authorization") String token, @Field("date") String date, @Field("weight") int weight);
 
     @POST("/tracker/weight/data/delete/{weight_id}")
     Call<Void> deleteWeight(@Header("Authorization") String token, @Path("weight_id") int weight_id);

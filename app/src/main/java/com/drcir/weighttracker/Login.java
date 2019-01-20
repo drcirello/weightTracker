@@ -63,8 +63,12 @@ public class Login extends AppCompatActivity {
         public void login(String username, String userpass){
 
             //TODO testing
-            username = "dave";
-            userpass = "password";
+            //username = "dave";
+            //userpass = "password";
+            username = "weighttrackertest@gmail.com";
+            userpass = "Weighttest123$";
+            //username = "weightTrackerTest2@gmail.com";
+            //userpass = "Weighttest123$";
 
             Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
             call.enqueue(new Callback<AccountManagement>() {

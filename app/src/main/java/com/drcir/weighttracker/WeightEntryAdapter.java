@@ -53,7 +53,7 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     public void onBindViewHolder(final WeightEntryViewHolder holder, int position) {
             final View viewThemeContext = holder.itemView;
             holder.mDate.setText(Utils.formatDate(mDataSet.get(position).getDate()));
-            holder.mWeight.setText(Float.toString(mDataSet.get(position).getWeight()));
+            holder.mWeight.setText(Integer.toString(Math.round(mDataSet.get(position).getWeight())));
             holder.mDelete.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(viewThemeContext.getContext());
