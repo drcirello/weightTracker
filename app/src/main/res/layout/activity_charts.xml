@@ -11,7 +11,26 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/TitleBar" />
 
+    <RelativeLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/noDataImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ChartsNoDataText"
+            android:text="@string/charts_no_data_helper"/>
+
+    </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

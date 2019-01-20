@@ -12,11 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.drcir.weighttracker.data.DataDefinitions;
 import com.github.mikephil.charting.charts.LineChart;
@@ -26,7 +26,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -36,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -308,6 +308,16 @@ public class Charts extends AppCompatActivity {
         charts_year_change_response.setText(form.format(stats.getChange1y()));
     }
 
+    public void setFakeChartStatistics(){
+        charts_current_weight.setText(R.string.no_data_current_weight);
+        charts_high_response.setText(R.string.no_data_high);
+        charts_low_response.setText(R.string.no_data_low);
+        charts_year_high_response.setText(R.string.no_data_year_high);
+        charts_year_low_response.setText(R.string.no_data_year_low);
+        charts_six_mo_change_response.setText(R.string.no_data_six_mo_change);
+        charts_year_change_response.setText(R.string.no_data_year_change);
+    }
+
     public void createChart(){
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
@@ -394,10 +404,20 @@ public class Charts extends AppCompatActivity {
                     pBar.setVisibility(View.VISIBLE);
                     charts_failed_message.setVisibility(View.GONE);
                     dataSet = response.body();
-                    setChartStatistics();
-                    createChart();
-                    setInitialViewport();
-                    removeLoadingScreen();
+                    if(dataSet.isEmpty()){
+                        dataSet = ExampleData.getFakedData();
+                        setFakeChartStatistics();
+                        createChart();
+                        setInitialViewport();
+                        removeLoadingScreen();
+                        addNoDataCover();
+                    }
+                    else{
+                        setChartStatistics();
+                        createChart();
+                        setInitialViewport();
+                        removeLoadingScreen();
+                    }
                 }
             }
 
@@ -408,5 +428,18 @@ public class Charts extends AppCompatActivity {
             }
         });
     };
+
+    public void addNoDataCover(){
+        LinearLayout mainView = findViewById(R.id.mainView);
+        RelativeLayout noDataView = findViewById(R.id.noData);
+        ImageView noDataImage = findViewById(R.id.noDataImage);
+        Blurry.with(Charts.this)
+                .radius(25)
+                .sampling(1)
+                .capture(mainView)
+                .into(noDataImage);
+        mainView.setVisibility(View.GONE);
+        noDataView.setVisibility(View.VISIBLE);
+    }
 
 }
