@@ -6,11 +6,10 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-public class MyValueFormatter {
+public class AxisValueFormatter {
 
-    static class MyValueFormatterShort implements IAxisValueFormatter {
+    static class XaxisValueFormatterShort implements IAxisValueFormatter {
 
             private String[] mValues;
 
@@ -24,11 +23,11 @@ public class MyValueFormatter {
 
     }
 
-    static class MyValueFormatterMedium implements IAxisValueFormatter {
+    static class XaxisValueFormatterShortFullscreen implements IAxisValueFormatter {
 
         private String[] mValues;
 
-        private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
+        private final SimpleDateFormat mFormat = new SimpleDateFormat("dd. MMM ''yy", Locale.ENGLISH);
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
@@ -38,11 +37,25 @@ public class MyValueFormatter {
 
     }
 
-    static class MyValueFormatterLong implements IAxisValueFormatter {
+    static class XaxisValueFormatterMedium implements IAxisValueFormatter {
 
         private String[] mValues;
 
-        private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM yy", Locale.ENGLISH);
+        private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            long millis = (long) value;
+            return mFormat.format(new Date(millis));
+        }
+
+    }
+
+    static class XaxisValueFormatterLong implements IAxisValueFormatter {
+
+        private String[] mValues;
+
+        private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {

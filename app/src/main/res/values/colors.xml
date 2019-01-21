@@ -42,6 +42,7 @@
     <!-- Chart Background -->
     <color name="colorChartButtonBackground">#F7F7F7</color>
     <color name="colorChartButtonSelected">#212121</color>
+    <color name="colorChartBorder">#212121</color>
 
     <!-- Text -->
     <color name="colorWhiteText">#FFFFFF</color>

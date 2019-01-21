@@ -44,6 +44,7 @@ public class Charts extends AppCompatActivity {
 
     LineChart chart;
     XAxis xAxis;
+    YAxis leftAxis;
     List<WeightEntry> dataSet;
     //Maximum chartSize
     float chartMaxSize;
@@ -190,7 +191,7 @@ public class Charts extends AppCompatActivity {
 
     public void maxView(){
         chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxSize);
+        ChartUtils.setXaxisScale(xAxis, chartMaxSize, false);
         selectedButtonRange = DataDefinitions.MAX;
     }
 
@@ -230,61 +231,25 @@ public class Charts extends AppCompatActivity {
             button.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorTitleBar));
             switch (button.getId()) {
                 case R.id.viewOneWeek:
-                    if (chartMaxSize < TimeConversions.SEVEN_DAYS_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.SEVEN_DAYS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.SEVEN_DAYS_MILLI);
-                        selectedButtonRange = DataDefinitions.ONE_WEEK;
-                    }
+                    chartButtonPressed(TimeConversions.SEVEN_DAYS_MILLI, DataDefinitions.ONE_WEEK);
                     break;
                 case R.id.viewOneMonth:
-                    if (chartMaxSize < TimeConversions.ONE_MONTH_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.ONE_MONTH_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.ONE_MONTH_MILLI);
-                        selectedButtonRange = DataDefinitions.ONE_MONTH;
-                    }
+                    chartButtonPressed(TimeConversions.ONE_MONTH_MILLI, DataDefinitions.ONE_MONTH);
                     break;
                 case R.id.viewThreeMonth:
-                    if (chartMaxSize < TimeConversions.THREE_MONTHS_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.THREE_MONTHS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.THREE_MONTHS_MILLI);
-                        selectedButtonRange = DataDefinitions.THREE_MONTHS;
-                    }
+                    chartButtonPressed(TimeConversions.THREE_MONTHS_MILLI, DataDefinitions.THREE_MONTHS);
                     break;
                 case R.id.viewSixMonth:
-                    if (chartMaxSize < TimeConversions.SIX_MONTHS_MILLI + TimeConversions.ONE_DAY_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.SIX_MONTHS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.SIX_MONTHS_MILLI);
-                        selectedButtonRange = DataDefinitions.SIX_MONTHS;
-                    }
+                    chartButtonPressed(TimeConversions.SIX_MONTHS_MILLI, DataDefinitions.SIX_MONTHS);
                     break;
                 case R.id.viewYear:
-                    if (chartMaxSize < TimeConversions.ONE_YEAR_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.ONE_YEAR_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.ONE_YEAR_MILLI);
-                        selectedButtonRange = DataDefinitions.ONE_YEAR;
-                    }
+                    chartButtonPressed(TimeConversions.ONE_YEAR_MILLI, DataDefinitions.ONE_YEAR);
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
                     int days = cal.get(cal.DAY_OF_YEAR);
-                    float ytd = days * TimeConversions.ONE_DAY_MILLI;
-                    if (chartMaxSize < ytd)
-                        maxView();
-                    else {
-                        ChartUtils.updateChartViewport(chart, ytd);
-                        ChartUtils.setXaxisScale(xAxis, ytd);
-                        selectedButtonRange = DataDefinitions.YTD;
-                    }
+                    float ytd = (days - 1) * TimeConversions.ONE_DAY_MILLI;
+                    chartButtonPressed(ytd, DataDefinitions.YTD);
                     break;
                 case R.id.viewMax:
                     maxView();
@@ -294,7 +259,15 @@ public class Charts extends AppCompatActivity {
         }
     }
 
-
+    public void chartButtonPressed(float timeMillis, int selectedbutton){
+        if (chartMaxSize < timeMillis)
+            maxView();
+        else {
+            chart = ChartUtils.updateChartViewport(chart, timeMillis);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, false);
+            selectedButtonRange = selectedbutton;
+        }
+    }
 
     public void setChartStatistics(){
         stats = new ChartStatistics(dataSet);
@@ -342,7 +315,7 @@ public class Charts extends AppCompatActivity {
         l.setEnabled(false);
 
         //Axis options
-        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis = chart.getAxisLeft();
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
 
@@ -352,6 +325,11 @@ public class Charts extends AppCompatActivity {
 
         chart.setData(lineData);
         chartMaxSize = chart.getHighestVisibleX();
+        chart.setDrawBorders(true);
+        chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
+        chart.setBorderWidth(1);
+        chart.setExtraLeftOffset(2f);
+        chart.setAutoScaleMinMaxEnabled(true);
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

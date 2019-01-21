@@ -3,6 +3,7 @@ package com.drcir.weighttracker;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,7 +15,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,13 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChartFullScreen extends AppCompatActivity {
+public class ChartFullScreen extends AppCompatActivity implements OnChartGestureListener {
 
     List<WeightEntry> dataSet;
     LineChart chart;
     XAxis xAxis;
-    //Maximum chartSize
-    float chartMaxSize;
+    //Chart min/max view position
+    float chartMinValue;
+    float chartMaxValue;
 
     Button selectedButton = null;
 
@@ -49,8 +52,6 @@ public class ChartFullScreen extends AppCompatActivity {
         setContentView(R.layout.activity_chart_fullscreen);
         Type listType = new TypeToken<ArrayList<WeightEntry>>(){}.getType();
         dataSet = new Gson().fromJson(getIntent().getStringExtra("DATASET"), listType);
-
-
 
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
@@ -75,16 +76,14 @@ public class ChartFullScreen extends AppCompatActivity {
 
         LineData lineData = new LineData(entrySet);
         //chart options
-        //Disable Chart Interactions
-        chart.setTouchEnabled(true);
         chart.getDescription().setEnabled(false);
-        chart.setScaleEnabled(false);
+        chart.setScaleXEnabled(true);
+        chart.setScaleYEnabled(false);
 
         Legend l = chart.getLegend();
         l.setEnabled(false);
 
         //Axis options
-        YAxis leftAxis = chart.getAxisLeft();
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
 
@@ -93,7 +92,15 @@ public class ChartFullScreen extends AppCompatActivity {
         xAxis.setDrawGridLines(true);
 
         chart.setData(lineData);
-        chartMaxSize = chart.getHighestVisibleX();
+        chartMinValue = entries.get(0).getX();
+        chartMaxValue = chart.getHighestVisibleX();
+        //more chart options
+        chart.setDrawBorders(true);
+        chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
+        chart.setBorderWidth(1);
+        chart.setExtraLeftOffset(2f);
+        chart.setAutoScaleMinMaxEnabled(true);
+        chart.setOnChartGestureListener(this);
 
         Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
         ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
@@ -171,55 +178,25 @@ public class ChartFullScreen extends AppCompatActivity {
             button.setBackgroundColor(ContextCompat.getColor(ChartFullScreen.this, R.color.colorTitleBar));
             switch (button.getId()) {
                 case R.id.viewOneWeek:
-                    if (chartMaxSize < TimeConversions.SEVEN_DAYS_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.SEVEN_DAYS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.SEVEN_DAYS_MILLI);
-                    }
+                    chartButtonPressed(TimeConversions.SEVEN_DAYS_MILLI);
                     break;
                 case R.id.viewOneMonth:
-                    if (chartMaxSize < TimeConversions.ONE_MONTH_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.ONE_MONTH_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.ONE_MONTH_MILLI);
-                    }
+                    chartButtonPressed(TimeConversions.ONE_MONTH_MILLI);
                     break;
                 case R.id.viewThreeMonth:
-                    if (chartMaxSize < TimeConversions.THREE_MONTHS_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.THREE_MONTHS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.THREE_MONTHS_MILLI);
-                    }
+                    chartButtonPressed(TimeConversions.THREE_MONTHS_MILLI);
                     break;
                 case R.id.viewSixMonth:
-                    if (chartMaxSize < TimeConversions.SIX_MONTHS_MILLI + TimeConversions.ONE_DAY_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.SIX_MONTHS_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.SIX_MONTHS_MILLI);
-                    }
+                    chartButtonPressed(TimeConversions.SIX_MONTHS_MILLI);
                     break;
                 case R.id.viewYear:
-                    if (chartMaxSize < TimeConversions.ONE_YEAR_MILLI)
-                        maxView();
-                    else{
-                        chart = ChartUtils.updateChartViewport(chart, TimeConversions.ONE_YEAR_MILLI);
-                        xAxis = ChartUtils.setXaxisScale(xAxis, TimeConversions.ONE_YEAR_MILLI);
-                    }
+                    chartButtonPressed(TimeConversions.ONE_YEAR_MILLI);
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
                     int days = cal.get(cal.DAY_OF_YEAR);
-                    float ytd = days * TimeConversions.ONE_DAY_MILLI;
-                    if (chartMaxSize < ytd)
-                        maxView();
-                    else {
-                        ChartUtils.updateChartViewport(chart, ytd);
-                        ChartUtils.setXaxisScale(xAxis, ytd);
-                    }
+                    float ytd = (days - 1) * TimeConversions.ONE_DAY_MILLI;
+                    chartButtonPressed(ytd);
                     break;
                 case R.id.viewMax:
                     maxView();
@@ -229,28 +206,60 @@ public class ChartFullScreen extends AppCompatActivity {
         }
     }
 
+    public void chartButtonPressed(float timeMillis){
+        if (chartMaxValue < timeMillis)
+            maxView();
+        else {
+            chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis, chartMinValue);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, true);
+        }
+    }
+
     public void maxView(){
         chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxSize);
+        ChartUtils.setXaxisScale(xAxis, chartMaxValue, true);
+    }
+
+
+    @Override
+    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+    }
+
+    @Override
+    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        float highViewX = chart.getHighestVisibleX();
+        float lowViewX = chart.getLowestVisibleX();
+        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, true);
+    }
+
+    @Override
+    public void onChartLongPressed(MotionEvent me) {
+
+    }
+
+    @Override
+    public void onChartDoubleTapped(MotionEvent me) {
+
+    }
+
+    @Override
+    public void onChartSingleTapped(MotionEvent me) {
+
+    }
+
+    @Override
+    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+    }
+
+    @Override
+    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+    }
+
+    @Override
+    public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
     }
 }
-
-/*
-
-
-    public void updateChartViewportFullscreen(float scale){
-        //get current right side of viewport
-        float highViewX = chart.getHighestVisibleX();
-        //resets entire chart
-        chart.fitScreen();
-        //gets the maximum possible x value
-        ViewPortHandler handler = chart.getViewPortHandler();
-        float maxScale = handler.getMaxScaleX();
-        //Sets viewport size for selected scale
-        chart.setVisibleXRangeMaximum(scale);
-        //Moves viewport back to current position
-        chart.moveViewToX(highViewX - scale);
-        //Allows pinch zooming to full range
-        chart.setVisibleXRangeMaximum(maxScale);
-    }
-    */
