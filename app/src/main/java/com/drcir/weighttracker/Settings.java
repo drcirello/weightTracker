@@ -17,11 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.drcir.weighttracker.data.DataDefinitions;
-import com.google.gson.JsonObject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Settings extends AppCompatActivity {
 
@@ -71,8 +66,8 @@ public class Settings extends AppCompatActivity {
         ranges.append(DataDefinitions.YTD, 5);
         ranges.append(DataDefinitions.MAX, 6);
 
-        SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
-        int defaultRange = sharedPrefUnit.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
+        SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+        int defaultRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
         Spinner spinnerRange = (Spinner) findViewById(R.id.selectedRange);
         ArrayAdapter<CharSequence> adapterRange = ArrayAdapter.createFromResource(this,
                 R.array.chart_ranges, android.R.layout.simple_spinner_item);
@@ -83,35 +78,9 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int range = ranges.keyAt(ranges.indexOfValue(position));
-                SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor mEditorUnit = sharedPrefUnit.edit();
-                mEditorUnit.putInt(getResources().getString(R.string.chart_range_preference), range).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        final SparseIntArray unitTypes = new SparseIntArray();
-        unitTypes.append(DataDefinitions.POUNDS, 0);
-        unitTypes.append(DataDefinitions.KILOGRAMS, 1);
-
-        int defaultUnits = sharedPrefUnit.getInt(getString(R.string.unit_type_preference), DataDefinitions.POUNDS);
-        Spinner spinnerUnits = (Spinner) findViewById(R.id.selectedUnitType);
-        ArrayAdapter<CharSequence> adapterUnits = ArrayAdapter.createFromResource(this,
-                R.array.unit_types, android.R.layout.simple_spinner_item);
-        adapterUnits.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerUnits.setAdapter(adapterUnits);
-        spinnerUnits.setSelection(unitTypes.get(defaultUnits));
-        spinnerUnits.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int unitType = unitTypes.keyAt(unitTypes.indexOfValue(position));
-                SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor mEditorUnit = sharedPrefUnit.edit();
-                mEditorUnit.putInt(getResources().getString(R.string.unit_type_preference), unitType).apply();
+                SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                mEditorRange.putInt(getResources().getString(R.string.chart_range_preference), range).apply();
             }
 
             @Override

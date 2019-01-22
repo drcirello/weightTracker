@@ -9,6 +9,4 @@ public class DataDefinitions {
     public static final int YTD = -1;
     public static final int MAX = 0;
 
-    public static final int POUNDS = 101;
-    public static final int KILOGRAMS = 102;
 }

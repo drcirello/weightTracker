@@ -19,8 +19,7 @@
     <string name="token_preference">com.drcir.weighttracker.TOKEN</string>
     <string name="token_JWT_preference">com.drcir.weighttracker.TOKEN_JWT</string>
     <string name="token_date_preference">com.drcir.weighttracker.TOKEN_DATE</string>
-    <string name="unit_preferences">com.drcir.weighttracker.UNIT_PREFERENCES</string>
-    <string name="unit_type_preference">com.drcir.weighttracker.UNIT_TYPE</string>
+    <string name="range_preferences">com.drcir.weighttracker.RANGE_PREFERENCES</string>
     <string name="chart_range_preference">com.drcir.weighttracker.CHART_RANGE</string>
 
     <!-- Navigation Bar -->
@@ -72,10 +71,8 @@
     <string name="enter_weight_invalid">\u0020\u0020\u0020Invalid Weight Entered.\nMust be between 0 and 999.</string>
 
     <!-- Settings Page -->
-    <string name="settings_units">Units Type</string>
     <string name="settings_chart_range">Default Chart Range</string>
     <string name="settings_logout">Logout</string>
-    <string name="settings_default_units">Pounds</string>
     <string name="settings_default_range">Max</string>
 
     <string-array name="chart_ranges">
@@ -86,11 +83,6 @@
         <item>1 Year</item>
         <item>YTD</item>
         <item>Max</item>
-    </string-array>
-
-    <string-array name="unit_types">
-        <item>Pounds</item>
-        <item>Kilograms</item>
     </string-array>
 
     <!-- No Data Statistics -->

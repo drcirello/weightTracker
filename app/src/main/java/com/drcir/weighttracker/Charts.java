@@ -207,8 +207,8 @@ public class Charts extends AppCompatActivity {
         int defaultRange;
         //Set Chart Range to Preference Size, default Max
         try {
-            SharedPreferences sharedPrefUnit = getSharedPreferences(getString(R.string.unit_preferences), Context.MODE_PRIVATE);
-            defaultRange = sharedPrefUnit.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
+            SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+            defaultRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
         }
         catch (Exception e){
             defaultRange = DataDefinitions.MAX;
