@@ -115,8 +115,6 @@ public class Charts extends AppCompatActivity {
         SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
         token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
 
-        getWeightEntries(token);
-
         viewOneWeek = findViewById(R.id.viewOneWeek);
         viewOneMonth = findViewById(R.id.viewOneMonth);
         viewThreeMonth = findViewById(R.id.viewThreeMonth);
@@ -137,6 +135,8 @@ public class Charts extends AppCompatActivity {
 
         chart = findViewById(R.id.lineChart);
         chartFrame = findViewById(R.id.chartFrame);
+
+        getWeightEntries(token);
         //Chart Button Handling
         viewOneWeek.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +187,13 @@ public class Charts extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshToken();
     }
 
     public void maxView(){
@@ -319,7 +326,7 @@ public class Charts extends AppCompatActivity {
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
 
-        xAxis  = chart.getXAxis();
+        xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
 
@@ -351,7 +358,8 @@ public class Charts extends AppCompatActivity {
         buttonBar.setVisibility(View.VISIBLE);
     }
 
-    public void dataRetrievalFailure(){
+    public void dataRetrievalFailure(String message){
+        TextView messageText = findViewById(R.id.charts_api_failed_message_part1);
         String failedText = getString(R.string.charts_api_failed_fields);
         charts_current_weight.setText(failedText);
         charts_high_response.setText(failedText);
@@ -364,6 +372,7 @@ public class Charts extends AppCompatActivity {
         chart.setVisibility(View.INVISIBLE);
         pBar.setVisibility(View.GONE);
         charts_failed_message.setVisibility(View.VISIBLE);
+        messageText.setText(message);
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -374,38 +383,43 @@ public class Charts extends AppCompatActivity {
 
     public void getWeightEntries(String token){
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
-        call.enqueue(new Callback<List<WeightEntry>>() {
-            @Override
-            public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
-                if(response.isSuccessful()) {
-                    pBar.setVisibility(View.VISIBLE);
-                    charts_failed_message.setVisibility(View.GONE);
-                    dataSet = response.body();
-                    if(dataSet.isEmpty()){
-                        dataSet = ExampleData.getFakedData();
-                        setFakeChartStatistics();
-                        createChart();
-                        setInitialViewport();
-                        removeLoadingScreen();
-                        addNoDataCover();
-                    }
-                    else{
-                        setChartStatistics();
-                        createChart();
-                        setInitialViewport();
-                        removeLoadingScreen();
+        if(Utils.checkConnection(Charts.this, getString(R.string.no_connection_message))) {
+            refreshToken();
+            Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+            call.enqueue(new Callback<List<WeightEntry>>() {
+                @Override
+                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                    if (response.isSuccessful()) {
+                        pBar.setVisibility(View.VISIBLE);
+                        charts_failed_message.setVisibility(View.GONE);
+                        dataSet = response.body();
+                        if (dataSet.isEmpty()) {
+                            dataSet = ExampleData.getFakedData();
+                            setFakeChartStatistics();
+                            createChart();
+                            setInitialViewport();
+                            removeLoadingScreen();
+                            addNoDataCover();
+                        } else {
+                            setChartStatistics();
+                            createChart();
+                            setInitialViewport();
+                            removeLoadingScreen();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
-                call.cancel();
-                dataRetrievalFailure();
-            }
-        });
-    };
+                @Override
+                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                    call.cancel();
+                    dataRetrievalFailure(getString(R.string.charts_api_failed_message_part1));
+                }
+            });
+        }
+        else{
+            dataRetrievalFailure(getString(R.string.no_connection_message));
+        }
+    }
 
     public void addNoDataCover(){
         LinearLayout mainView = findViewById(R.id.mainView);
@@ -420,4 +434,12 @@ public class Charts extends AppCompatActivity {
         noDataView.setVisibility(View.VISIBLE);
     }
 
+    public void refreshToken(){
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
+            Intent intent = new Intent(Charts.this, Main.class);
+            Utils.refreshToken(mSharedPreferences, Charts.this, intent);
+        }
+    }
 }

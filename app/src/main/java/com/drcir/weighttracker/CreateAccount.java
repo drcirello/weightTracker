@@ -44,28 +44,29 @@ public class CreateAccount extends AppCompatActivity {
                 String password = userPass.getText().toString();
 
                 APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                Call<JsonObject> call = apiInterface.createUser(email, email, password, password);
-                call.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        if(response.isSuccessful()) {
-                            Intent intent = new Intent(CreateAccount.this, Login.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            CreateAccount.this.startActivity(intent);
-                            Toast.makeText(CreateAccount.this, getString(R.string.account_created), Toast.LENGTH_SHORT).show();
-                            finish();
+                if(Utils.checkConnection(CreateAccount.this, getString(R.string.no_connection_message_create_account))) {
+                    Call<JsonObject> call = apiInterface.createUser(email, email, password, password);
+                    call.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful()) {
+                                Intent intent = new Intent(CreateAccount.this, Login.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                CreateAccount.this.startActivity(intent);
+                                Toast.makeText(CreateAccount.this, getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                createFailed();
+                            }
                         }
-                        else{
-                            createFailed();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        createFailed();
-                        call.cancel();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            createFailed();
+                            call.cancel();
+                        }
+                    });
+                }
             }
         });
 

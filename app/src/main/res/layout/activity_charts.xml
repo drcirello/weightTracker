@@ -87,6 +87,7 @@
                 android:layout_centerVertical="true"
                 android:visibility="gone">
                 <TextView
+                    android:id="@+id/charts_api_failed_message_part1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/ChartsLoadingFailed"

@@ -99,4 +99,15 @@ public class Settings extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
+            Intent intent = new Intent(Settings.this, Main.class);
+            Utils.refreshToken(mSharedPreferences, Settings.this, intent);
+        }
+    }
 }

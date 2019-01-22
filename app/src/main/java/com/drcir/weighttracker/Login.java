@@ -69,35 +69,35 @@ public class Login extends AppCompatActivity {
             userpass = "Weighttest123$";
             //username = "weightTrackerTest2@gmail.com";
             //userpass = "Weighttest123$";
-
-            Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
-            call.enqueue(new Callback<AccountManagement>() {
-                @Override
-                public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-                    response.body();
-                    try{
-                        token =response.body().getToken();
-                        user = response.body().getUser();
-                        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                        mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
-                        mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
-                        mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                        Intent intent = new Intent(Login.this, Charts.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Login.this.startActivity(intent);
-                        finish();
+            if(Utils.checkConnection(Login.this, getString(R.string.no_connection_message_login))) {
+                Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
+                call.enqueue(new Callback<AccountManagement>() {
+                    @Override
+                    public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
+                        response.body();
+                        try {
+                            token = response.body().getToken();
+                            user = response.body().getUser();
+                            SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+                            SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+                            mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
+                            mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
+                            mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
+                            Intent intent = new Intent(Login.this, Charts.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            Login.this.startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
+                        }
                     }
-                    catch(Exception e){
+
+                    @Override
+                    public void onFailure(Call<AccountManagement> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
+                        call.cancel();
                     }
-                }
-
-                @Override
-                public void onFailure(Call<AccountManagement> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
-                    call.cancel();
-                }
-            });
+                });
+            }
         };
 }

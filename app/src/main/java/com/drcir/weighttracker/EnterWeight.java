@@ -109,7 +109,8 @@ public class EnterWeight extends AppCompatActivity {
                 Date date = new Date(selectedDate);
                 String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
                 enteredWeight = Integer.parseInt(enteredWeightView.getText().toString());
-                if(verifyWeight()){
+                if(Utils.checkConnection(EnterWeight.this, getString(R.string.no_connection_message_create)) && verifyWeight()){
+                    refreshToken();
                     Call<Void> call = apiInterface.createWeight(token, modifiedDate, enteredWeight);
                     call.enqueue(new Callback<Void>() {
                         @Override
@@ -130,6 +131,21 @@ public class EnterWeight extends AppCompatActivity {
                 enteredWeightView.setText(null);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshToken();
+    }
+
+    public void refreshToken() {
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
+            Intent intent = new Intent(EnterWeight.this, Main.class);
+            Utils.refreshToken(mSharedPreferences, EnterWeight.this, intent);
+        }
     }
 
     public void createFailed(){

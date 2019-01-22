@@ -96,6 +96,12 @@ public class WeightEntries extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshToken();
+    }
+
     public void dataRetrievalFailure(){
         mRecyclerView.setVisibility(View.INVISIBLE);
         pBar.setVisibility(View.GONE);
@@ -112,36 +118,53 @@ public class WeightEntries extends AppCompatActivity {
     public void getWeightEntries(String token){
         pBar.setVisibility(View.VISIBLE);
         entriesFailedMessage.setVisibility(View.GONE);
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<List<WeightEntry>> call = apiInterface.getWeightEntries(token);
-        call.enqueue(new Callback<List<WeightEntry>>() {
-            @Override
-            public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
-                if(response.isSuccessful()) {
-                    dataSet = response.body();
-                    mAdapter = new WeightEntryAdapter (dataSet);
-                    mRecyclerView.setAdapter(mAdapter);
-                    if (dataSet.isEmpty()) {
-                        mRecyclerView.setVisibility(View.GONE);
-                        emptyView.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        emptyView.setVisibility(View.GONE);
-                    }
+        if(Utils.checkConnection(WeightEntries.this, getString(R.string.no_connection_message))) {
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<WeightEntry>> call = apiInterface.getWeightEntries(token);
+            call.enqueue(new Callback<List<WeightEntry>>() {
+                @Override
+                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                    if (response.isSuccessful()) {
+                        dataSet = response.body();
+                        mAdapter = new WeightEntryAdapter(dataSet);
+                        mRecyclerView.setAdapter(mAdapter);
+                        if (dataSet.isEmpty()) {
+                            mRecyclerView.setVisibility(View.GONE);
+                            emptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            mRecyclerView.setVisibility(View.VISIBLE);
+                            emptyView.setVisibility(View.GONE);
+                        }
 
-
-                    pBar.setVisibility(View.GONE);
-                    entriesFailedMessage.setVisibility(View.GONE);
+                        pBar.setVisibility(View.GONE);
+                        entriesFailedMessage.setVisibility(View.GONE);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<WeightEntry>> call, Throwable t)
-            {
-                dataRetrievalFailure();
-                call.cancel();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                    dataRetrievalFailure();
+                    call.cancel();
+                }
+            });
+        }
+        else{
+            mRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            pBar.setVisibility(View.GONE);
+            TextView noDataLineOne = findViewById(R.id.no_data_available_line_one);
+            TextView noDataLineTwo = findViewById(R.id.no_data_available_line_two);
+            noDataLineOne.setText(R.string.no_connection_message);
+            noDataLineTwo.setText("");
+        }
     };
+
+    public void refreshToken() {
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
+            Intent intent = new Intent(WeightEntries.this, Main.class);
+            Utils.refreshToken(mSharedPreferences, WeightEntries.this, intent);
+        }
+    }
 }

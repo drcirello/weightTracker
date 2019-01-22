@@ -1,5 +1,8 @@
 package com.drcir.weighttracker;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -170,6 +173,12 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshToken();
+    }
+
     public void setViewport(Button button){
         if(dataSet != null) {
             if (selectedButton != null)
@@ -218,6 +227,15 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     public void maxView(){
         chart.fitScreen();
         ChartUtils.setXaxisScale(xAxis, chartMaxValue, true);
+    }
+
+    public void refreshToken(){
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
+            Intent intent = new Intent(ChartFullScreen.this, Main.class);
+            Utils.refreshToken(mSharedPreferences, ChartFullScreen.this, intent);
+        }
     }
 
 

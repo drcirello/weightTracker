@@ -30,7 +30,7 @@ public class Main extends AppCompatActivity {
         tokenDate = mSharedPreferences.getLong(getString(R.string.token_date_preference), System.currentTimeMillis());
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        if(token != null){
+        if(token != null && Utils.checkConnection(this, getString(R.string.no_connection_message))){
             validateToken();
         }
         else{

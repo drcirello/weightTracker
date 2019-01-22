@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -56,20 +54,22 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
             holder.mWeight.setText(Integer.toString(Math.round(mDataSet.get(position).getWeight())));
             holder.mDelete.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(viewThemeContext.getContext());
-                    builder.setTitle("Delete entry")
-                        .setMessage("Are you sure you want to delete this entry?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                int currentPosition = holder.getAdapterPosition();
-                                removeEntry(viewThemeContext.getContext(), currentPosition);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .show();
+                    if(Utils.checkConnection(viewThemeContext.getContext(), viewThemeContext.getContext().getString(R.string.no_connection_message_delete))) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(viewThemeContext.getContext());
+                        builder.setTitle("Delete entry")
+                                .setMessage("Are you sure you want to delete this entry?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int currentPosition = holder.getAdapterPosition();
+                                        removeEntry(viewThemeContext.getContext(), currentPosition);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .show();
+                    }
                 }
             });
     }

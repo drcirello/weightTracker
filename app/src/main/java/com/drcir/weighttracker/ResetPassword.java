@@ -9,6 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ResetPassword extends AppCompatActivity {
 
     @Override
@@ -16,7 +22,7 @@ public class ResetPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        EditText useremail = findViewById(R.id.reset_password_useremail);
+        final EditText useremail = findViewById(R.id.reset_password_useremail);
 
         ImageView back = findViewById(R.id.reset_password_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -33,13 +39,38 @@ public class ResetPassword extends AppCompatActivity {
         sendPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Generate and send Password
-                Toast.makeText(ResetPassword.this, "Password Reset!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ResetPassword.this, Login.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                ResetPassword.this.startActivity(intent);
-                finish();
+                String email = useremail.getText().toString();
+
+                APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                if(Utils.checkConnection(ResetPassword.this, getString(R.string.no_connection_message_reset))) {
+                    Call<JsonObject> call = apiInterface.resetPassword(email);
+                    call.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful()) {
+                                Intent intent = new Intent(ResetPassword.this, Login.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                ResetPassword.this.startActivity(intent);
+                                Toast.makeText(ResetPassword.this, "Password Reset Sent", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                resetFailed();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            resetFailed();
+                            call.cancel();
+                        }
+                    });
+                }
             }
         });
+
+    }
+
+    public void resetFailed(){
+        Toast.makeText(getApplicationContext(), "Password Reset Failed", Toast.LENGTH_LONG).show();
     }
 }
