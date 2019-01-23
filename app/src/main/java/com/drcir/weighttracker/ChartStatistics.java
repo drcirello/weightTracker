@@ -1,5 +1,8 @@
 package com.drcir.weighttracker;
 
+import com.drcir.weighttracker.data.DataDefinitions;
+
+import java.util.Calendar;
 import java.util.List;
 
 public class ChartStatistics {
@@ -7,165 +10,77 @@ public class ChartStatistics {
     private float low1y;
     private float highMax;
     private float lowMax;
-    private float change6mo;
-    private float change1y;
+    private float changeOverTime1;
+    private float changeOverTime2;
     float currentWeight;//
 
-    public ChartStatistics(List<WeightEntry> dataset){
-        float year = TimeConversions.ONE_YEAR_MILLI;
-        float sixMonths = TimeConversions.SIX_MONTHS_MILLI;
-        float currentTime = System.currentTimeMillis();
-        int sixMonthIndex;
-        int yearIndex;
+    private ChartStatistics(List<WeightEntry> dataset, int changeOverTimePref1, int changeOverTimePref2){
         currentWeight = dataset.get(dataset.size()-1).getWeight();
-
-        //Entries greater than 6 months
-        if(currentTime - dataset.get(0).getDate() > sixMonths){
-            sixMonthIndex = getTimeIndex(sixMonths, dataset, dataset.size()-1);
-            change6mo = getWeightChange(sixMonthIndex, sixMonths, dataset);
-            //Entries greater than a year
-            if(currentTime - dataset.get(0).getDate() > year){
-                //Set 1 year High/low
-                yearIndex = getTimeIndex(year, dataset, dataset.size()-1);
-                float highLowYear[] = getHighLowWeight(yearIndex, dataset.size()-1,dataset);
-                high1y = highLowYear[0];
-                low1y = highLowYear[1];
-                change1y = getWeightChange(yearIndex, year, dataset);
-                //Set alltime high/low
-                float highLowAll[] = getHighLowWeight(0, yearIndex-1 ,dataset);
-                if(highLowAll[0] > high1y)
-                    highMax = highLowAll[0];
-                else
-                    highMax = high1y;
-                if(highLowAll[1] < low1y)
-                    lowMax = highLowAll[1];
-                else
-                    lowMax = low1y;
-            }
-            //Entries between 6mo and 1 year
-            else{
-                change1y = change6mo;
-                float highLowAll[] = getHighLowWeight(0, dataset.size()-1 ,dataset);
-                high1y = highMax =  highLowAll[0];
-                low1y = lowMax = highLowAll[1];
-            }
-        }
-        //Entries less than 6 months
-        else{
-            float highLowAll[] = getHighLowWeight(0, dataset.size()-1 ,dataset);
-            high1y = highMax =  highLowAll[0];
-            low1y = lowMax = highLowAll[1];
-            change6mo = highMax - currentWeight;
-            change1y = change6mo;
-        }
+        changeOverTime1 = getChangeOverTime(changeOverTimePref1, dataset);
+        changeOverTime2 = getChangeOverTime(changeOverTimePref2, dataset);
+        getHighLowWeight(dataset);
     }
 
-    private float[] getHighLowWeight(int startIndex, int endIndex, List<WeightEntry> entries){
-        float[] highlow = {entries.get(startIndex).getWeight(), entries.get(startIndex).getWeight()};
+    private void getHighLowWeight(List<WeightEntry> dataset){
+        int dataSize = dataset.size();
         float temp;
-        for(int i = startIndex + 1; i <= endIndex; i++){
-            temp = entries.get(i).getWeight();
-            if(temp > highlow[0])
-                highlow[0] = temp;
-            if(temp < highlow[1])
-                highlow[1] = temp;
-        }
 
-        return highlow;
+        highMax = dataset.get(dataSize - 1).getWeight();
+        lowMax = dataset.get(dataSize - 1).getWeight();
+        for(int i = 1; i <= dataSize; i++){
+            temp = dataset.get(dataSize - i).getWeight();
+            if(temp > highMax)
+                highMax = temp;
+            if(temp < lowMax)
+                lowMax = temp;
+            if(i == DataDefinitions.ONE_YEAR){
+                high1y = highMax;
+                low1y = lowMax;
+            }
+        }
+        if(dataset.size() < DataDefinitions.ONE_YEAR){
+            high1y = highMax;
+            low1y = lowMax;
+        }
     }
 
-
-
-    //timePeriod = Six months in milliseconds
-    //startIndex = Index of first date prior to time period.
-    //difference =
-
-//now - six months
-
-    private float getWeightChange (int startIndex, float timePeriod, List<WeightEntry> dataset){
-        float difference = 0;
-        float oneDayMilliseconds = TimeConversions.ONE_DAY_MILLI;
-        float dateNow =System.currentTimeMillis();
-        float dateStartIndex = dataset.get(startIndex).getDate();
-        //If multiple entries and not the same day
-        if(startIndex != dataset.size()-1 && !(dateStartIndex/oneDayMilliseconds == timePeriod/oneDayMilliseconds)){
-            float nextEntryDate = dataset.get(startIndex + 1).getDate();
-            float millisCurrentIndexOffGoal = (dateNow - timePeriod) - dateStartIndex;
-            float millsCurrentIndexNextIndex = nextEntryDate - dateStartIndex;
-            float weightDiff = dataset.get(startIndex + 1).getWeight() - dataset.get(startIndex).getWeight();
-            float daysCurrentIndexOffGoal = (float) millisCurrentIndexOffGoal/oneDayMilliseconds;
-            float daysCurrentIndexNextIndex = (float)millsCurrentIndexNextIndex/oneDayMilliseconds;
-            //Average out difference for periods of no entry
-            float previousWeight = dataset.get(startIndex).getWeight() + (int)(daysCurrentIndexNextIndex/daysCurrentIndexOffGoal*weightDiff);
-            difference = currentWeight - previousWeight;
+    private float getChangeOverTime (int timePeriod, List<WeightEntry> dataset){
+        float difference;
+        int dataSize = dataset.size();
+        //YTD
+        if(timePeriod == -1) {
+            Calendar cal = Calendar.getInstance();
+            timePeriod = cal.get(cal.DAY_OF_YEAR);
         }
+        //Max
+        if(timePeriod == 0 || timePeriod > dataSize)
+            difference = currentWeight - dataset.get(0).getWeight();
+        else
+            difference = currentWeight - dataset.get(dataSize - 1 - timePeriod).getWeight();
+
         return difference;
-    }
-
-    private int getTimeIndex(float timePeriod, List<WeightEntry> entries, int startIndex){
-        float time = System.currentTimeMillis() - timePeriod;
-        int index = 0;
-        for(int i = startIndex; i >= 0 && index == 0; i--){
-            if(entries.get(i).getDate() < time)
-                index = i;
-        }
-        return index;
     }
 
     public float getHigh1y() {
         return high1y;
     }
-
-    public void setHigh1y(int high1y) {
-        this.high1y = high1y;
-    }
-
     public float getLow1y() {
         return low1y;
     }
-
-    public void setLow1y(int low1y) {
-        this.low1y = low1y;
-    }
-
     public float getHighMax() {
         return highMax;
     }
-
-    public void setHighMax(int highMax) {
-        this.highMax = highMax;
-    }
-
     public float getLowMax() {
         return lowMax;
     }
-
-    public void setLowMax(int lowMax) {
-        this.lowMax = lowMax;
+    public float getChangeOverTime1() {
+        return changeOverTime1;
     }
-
-    public float getChange6mo() {
-        return change6mo;
+    public float getChangeOverTime2() {
+        return changeOverTime2;
     }
-
-    public void setChange6mo(int change6mo) {
-        this.change6mo = change6mo;
-    }
-
-    public float getChange1y() {
-        return change1y;
-    }
-
-    public void setChange1y(int change1y) {
-        this.change1y = change1y;
-    }
-
     public float getCurrentWeight() {
         return currentWeight;
-    }
-
-    public void setCurrentWeight(int currentWeight) {
-        this.currentWeight = currentWeight;
     }
 
 }

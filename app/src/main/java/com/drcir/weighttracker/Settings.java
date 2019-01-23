@@ -67,20 +67,60 @@ public class Settings extends AppCompatActivity {
         ranges.append(DataDefinitions.MAX, 6);
 
         SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
-        int defaultRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
-        Spinner spinnerRange = (Spinner) findViewById(R.id.selectedRange);
+        int defaultChartRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
+        Spinner spinnerChartRange = (Spinner) findViewById(R.id.selectedRange);
         ArrayAdapter<CharSequence> adapterRange = ArrayAdapter.createFromResource(this,
                 R.array.chart_ranges, android.R.layout.simple_spinner_item);
         adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRange.setAdapter(adapterRange);
-        spinnerRange.setSelection(ranges.get(defaultRange));
-        spinnerRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerChartRange.setAdapter(adapterRange);
+        spinnerChartRange.setSelection(ranges.get(defaultChartRange));
+        spinnerChartRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int range = ranges.keyAt(ranges.indexOfValue(position));
                 SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
                 SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
                 mEditorRange.putInt(getResources().getString(R.string.chart_range_preference), range).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        int defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
+        Spinner spinnerOverTime1 = (Spinner) findViewById(R.id.selectedChangeTime1);
+        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOverTime1.setAdapter(adapterRange);
+        spinnerOverTime1.setSelection(ranges.get(defaultOverTime1));
+        spinnerOverTime1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int range = ranges.keyAt(ranges.indexOfValue(position));
+                SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                mEditorRange.putInt(getResources().getString(R.string.chart_over_time_preference_one), range).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        int defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
+        Spinner spinnerOverTime2 = (Spinner) findViewById(R.id.selectedChangeTime2);
+        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOverTime2.setAdapter(adapterRange);
+        spinnerOverTime2.setSelection(ranges.get(defaultOverTime2));
+        spinnerOverTime2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int range = ranges.keyAt(ranges.indexOfValue(position));
+                SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                mEditorRange.putInt(getResources().getString(R.string.chart_over_time_preference_two), range).apply();
             }
 
             @Override

@@ -35,6 +35,40 @@
                 style="@style/SettingsOptionsSelectedText" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/changeTime1Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                style="@style/SettingsOptionsHeaderText"
+                android:text="@string/settings_chart_change_one"/>
+            <Spinner
+                android:id="@+id/selectedChangeTime1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/SettingsOptionsSelectedText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/changeTime2Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                style="@style/SettingsOptionsHeaderText"
+                android:text="@string/settings_chart_change_two"/>
+            <Spinner
+                android:id="@+id/selectedChangeTime2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/SettingsOptionsSelectedText" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView

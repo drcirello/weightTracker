@@ -14,6 +14,7 @@
     <string name="login_failed">Log in Failed. Please try again.</string>
     <string name="account_created">Account Created!</string>
     <string name="account_created_failed">Failed to create account. Please try again.</string>
+
     <!-- Shared Preferences Strings-->
     <string name="token_preferences">com.drcir.weighttracker.TOKEN_PREFERENCES</string>
     <string name="token_preference">com.drcir.weighttracker.TOKEN</string>
@@ -21,6 +22,8 @@
     <string name="token_date_preference">com.drcir.weighttracker.TOKEN_DATE</string>
     <string name="range_preferences">com.drcir.weighttracker.RANGE_PREFERENCES</string>
     <string name="chart_range_preference">com.drcir.weighttracker.CHART_RANGE</string>
+    <string name="chart_over_time_preference_one">com.drcir.weighttracker.CHART_OVER_TIME_ONE</string>
+    <string name="chart_over_time_preference_two">com.drcir.weighttracker.CHART_OVER_TIME_TWO</string>
 
     <!-- Navigation Bar -->
     <string name="navigate_charts">Charts</string>
@@ -40,10 +43,9 @@
     <string name="charts_current">Current Weight</string>
     <string name="charts_high">High</string>
     <string name="charts_low">Low</string>
-    <string name="charts_year_high">52wk High</string>
-    <string name="charts_year_low">52wk Low</string>
-    <string name="charts_six_mo_change">6mo Change</string>
-    <string name="charts_year_change">1yr Change</string>
+    <string name="charts_year_high">52 wk. High</string>
+    <string name="charts_year_low">52 wk. Low</string>
+    <string name="charts_change">\u0020Change</string>
     <string name="button_one_week">7D</string>
     <string name="button_one_month">1M</string>
     <string name="button_three_month">3M</string>
@@ -54,6 +56,13 @@
     <string name="charts_api_failed_fields">---</string>
     <string name="charts_api_failed_message_part1">Failed to retrieve data.</string>
     <string name="charts_api_failed_message_part2">Click here to try again.</string>
+    <string name="over_time_one_week">7 d.</string>
+    <string name="over_time_one_month">1 mo.</string>
+    <string name="over_time_three_month">3 mo.</string>
+    <string name="over_time_six_month">6 mo.</string>
+    <string name="over_time_one_year">1 yr.</string>
+    <string name="over_time_ytd">YTD</string>
+    <string name="over_time_max">Max</string>
 
     <!-- Toolbar Titles -->
     <string name="charts_title">Charts</string>
@@ -72,6 +81,8 @@
 
     <!-- Settings Page -->
     <string name="settings_chart_range">Default Chart Range</string>
+    <string name="settings_chart_change_one">Charts Change Over Time #1</string>
+    <string name="settings_chart_change_two">Charts Change Over Time #2</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_default_range">Max</string>
 
@@ -82,7 +93,7 @@
         <item>6 Months</item>
         <item>1 Year</item>
         <item>YTD</item>
-        <item>Max</item>
+        <item>All Time</item>
     </string-array>
 
     <!-- No Data Statistics -->

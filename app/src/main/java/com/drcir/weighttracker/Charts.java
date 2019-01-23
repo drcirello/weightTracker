@@ -54,6 +54,8 @@ public class Charts extends AppCompatActivity {
     String token;
     //Passed to Fullscreen Chart
     int selectedButtonRange;
+    int defaultOverTime1;
+    int defaultOverTime2;
 
     Button viewOneWeek;
     Button viewOneMonth;
@@ -68,8 +70,8 @@ public class Charts extends AppCompatActivity {
     TextView charts_low_response;
     TextView charts_year_high_response;
     TextView charts_year_low_response;
-    TextView charts_six_mo_change_response;
-    TextView charts_year_change_response;
+    TextView charts_change_over_time_1_response;
+    TextView charts_change_over_time_2_response;
     LinearLayout charts_failed_message;
 
     ProgressBar pBar;
@@ -113,7 +115,25 @@ public class Charts extends AppCompatActivity {
                 });
 
         SharedPreferences sharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
         token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
+        defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
+        defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
+
+        TextView charts_change_over_time_1 = findViewById(R.id.charts_change_over_time_1);
+        TextView charts_change_over_time_2 = findViewById(R.id.charts_change_over_time_2);
+
+        Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
+        ranges.put(DataDefinitions.ONE_WEEK, R.string.over_time_one_week);
+        ranges.put(DataDefinitions.ONE_MONTH, R.string.over_time_one_month);
+        ranges.put(DataDefinitions.THREE_MONTHS, R.string.over_time_three_month);
+        ranges.put(DataDefinitions.SIX_MONTHS, R.string.over_time_six_month);
+        ranges.put(DataDefinitions.ONE_YEAR, R.string.over_time_one_year);
+        ranges.put(DataDefinitions.YTD, R.string.over_time_ytd);
+        ranges.put(DataDefinitions.MAX, R.string.over_time_max);
+
+        charts_change_over_time_1.setText(getString(ranges.get(defaultOverTime1)));
+        charts_change_over_time_2.setText(getString(ranges.get(defaultOverTime2)));
 
         viewOneWeek = findViewById(R.id.viewOneWeek);
         viewOneMonth = findViewById(R.id.viewOneMonth);
@@ -128,8 +148,8 @@ public class Charts extends AppCompatActivity {
         charts_low_response = findViewById(R.id.charts_low_response);
         charts_year_high_response = findViewById(R.id.charts_year_high_response);
         charts_year_low_response = findViewById(R.id.charts_year_low_response);
-        charts_six_mo_change_response = findViewById(R.id.charts_six_mo_change_response);
-        charts_year_change_response = findViewById(R.id.charts_year_change_response);
+        charts_change_over_time_1_response = findViewById(R.id.charts_change_over_time_1_response);
+        charts_change_over_time_2_response = findViewById(R.id.charts_change_over_time_2_response);
         charts_failed_message = findViewById(R.id.failedMessage);
         pBar = findViewById(R.id.pBar);
 
@@ -277,15 +297,15 @@ public class Charts extends AppCompatActivity {
     }
 
     public void setChartStatistics(){
-        stats = new ChartStatistics(dataSet);
+        stats = new ChartStatistics(dataSet, defaultOverTime1, defaultOverTime2);
         DecimalFormat form = Utils.getDecimalFormat();
         charts_current_weight.setText(form.format(stats.getCurrentWeight()));
         charts_high_response.setText(form.format(stats.getHighMax()));
         charts_low_response.setText(form.format(stats.getLowMax()));
         charts_year_high_response.setText(form.format(stats.getHigh1y()));
         charts_year_low_response.setText(form.format(stats.getLow1y()));
-        charts_six_mo_change_response.setText(form.format(stats.getChange6mo()));
-        charts_year_change_response.setText(form.format(stats.getChange1y()));
+        charts_change_over_time_1_response.setText(form.format(stats.getChangeOverTime1()));
+        charts_change_over_time_2_response.setText(form.format(stats.getChangeOverTime2()));
     }
 
     public void setFakeChartStatistics(){
@@ -294,8 +314,12 @@ public class Charts extends AppCompatActivity {
         charts_low_response.setText(R.string.no_data_low);
         charts_year_high_response.setText(R.string.no_data_year_high);
         charts_year_low_response.setText(R.string.no_data_year_low);
-        charts_six_mo_change_response.setText(R.string.no_data_six_mo_change);
-        charts_year_change_response.setText(R.string.no_data_year_change);
+        charts_change_over_time_1_response.setText(R.string.no_data_six_mo_change);
+        charts_change_over_time_2_response.setText(R.string.no_data_year_change);
+        TextView charts_change_over_time_1 = findViewById(R.id.charts_change_over_time_1);
+        TextView charts_change_over_time_2 = findViewById(R.id.charts_change_over_time_2);
+        charts_change_over_time_1.setText(R.string.over_time_six_month);
+        charts_change_over_time_2.setText(R.string.over_time_one_year);
     }
 
     public void createChart(){
@@ -366,8 +390,8 @@ public class Charts extends AppCompatActivity {
         charts_low_response.setText(failedText);
         charts_year_high_response.setText(failedText);
         charts_year_low_response.setText(failedText);
-        charts_six_mo_change_response.setText(failedText);
-        charts_year_change_response.setText(failedText);
+        charts_change_over_time_1_response.setText(failedText);
+        charts_change_over_time_2_response.setText(failedText);
 
         chart.setVisibility(View.INVISIBLE);
         pBar.setVisibility(View.GONE);
