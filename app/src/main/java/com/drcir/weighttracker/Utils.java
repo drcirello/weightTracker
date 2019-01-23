@@ -35,7 +35,7 @@ public class Utils {
     }
 
     public static DecimalFormat getDecimalFormat(){
-        return new DecimalFormat("0.0");
+        return new DecimalFormat("0");
     }
 
     public static boolean checkConnection(Context context, String failedMessage) {

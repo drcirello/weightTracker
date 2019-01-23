@@ -14,7 +14,7 @@ public class ChartStatistics {
     private float changeOverTime2;
     float currentWeight;//
 
-    private ChartStatistics(List<WeightEntry> dataset, int changeOverTimePref1, int changeOverTimePref2){
+    public ChartStatistics(List<WeightEntry> dataset, int changeOverTimePref1, int changeOverTimePref2){
         currentWeight = dataset.get(dataset.size()-1).getWeight();
         changeOverTime1 = getChangeOverTime(changeOverTimePref1, dataset);
         changeOverTime2 = getChangeOverTime(changeOverTimePref2, dataset);
