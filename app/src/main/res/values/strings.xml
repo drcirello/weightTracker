@@ -109,13 +109,13 @@
     <string name="login_expired">Login Expired.</string>
 
     <!-- No Data Statistics -->
-    <string name="no_data_current_weight">182</string>
-    <string name="no_data_high">192</string>
-    <string name="no_data_low">169</string>
-    <string name="no_data_year_high">192</string>
-    <string name="no_data_year_low">169</string>
-    <string name="no_data_six_mo_change">2</string>
-    <string name="no_data_year_change">13</string>
+    <string name="no_data_current_weight">175</string>
+    <string name="no_data_high">194</string>
+    <string name="no_data_low">160</string>
+    <string name="no_data_year_high">195</string>
+    <string name="no_data_year_low">171</string>
+    <string name="no_data_six_mo_change">-16</string>
+    <string name="no_data_year_change">-8</string>
     <string name="charts_no_data_helper">Add some data to see your charts!</string>
 
 
