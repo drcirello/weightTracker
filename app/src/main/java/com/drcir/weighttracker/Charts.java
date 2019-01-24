@@ -56,6 +56,7 @@ public class Charts extends AppCompatActivity {
     int selectedButtonRange;
     int defaultOverTime1;
     int defaultOverTime2;
+    long dataSetLength;
 
     Button viewOneWeek;
     Button viewOneMonth;
@@ -218,7 +219,7 @@ public class Charts extends AppCompatActivity {
 
     public void maxView(){
         chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxSize, false);
+        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, dataSetLength);
         selectedButtonRange = DataDefinitions.MAX;
     }
 
@@ -291,7 +292,7 @@ public class Charts extends AppCompatActivity {
             maxView();
         else {
             chart = ChartUtils.updateChartViewport(chart, timeMillis);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, false);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataSetLength);
             selectedButtonRange = selectedbutton;
         }
     }
@@ -353,6 +354,7 @@ public class Charts extends AppCompatActivity {
         xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
+        xAxis.setLabelRotationAngle(-45);
 
         chart.setData(lineData);
         chartMaxSize = chart.getHighestVisibleX();
@@ -360,6 +362,7 @@ public class Charts extends AppCompatActivity {
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
         chart.setExtraLeftOffset(2f);
+        chart.setExtraBottomOffset(4f);
         chart.setAutoScaleMinMaxEnabled(true);
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -425,6 +428,7 @@ public class Charts extends AppCompatActivity {
                             removeLoadingScreen();
                             addNoDataCover();
                         } else {
+                            dataSetLength = dataSet.get(dataSet.size()-1).getDate() - dataSet.get(0).getDate();
                             setChartStatistics();
                             createChart();
                             setInitialViewport();

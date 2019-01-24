@@ -38,6 +38,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     //Chart min/max view position
     float chartMinValue;
     float chartMaxValue;
+    long dataSetLength;
 
     Button selectedButton = null;
 
@@ -55,6 +56,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         setContentView(R.layout.activity_chart_fullscreen);
         Type listType = new TypeToken<ArrayList<WeightEntry>>(){}.getType();
         dataSet = new Gson().fromJson(getIntent().getStringExtra("DATASET"), listType);
+        dataSetLength = dataSet.get(dataSet.size()-1).getDate() - dataSet.get(0).getDate();
 
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
@@ -93,6 +95,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         xAxis  = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
+        xAxis.setLabelRotationAngle(-45);
 
         chart.setData(lineData);
         chartMinValue = entries.get(0).getX();
@@ -102,6 +105,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
         chart.setExtraLeftOffset(2f);
+        chart.setExtraBottomOffset(4f);
         chart.setAutoScaleMinMaxEnabled(true);
         chart.setOnChartGestureListener(this);
 
@@ -220,13 +224,13 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             maxView();
         else {
             chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis, chartMinValue);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, true);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataSetLength);
         }
     }
 
     public void maxView(){
         chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxValue, true);
+        ChartUtils.setXaxisScale(xAxis, chartMaxValue, dataSetLength);
     }
 
     public void refreshToken(){
@@ -248,7 +252,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
         float highViewX = chart.getHighestVisibleX();
         float lowViewX = chart.getLowestVisibleX();
-        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, true);
+        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataSetLength);
     }
 
     @Override

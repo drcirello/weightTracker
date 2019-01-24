@@ -6,12 +6,11 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 public class ChartUtils {
 
-    public static XAxis setXaxisScale(XAxis xAxis, float scale, boolean fullscreen){
+    public static XAxis setXaxisScale(XAxis xAxis, float scale, long datasetLength){
+        if(datasetLength < scale)
+            scale = datasetLength;
         if(scale <= TimeConversions.THREE_MONTHS_MILLI) {
-            if(fullscreen)
-                xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterShortFullscreen());
-            else
-                xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterShort());
+            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterShort());
         }
         else if(scale < TimeConversions.ONE_YEAR_MILLI) {
             xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterMedium());
@@ -58,12 +57,14 @@ public class ChartUtils {
     private static int XaxisLabels(float time){
         int labels = 7;
 
-        if(0 <= time && time <= TimeConversions.SEVEN_DAYS_MILLI)
-            labels = (int)(time/TimeConversions.ONE_DAY_MILLI);
+        if(0 <= time && time < TimeConversions.ONE_DAY_MILLI )
+            labels = 1;
+        else if(TimeConversions.ONE_DAY_MILLI <= time  && time <= TimeConversions.SEVEN_DAYS_MILLI - TimeConversions.ONE_DAY_MILLI)
+            labels = (int)(time/TimeConversions.ONE_DAY_MILLI) + 1;
         else if(TimeConversions.SIX_MONTHS_MILLI < time && time <= TimeConversions.ONE_YEAR_MILLI) {
             labels = (int) (time / TimeConversions.ONE_MONTH_MILLI);
-            if (labels > 8)
-                labels = labels/2;
+        if (labels > 8)
+            labels = labels/2;
         }
 
         return labels;
