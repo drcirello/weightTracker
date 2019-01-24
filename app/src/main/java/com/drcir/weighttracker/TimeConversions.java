@@ -12,5 +12,5 @@ public class TimeConversions {
     final static float SIX_MONTHS_MILLI = ONE_DAY_MILLI * 182;
     final static float ONE_YEAR_MILLI = ONE_DAY_MILLI * 365;
 
-    final static float TOKEN_REFRESH_TIME = ONE_HOUR_MILLI;
+    final static float TOKEN_REFRESH_TIME = ONE_HOUR_MILLI * 6;
 }
