@@ -56,7 +56,7 @@ public class Charts extends AppCompatActivity {
     int selectedButtonRange;
     int defaultOverTime1;
     int defaultOverTime2;
-    long dataSetLength;
+    long startDate;
 
     Button viewOneWeek;
     Button viewOneMonth;
@@ -219,7 +219,7 @@ public class Charts extends AppCompatActivity {
 
     public void maxView(){
         chart.fitScreen();
-        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, dataSetLength);
+        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, startDate);
         selectedButtonRange = DataDefinitions.MAX;
     }
 
@@ -259,24 +259,24 @@ public class Charts extends AppCompatActivity {
             button.setBackgroundColor(ContextCompat.getColor(Charts.this, R.color.colorTitleBar));
             switch (button.getId()) {
                 case R.id.viewOneWeek:
-                    chartButtonPressed(TimeConversions.SEVEN_DAYS_MILLI, DataDefinitions.ONE_WEEK);
+                    chartButtonPressed(TimeConversions.SEVEN_DAYS_FLOAT, DataDefinitions.ONE_WEEK);
                     break;
                 case R.id.viewOneMonth:
-                    chartButtonPressed(TimeConversions.ONE_MONTH_MILLI, DataDefinitions.ONE_MONTH);
+                    chartButtonPressed(TimeConversions.ONE_MONTH_FLOAT, DataDefinitions.ONE_MONTH);
                     break;
                 case R.id.viewThreeMonth:
-                    chartButtonPressed(TimeConversions.THREE_MONTHS_MILLI, DataDefinitions.THREE_MONTHS);
+                    chartButtonPressed(TimeConversions.THREE_MONTHS_FLOAT, DataDefinitions.THREE_MONTHS);
                     break;
                 case R.id.viewSixMonth:
-                    chartButtonPressed(TimeConversions.SIX_MONTHS_MILLI, DataDefinitions.SIX_MONTHS);
+                    chartButtonPressed(TimeConversions.SIX_MONTHS_FLOAT, DataDefinitions.SIX_MONTHS);
                     break;
                 case R.id.viewYear:
-                    chartButtonPressed(TimeConversions.ONE_YEAR_MILLI, DataDefinitions.ONE_YEAR);
+                    chartButtonPressed(TimeConversions.ONE_YEAR_FLOAT, DataDefinitions.ONE_YEAR);
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
                     int days = cal.get(cal.DAY_OF_YEAR);
-                    float ytd = (days - 1) * TimeConversions.ONE_DAY_MILLI;
+                    float ytd = days * TimeConversions.ONE_DAY_FLOAT;
                     chartButtonPressed(ytd, DataDefinitions.YTD);
                     break;
                 case R.id.viewMax:
@@ -292,7 +292,7 @@ public class Charts extends AppCompatActivity {
             maxView();
         else {
             chart = ChartUtils.updateChartViewport(chart, timeMillis);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataSetLength);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, startDate);
             selectedButtonRange = selectedbutton;
         }
     }
@@ -326,8 +326,9 @@ public class Charts extends AppCompatActivity {
     public void createChart(){
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
+        startDate = dataSet.get(0).getDate();
         for(int i = 0; i < dataSet.size(); i++){
-            entries.add(i, new Entry((float)dataSet.get(i).getDate(), dataSet.get(i).getWeight()));
+            entries.add(i, new Entry(i * .1f, dataSet.get(i).getWeight()));
         }
         LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
 
@@ -428,7 +429,6 @@ public class Charts extends AppCompatActivity {
                             removeLoadingScreen();
                             addNoDataCover();
                         } else {
-                            dataSetLength = dataSet.get(dataSet.size()-1).getDate() - dataSet.get(0).getDate();
                             setChartStatistics();
                             createChart();
                             setInitialViewport();

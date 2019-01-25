@@ -36,9 +36,9 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     LineChart chart;
     XAxis xAxis;
     //Chart min/max view position
-    float chartMinValue;
     float chartMaxValue;
-    long dataSetLength;
+    long dataStartDate;
+    float dataSetLength;
 
     Button selectedButton = null;
 
@@ -56,12 +56,13 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         setContentView(R.layout.activity_chart_fullscreen);
         Type listType = new TypeToken<ArrayList<WeightEntry>>(){}.getType();
         dataSet = new Gson().fromJson(getIntent().getStringExtra("DATASET"), listType);
-        dataSetLength = dataSet.get(dataSet.size()-1).getDate() - dataSet.get(0).getDate();
+        dataSetLength = dataSet.size() *.1f;
+        dataStartDate = dataSet.get(0).getDate();
 
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
         for(int i = 0; i < dataSet.size(); i++){
-            entries.add(i, new Entry((float)dataSet.get(i).getDate(), dataSet.get(i).getWeight()));
+            entries.add(i, new Entry(i * .1f, dataSet.get(i).getWeight()));
         }
         LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
 
@@ -98,7 +99,6 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         xAxis.setLabelRotationAngle(-45);
 
         chart.setData(lineData);
-        chartMinValue = entries.get(0).getX();
         chartMaxValue = chart.getHighestVisibleX();
         //more chart options
         chart.setDrawBorders(true);
@@ -191,24 +191,24 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             button.setBackgroundColor(ContextCompat.getColor(ChartFullScreen.this, R.color.colorTitleBar));
             switch (button.getId()) {
                 case R.id.viewOneWeek:
-                    chartButtonPressed(TimeConversions.SEVEN_DAYS_MILLI);
+                    chartButtonPressed(TimeConversions.SEVEN_DAYS_FLOAT);
                     break;
                 case R.id.viewOneMonth:
-                    chartButtonPressed(TimeConversions.ONE_MONTH_MILLI);
+                    chartButtonPressed(TimeConversions.ONE_MONTH_FLOAT);
                     break;
                 case R.id.viewThreeMonth:
-                    chartButtonPressed(TimeConversions.THREE_MONTHS_MILLI);
+                    chartButtonPressed(TimeConversions.THREE_MONTHS_FLOAT);
                     break;
                 case R.id.viewSixMonth:
-                    chartButtonPressed(TimeConversions.SIX_MONTHS_MILLI);
+                    chartButtonPressed(TimeConversions.SIX_MONTHS_FLOAT);
                     break;
                 case R.id.viewYear:
-                    chartButtonPressed(TimeConversions.ONE_YEAR_MILLI);
+                    chartButtonPressed(TimeConversions.ONE_YEAR_FLOAT);
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
                     int days = cal.get(cal.DAY_OF_YEAR);
-                    float ytd = (days - 1) * TimeConversions.ONE_DAY_MILLI;
+                    float ytd = (days - 1) * TimeConversions.ONE_DAY_FLOAT;
                     chartButtonPressed(ytd);
                     break;
                 case R.id.viewMax:
@@ -223,14 +223,14 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         if (chartMaxValue < timeMillis)
             maxView();
         else {
-            chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis, chartMinValue);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataSetLength);
+            chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis);
+            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataStartDate);
         }
     }
 
     public void maxView(){
         chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxValue, dataSetLength);
+        ChartUtils.setXaxisScale(xAxis, chartMaxValue, dataStartDate);
     }
 
     public void refreshToken(){
@@ -252,7 +252,9 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
         float highViewX = chart.getHighestVisibleX();
         float lowViewX = chart.getLowestVisibleX();
-        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataSetLength);
+        if(highViewX > dataSetLength - .1)
+            highViewX = dataSetLength;
+        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
     }
 
     @Override

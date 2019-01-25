@@ -11,27 +11,19 @@ public class AxisValueFormatter {
 
     static class XaxisValueFormatterShort implements IAxisValueFormatter {
 
-            private String[] mValues;
-
-            private final SimpleDateFormat mFormat = new SimpleDateFormat("dd. MMM", Locale.ENGLISH);
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                long millis = (long) value;
-                return mFormat.format(new Date(millis));
-            }
-
-    }
-
-    static class XaxisValueFormatterShortFullscreen implements IAxisValueFormatter {
 
         private String[] mValues;
 
-        private final SimpleDateFormat mFormat = new SimpleDateFormat("dd. MMM ''yy", Locale.ENGLISH);
+        private long mStartDate;
+        public XaxisValueFormatterShort(long startDate){
+            mStartDate = startDate;
+        };
+
+        private final SimpleDateFormat mFormat = new SimpleDateFormat("dd. MMM", Locale.ENGLISH);
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            long millis = (long) value;
+            long millis = (long) (value * 10 * TimeConversions.ONE_DAY_MILLI) + mStartDate;
             return mFormat.format(new Date(millis));
         }
 
@@ -41,11 +33,16 @@ public class AxisValueFormatter {
 
         private String[] mValues;
 
+        private long mStartDate;
+        public XaxisValueFormatterMedium(long startDate){
+            mStartDate = startDate;
+        };
+
         private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            long millis = (long) value;
+            long millis = (long) (value * 10 * TimeConversions.ONE_DAY_MILLI) + mStartDate;
             return mFormat.format(new Date(millis));
         }
 
@@ -55,11 +52,16 @@ public class AxisValueFormatter {
 
         private String[] mValues;
 
+        private long mStartDate;
+        public XaxisValueFormatterLong(long startDate){
+            mStartDate = startDate;
+        };
+
         private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            long millis = (long) value;
+            long millis = (long) (value * 10 * TimeConversions.ONE_DAY_MILLI) + mStartDate;
             return mFormat.format(new Date(millis));
         }
 

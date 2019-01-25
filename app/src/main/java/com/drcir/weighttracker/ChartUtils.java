@@ -6,17 +6,15 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 public class ChartUtils {
 
-    public static XAxis setXaxisScale(XAxis xAxis, float scale, long datasetLength){
-        if(datasetLength < scale)
-            scale = datasetLength;
-        if(scale <= TimeConversions.THREE_MONTHS_MILLI) {
-            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterShort());
+    public static XAxis setXaxisScale(XAxis xAxis, float scale, long dataStartDate){
+        if(scale < TimeConversions.THREE_MONTHS_FLOAT + .1) {
+            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterShort(dataStartDate));
         }
-        else if(scale < TimeConversions.ONE_YEAR_MILLI) {
-            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterMedium());
+        else if(scale < TimeConversions.ONE_YEAR_FLOAT+ .1) {
+            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterMedium(dataStartDate));
         }
         else{
-            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterLong());
+            xAxis.setValueFormatter(new AxisValueFormatter.XaxisValueFormatterLong(dataStartDate));
         }
         xAxis.setLabelCount(XaxisLabels(scale), true);
         return xAxis;
@@ -35,15 +33,15 @@ public class ChartUtils {
         return chart;
     }
 
-    public static LineChart updateChartViewportFullscreen(LineChart chart, float scale, float chartMinValue){
+    public static LineChart updateChartViewportFullscreen(LineChart chart, float scale){
         //get current right side of viewport
         float highViewX = chart.getHighestVisibleX();
         //resets entire chart
         chart.fitScreen();
         //Sets viewport size for selected scale
         chart.setVisibleXRangeMaximum(scale);
-        if(highViewX - scale < chartMinValue)
-            chart.moveViewToX(chartMinValue);
+        if(highViewX - scale < 0f)
+            chart.moveViewToX(0f);
         else
             chart.moveViewToX(highViewX - scale);
         //gets the maximum possible x value
@@ -57,16 +55,15 @@ public class ChartUtils {
     private static int XaxisLabels(float time){
         int labels = 7;
 
-        if(0 <= time && time < TimeConversions.ONE_DAY_MILLI )
+        if(0 <= time && time < TimeConversions.ONE_DAY_FLOAT )
             labels = 1;
-        else if(TimeConversions.ONE_DAY_MILLI <= time  && time <= TimeConversions.SEVEN_DAYS_MILLI - TimeConversions.ONE_DAY_MILLI)
-            labels = (int)(time/TimeConversions.ONE_DAY_MILLI) + 1;
-        else if(TimeConversions.SIX_MONTHS_MILLI < time && time <= TimeConversions.ONE_YEAR_MILLI) {
-            labels = (int) (time / TimeConversions.ONE_MONTH_MILLI);
+        else if(TimeConversions.ONE_DAY_FLOAT <= time  && time <= TimeConversions.SEVEN_DAYS_FLOAT + .09 - TimeConversions.ONE_DAY_FLOAT)
+            labels = (int)(time/TimeConversions.ONE_DAY_FLOAT) + 1;
+        else if(TimeConversions.SIX_MONTHS_FLOAT +.09 < time && time <= TimeConversions.ONE_YEAR_FLOAT +.09) {
+            labels = (int) (time / TimeConversions.ONE_MONTH_FLOAT);
         if (labels > 8)
             labels = labels/2;
         }
-
         return labels;
     }
 }
