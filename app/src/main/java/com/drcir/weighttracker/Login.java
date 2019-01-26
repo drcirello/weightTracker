@@ -50,14 +50,6 @@ public class Login extends AppCompatActivity {
                 }
             });
 
-            LinearLayout resetPassword = findViewById(R.id.resetPassword);
-            resetPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                  Intent i = new Intent(Login.this, ResetPassword.class);
-                  Login.this.startActivity(i);
-                }
-            });
         }
 
         public void login(String username, String userpass){
