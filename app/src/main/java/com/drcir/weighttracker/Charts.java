@@ -217,12 +217,6 @@ public class Charts extends AppCompatActivity {
         refreshToken();
     }
 
-    public void maxView(){
-        chart.fitScreen();
-        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, startDate);
-        selectedButtonRange = DataDefinitions.MAX;
-    }
-
     public void setInitialViewport(){
         Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
         ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
@@ -297,6 +291,12 @@ public class Charts extends AppCompatActivity {
         }
     }
 
+    public void maxView(){
+        chart.fitScreen();
+        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, startDate);
+        selectedButtonRange = DataDefinitions.MAX;
+    }
+
     public void setChartStatistics(){
         stats = new ChartStatistics(dataSet, defaultOverTime1, defaultOverTime2);
         DecimalFormat form = Utils.getDecimalFormat();
@@ -349,6 +349,7 @@ public class Charts extends AppCompatActivity {
 
         //Axis options
         leftAxis = chart.getAxisLeft();
+        leftAxis.setGranularity(.5f);
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
 
@@ -356,6 +357,7 @@ public class Charts extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
         xAxis.setLabelRotationAngle(-45);
+        xAxis.setGranularity(TimeConversions.ONE_DAY_FLOAT);
 
         chart.setData(lineData);
         chartMaxSize = chart.getHighestVisibleX();
