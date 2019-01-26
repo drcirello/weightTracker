@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     float chartMaxValue;
     long dataStartDate;
     float dataSetLength;
+    float currentViewSize;
 
     Button selectedButton = null;
 
@@ -78,7 +80,10 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         //entriesSet options
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
-        entrySet.setDrawCircles(false);
+        if(dataSet.size() != 1)
+            entrySet.setDrawCircles(false);
+        else
+            entrySet.setCircleHoleRadius(10);
 
         LineData lineData = new LineData(entrySet);
         //chart options
@@ -99,7 +104,6 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         xAxis  = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
-        xAxis.setLabelRotationAngle(-45);
 
         chart.setData(lineData);
         chartMaxValue = chart.getHighestVisibleX();
@@ -107,10 +111,10 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         chart.setDrawBorders(true);
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
-        chart.setExtraLeftOffset(2f);
-        chart.setExtraBottomOffset(4f);
+        chart.setExtraOffsets(2, 0, 20, 0);
         chart.setAutoScaleMinMaxEnabled(true);
         chart.setOnChartGestureListener(this);
+        currentViewSize = chart.getHighestVisibleX() - chart.getLowestVisibleX();
 
         Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
         ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
@@ -215,7 +219,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
                     chartButtonPressed(ytd);
                     break;
                 case R.id.viewMax:
-                    maxView();
+                    chartButtonPressed(DataDefinitions.MAX);
                 default:
                     break;
             }
@@ -223,17 +227,15 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     }
 
     public void chartButtonPressed(float timeMillis){
-        if (chartMaxValue < timeMillis)
-            maxView();
-        else {
-            chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataStartDate);
+        if(dataSet.size() != 1) {
+            if (chartMaxValue < timeMillis || timeMillis == 0) {
+                chart.fitScreen();
+                timeMillis = chartMaxValue;
+            } else {
+                chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis);
+            }
         }
-    }
-
-    public void maxView(){
-        chart.fitScreen();
-        ChartUtils.setXaxisScale(xAxis, chartMaxValue, dataStartDate);
+        xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataStartDate);
     }
 
     public void refreshToken(){
@@ -257,7 +259,14 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         float lowViewX = chart.getLowestVisibleX();
         if(highViewX > dataSetLength - .1)
             highViewX = dataSetLength;
-        xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
+
+        float newViewSize = highViewX - lowViewX;
+        float rangeDifference = currentViewSize - newViewSize;
+
+        if(rangeDifference <= -TimeConversions.ONE_DAY_FLOAT || rangeDifference >= TimeConversions.ONE_DAY_FLOAT) {
+            xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
+            currentViewSize = newViewSize;
+        }
     }
 
     @Override

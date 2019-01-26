@@ -51,7 +51,7 @@
     <color name="colorCalendarMonth">#4FC3F7</color>
     <color name="colorCalendarSubmitButton">#4FC3F7</color>
     <color name="colorWeekdayBar">#6A686B</color>
-    <color name="chartsNoDataText">#4FC3F7</color>
+    <color name="chartsNoDataText">#ff5f03</color>
 
 </resources>
 

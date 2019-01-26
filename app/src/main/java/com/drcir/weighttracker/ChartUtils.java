@@ -56,7 +56,7 @@ public class ChartUtils {
         int labels = 7;
 
         if(0 <= time && time < TimeConversions.ONE_DAY_FLOAT )
-            labels = 1;
+            labels = 3;
         else if(TimeConversions.ONE_DAY_FLOAT <= time  && time <= TimeConversions.SEVEN_DAYS_FLOAT + .09 - TimeConversions.ONE_DAY_FLOAT)
             labels = (int)(time/TimeConversions.ONE_DAY_FLOAT) + 1;
         else if(TimeConversions.SIX_MONTHS_FLOAT +.09 < time && time <= TimeConversions.ONE_YEAR_FLOAT +.09) {

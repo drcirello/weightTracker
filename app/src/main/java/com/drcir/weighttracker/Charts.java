@@ -3,6 +3,7 @@ package com.drcir.weighttracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -274,7 +275,7 @@ public class Charts extends AppCompatActivity {
                     chartButtonPressed(ytd, DataDefinitions.YTD);
                     break;
                 case R.id.viewMax:
-                    maxView();
+                    chartButtonPressed(DataDefinitions.MAX, DataDefinitions.MAX);
                 default:
                     break;
             }
@@ -282,19 +283,17 @@ public class Charts extends AppCompatActivity {
     }
 
     public void chartButtonPressed(float timeMillis, int selectedbutton){
-        if (chartMaxSize < timeMillis)
-            maxView();
-        else {
-            chart = ChartUtils.updateChartViewport(chart, timeMillis);
-            xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, startDate);
-            selectedButtonRange = selectedbutton;
+        if(dataSet.size() != 1) {
+            if (chartMaxSize < timeMillis || timeMillis == DataDefinitions.MAX){
+                chart.fitScreen();
+                timeMillis = chartMaxSize;
+            }
+            else {
+                chart = ChartUtils.updateChartViewport(chart, timeMillis);
+            }
         }
-    }
-
-    public void maxView(){
-        chart.fitScreen();
-        xAxis = ChartUtils.setXaxisScale(xAxis, chartMaxSize, startDate);
-        selectedButtonRange = DataDefinitions.MAX;
+        xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, startDate);
+        selectedButtonRange = selectedbutton;
     }
 
     public void setChartStatistics(){
@@ -335,7 +334,10 @@ public class Charts extends AppCompatActivity {
         //entriesSet options
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
-        entrySet.setDrawCircles(false);
+        if(dataSet.size() != 1)
+            entrySet.setDrawCircles(false);
+        else
+            entrySet.setCircleHoleRadius(10);
 
         LineData lineData = new LineData(entrySet);
         //chart options
@@ -356,7 +358,7 @@ public class Charts extends AppCompatActivity {
         xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
-        xAxis.setLabelRotationAngle(-45);
+
         xAxis.setGranularity(TimeConversions.ONE_DAY_FLOAT);
 
         chart.setData(lineData);
@@ -364,8 +366,7 @@ public class Charts extends AppCompatActivity {
         chart.setDrawBorders(true);
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
-        chart.setExtraLeftOffset(2f);
-        chart.setExtraBottomOffset(4f);
+        chart.setExtraOffsets(2, 0, 20, 0);
         chart.setAutoScaleMinMaxEnabled(true);
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
