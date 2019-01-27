@@ -5,13 +5,11 @@
     <color name="colorAccent">#4FC3F7</color>
     <color name="colorMainBackground">#303030</color>
 
-    <!-- Blue Button Pressed -->
-    <color name="colorBlueButtonPressedStart">#FF73A3BF</color>
-    <color name="colorBlueButtonPressedEnd">#FF008080</color>
-
-    <!-- Blue Button Focused-->
-    <color name="colorBlueButtonFocusedStart">#FF87BFE0</color>
-    <color name="colorBlueButtonFocusedEnd">#FF008080</color>
+    <!-- Blue Button States -->
+    <color name="colorBlueButtonUnfocused">#039BE5</color>
+    <color name="colorBlueButtonPressed">#D6039BE5</color>
+    <color name="colorBlueButtonFocused">#E0039BE5</color>
+    <color name="colorBlueButtonBorder">#FF404040</color>
 
     <!-- Edit Text -->
     <color name="colorEditTextBackground">#E8E8E8</color>
@@ -31,7 +29,6 @@
     <!-- Weight Entries -->
     <color name="colorEntryPrimaryText">#FFFFFF</color>
     <color name="colorEntrySecondaryText">#6A686B</color>
-
 
     <!-- Recycler Divider -->
     <color name="colorRecyclerDivider">#999999</color>

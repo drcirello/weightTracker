@@ -47,7 +47,8 @@
                 android:text="@string/login"
                 android:background="@drawable/rounded_button"
                 style="@style/AccountManagementButtons"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 

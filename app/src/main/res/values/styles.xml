@@ -41,10 +41,10 @@
     </style>
 
     <style name="AccountManagementButtons">
-        <item name="android:layout_marginLeft">35dp</item>
-        <item name="android:layout_marginRight">35dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -133,7 +133,7 @@
 
     <style name="CalendarViewCustomStyle">
         <item name="android:background">@color/colorMainBackground</item>
-        <item name="calendar_date_background">@drawable/custom_state_bg_selector</item>
+        <item name="calendar_date_background">@drawable/custom_calendar_selector</item>
         <item name="calendar_date_text_color">@color/custom_date_text_selector</item>
         <item name="calendar_month_text_color">@color/colorTitleBarText</item>
         <item name="calendar_day_bar_background">@color/colorWeekdayBar</item>
