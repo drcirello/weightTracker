@@ -73,6 +73,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:hint="@string/enter_weight_hint"
                     style="@style/EnterWeightEditTextStyle" />
@@ -82,7 +84,9 @@
             android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.SubmitButton"
+            android:enabled="false"
+            android:theme="@style/SubmitButtonAccent"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:text="@string/enter_weight_submit"/>
     </LinearLayout>
     <android.support.design.widget.BottomNavigationView

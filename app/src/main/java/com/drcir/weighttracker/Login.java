@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -29,6 +34,65 @@ public class Login extends AppCompatActivity {
 
             final EditText useremail = findViewById(R.id.login_useremail);
             final EditText userpass = findViewById(R.id.login_userpass);
+            final Button login = findViewById(R.id.login_button);
+
+            useremail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        if(userpass.getText().toString().trim().length()!= 0 && useremail.getText().toString().trim().length()!=0)
+                            login.performClick();
+                    }
+                    return false;
+                }
+            });
+
+            useremail.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if(s.toString().trim().length()==0 || userpass.getText().toString().trim().length()== 0){
+                        login.setEnabled(false);
+                    } else {
+                        login.setEnabled(true);
+                    }
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+
+            userpass.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        Toast.makeText(Login.this, "Move to create", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            userpass.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if(s.toString().trim().length()==0 || useremail.getText().toString().trim().length()== 0){
+                        login.setEnabled(false);
+                    } else {
+                        login.setEnabled(true);
+                    }
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
 
             ImageView back = findViewById(R.id.login_back);
             back.setOnClickListener(new View.OnClickListener() {
@@ -41,7 +105,6 @@ public class Login extends AppCompatActivity {
                 }
             });
 
-            Button login = findViewById(R.id.login_button);
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -14,6 +14,8 @@
     <string name="login_failed">Log in Failed. Please try again.</string>
     <string name="account_created">Account Created!</string>
     <string name="account_created_failed">Failed to create account. Please try again.</string>
+    <string name="invalid_email">Invalid Email Entered</string>
+
 
     <!-- Shared Preferences Strings-->
     <string name="token_preferences">com.drcir.weighttracker.TOKEN_PREFERENCES</string>

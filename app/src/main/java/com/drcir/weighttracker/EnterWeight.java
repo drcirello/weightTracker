@@ -11,8 +11,12 @@ import android.os.Bundle;
 
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -76,6 +80,36 @@ public class EnterWeight extends AppCompatActivity {
                 });
 
         enteredWeightView = findViewById(R.id.enteredWeight);
+        final Button submit = findViewById(R.id.submit);
+
+        enteredWeightView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if(enteredWeightView.getText().toString().trim().length()!= 0)
+                        submit.performClick();
+                }
+                return false;
+            }
+        });
+
+        enteredWeightView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(enteredWeightView.getText().toString().trim().length()==0){
+                    submit.setEnabled(false);
+                } else {
+                    submit.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         //setup calendar
         final CalendarView calendarView = findViewById(R.id.calendarView);
@@ -98,7 +132,6 @@ public class EnterWeight extends AppCompatActivity {
             }
         });
 
-        Button submit = findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
