@@ -68,7 +68,7 @@ public class Settings extends AppCompatActivity {
 
         SharedPreferences sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
         int defaultChartRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
-        Spinner spinnerChartRange = (Spinner) findViewById(R.id.selectedRange);
+        Spinner spinnerChartRange = findViewById(R.id.selectedRange);
         ArrayAdapter<CharSequence> adapterRange = ArrayAdapter.createFromResource(this,
                 R.array.chart_ranges, android.R.layout.simple_spinner_item);
         adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,7 +90,7 @@ public class Settings extends AppCompatActivity {
         });
 
         int defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
-        Spinner spinnerOverTime1 = (Spinner) findViewById(R.id.selectedChangeTime1);
+        Spinner spinnerOverTime1 = findViewById(R.id.selectedChangeTime1);
         adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerOverTime1.setAdapter(adapterRange);
         spinnerOverTime1.setSelection(ranges.get(defaultOverTime1));
@@ -110,7 +110,7 @@ public class Settings extends AppCompatActivity {
         });
 
         int defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
-        Spinner spinnerOverTime2 = (Spinner) findViewById(R.id.selectedChangeTime2);
+        Spinner spinnerOverTime2 = findViewById(R.id.selectedChangeTime2);
         adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerOverTime2.setAdapter(adapterRange);
         spinnerOverTime2.setSelection(ranges.get(defaultOverTime2));

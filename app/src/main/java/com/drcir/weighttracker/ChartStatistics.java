@@ -50,7 +50,7 @@ public class ChartStatistics {
         //YTD
         if(timePeriod == -1) {
             Calendar cal = Calendar.getInstance();
-            timePeriod = cal.get(cal.DAY_OF_YEAR);
+            timePeriod = cal.get(Calendar.DAY_OF_YEAR);
         }
         //Max
         if(timePeriod == 0 || timePeriod > dataSize)

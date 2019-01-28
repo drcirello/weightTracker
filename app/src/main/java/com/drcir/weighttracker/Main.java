@@ -58,7 +58,7 @@ public class Main extends AppCompatActivity {
                 noToken();
             }
         });
-    };
+    }
 
     public void noToken(){
         setContentView(R.layout.activity_main);
@@ -108,12 +108,12 @@ public class Main extends AppCompatActivity {
                     mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
                 }
                 catch (Exception e){}
-            };
+            }
 
             @Override
             public void onFailure(Call<AccountManagement> call, Throwable t) {
                 call.cancel();
             }
         });
-    };
+    }
 }

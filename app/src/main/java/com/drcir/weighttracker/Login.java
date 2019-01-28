@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        Toast.makeText(Login.this, "Move to create", Toast.LENGTH_SHORT).show();
+                        login.performClick();
                         return true;
                     }
                     return false;
@@ -117,13 +117,6 @@ public class Login extends AppCompatActivity {
 
         public void login(String username, String userpass){
 
-            //TODO testing
-            //username = "dave";
-            //userpass = "password";
-            username = "weighttrackertest@gmail.com";
-            userpass = "Weighttest123$";
-            //username = "weightTrackerTest2@gmail.com";
-            //userpass = "Weighttest123$";
             if(Utils.checkConnection(Login.this, getString(R.string.no_connection_message_login))) {
                 Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
                 call.enqueue(new Callback<AccountManagement>() {
@@ -154,5 +147,5 @@ public class Login extends AppCompatActivity {
                     }
                 });
             }
-        };
+        }
 }

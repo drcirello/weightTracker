@@ -270,7 +270,7 @@ public class Charts extends AppCompatActivity {
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
-                    int days = cal.get(cal.DAY_OF_YEAR);
+                    int days = cal.get(Calendar.DAY_OF_YEAR);
                     float ytd = days * TimeConversions.ONE_DAY_FLOAT;
                     chartButtonPressed(ytd, DataDefinitions.YTD);
                     break;

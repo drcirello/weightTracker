@@ -17,7 +17,7 @@ public class AxisValueFormatter {
         private long mStartDate;
         public XaxisValueFormatterShort(long startDate){
             mStartDate = startDate;
-        };
+        }
 
         private final SimpleDateFormat mFormat = new SimpleDateFormat("dd. MMM", Locale.ENGLISH);
 
@@ -36,7 +36,7 @@ public class AxisValueFormatter {
         private long mStartDate;
         public XaxisValueFormatterMedium(long startDate){
             mStartDate = startDate;
-        };
+        }
 
         private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
 
@@ -55,7 +55,7 @@ public class AxisValueFormatter {
         private long mStartDate;
         public XaxisValueFormatterLong(long startDate){
             mStartDate = startDate;
-        };
+        }
 
         private final SimpleDateFormat mFormat = new SimpleDateFormat("MMM ''yy", Locale.ENGLISH);
 

@@ -1,7 +1,7 @@
 package com.drcir.weighttracker;
 
 public class TimeConversions {
-    public TimeConversions() {};
+    public TimeConversions() {}
 
     final static long ONE_MINUTE_MILLI = 60000;
     final static long ONE_HOUR_MILLI = ONE_MINUTE_MILLI * 60;
