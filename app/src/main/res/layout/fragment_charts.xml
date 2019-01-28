@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/TitleBar" />
-
     <RelativeLayout
         android:id="@+id/noData"
         android:layout_width="match_parent"
@@ -28,7 +22,6 @@
             android:layout_centerHorizontal="true"
             style="@style/ChartsNoDataText"
             android:text="@string/charts_no_data_helper"/>
-
     </RelativeLayout>
 
     <LinearLayout
@@ -43,13 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/CurrentWeight" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/CurrentWeightTitleText"
             android:text="@string/charts_current" />
-
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
@@ -101,6 +92,7 @@
                     android:text="@string/charts_api_failed_message_part2" />
             </LinearLayout>
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/buttonBar"
             android:layout_width="match_parent"
@@ -169,7 +161,6 @@
                 android:text="@string/button_max" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -188,28 +179,24 @@
                     android:layout_weight="2"
                     style="@style/StatsText"
                     android:text="@string/charts_high" />
-
                 <TextView
                     android:id="@+id/charts_high_response"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/StatsText"/>
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     style="@style/StatsText"
                     android:text="@string/charts_low" />
-
                 <TextView
                     android:id="@+id/charts_low_response"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/StatsText"/>
-
             </LinearLayout>
 
             <LinearLayout
@@ -218,35 +205,30 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 style="@style/StatsText">
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/charts_year_high"
                     style="@style/StatsText" />
-
                 <TextView
                     android:id="@+id/charts_year_high_response"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/StatsText" />
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     style="@style/StatsText"
                     android:text="@string/charts_year_low" />
-
                 <TextView
                     android:id="@+id/charts_year_low_response"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/StatsText"/>
-
             </LinearLayout>
 
             <LinearLayout
@@ -262,18 +244,17 @@
                     android:layout_weight="2"
                     android:orientation="horizontal"
                     style="@style/StatsText">
-                <TextView
-                    android:id="@+id/charts_change_over_time_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/StatsText" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/StatsText"
-                    android:text="@string/charts_change"/>
+                    <TextView
+                        android:id="@+id/charts_change_over_time_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/StatsText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/StatsText"
+                        android:text="@string/charts_change"/>
                 </LinearLayout>
-
 
                 <TextView
                     android:id="@+id/charts_change_over_time_1_response"
@@ -288,17 +269,16 @@
                     android:layout_weight="2"
                     android:orientation="horizontal"
                     style="@style/StatsText">
-
-                <TextView
-                    android:id="@+id/charts_change_over_time_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/StatsText" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/StatsText"
-                    android:text="@string/charts_change"/>
+                    <TextView
+                        android:id="@+id/charts_change_over_time_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/StatsText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/StatsText"
+                        android:text="@string/charts_change"/>
                 </LinearLayout>
 
                 <TextView
@@ -307,21 +287,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/StatsText" />
-
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-    <android.support.design.widget.BottomNavigationView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/navBar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        app:itemBackground="@color/colorNavigationBackground"
-        app:itemIconTint="@drawable/navigation_color_selector"
-        app:itemTextColor="@drawable/navigation_color_selector"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_navigation_items" />
 </LinearLayout>

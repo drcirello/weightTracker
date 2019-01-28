@@ -89,7 +89,7 @@ public class Main extends AppCompatActivity {
         if((System.currentTimeMillis() - tokenDate) > DataDefinitions.ONE_WEEK){
             refreshToken();
         }
-        Intent i = new Intent(Main.this, Charts.class);
+        Intent i = new Intent(Main.this, Base_Activity.class);
         Main.this.startActivity(i);
         finish();
     }

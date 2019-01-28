@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/TitleBar" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -80,17 +73,5 @@
                 android:text="@string/settings_logout"/>
         </LinearLayout>
     </LinearLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/navBar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:itemBackground="@color/colorNavigationBackground"
-        app:itemIconTint="@drawable/navigation_color_selector"
-        app:itemTextColor="@drawable/navigation_color_selector"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_navigation_items" />
 
 </LinearLayout>

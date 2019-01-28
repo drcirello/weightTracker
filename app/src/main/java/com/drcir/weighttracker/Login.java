@@ -13,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,7 +115,6 @@ public class Login extends AppCompatActivity {
         }
 
         public void login(String username, String userpass){
-
             if(Utils.checkConnection(Login.this, getString(R.string.no_connection_message_login))) {
                 Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
                 call.enqueue(new Callback<AccountManagement>() {
@@ -131,7 +129,7 @@ public class Login extends AppCompatActivity {
                             mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
                             mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
                             mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                            Intent intent = new Intent(Login.this, Charts.class);
+                            Intent intent = new Intent(Login.this, Base_Activity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             Login.this.startActivity(intent);
                             finish();

@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/TitleBar" />
+
     <ru.cleverpumpkin.calendar.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
@@ -18,7 +13,6 @@
         style="@style/CalendarViewCustomStyle" />
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,17 +82,4 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:text="@string/enter_weight_submit"/>
     </LinearLayout>
-    <android.support.design.widget.BottomNavigationView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/navBar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        app:itemBackground="@color/colorNavigationBackground"
-        app:itemIconTint="@drawable/navigation_color_selector"
-        app:itemTextColor="@drawable/navigation_color_selector"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_navigation_items" />
-
 </LinearLayout>

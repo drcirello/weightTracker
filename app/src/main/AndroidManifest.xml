@@ -32,23 +32,11 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
-        <activity android:name="com.drcir.weighttracker.WeightEntries"
-            android:label="@string/entries_title">
-        </activity>
-        <activity android:name="com.drcir.weighttracker.Charts"
-            android:label="@string/charts_title"
+        <activity android:name="com.drcir.weighttracker.Base_Activity"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
-        <activity android:name="com.drcir.weighttracker.EnterWeight"
-            android:label="@string/enter_weight_title"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation">
-        </activity>
-        <activity android:name="com.drcir.weighttracker.Settings"
-            android:label="@string/settings_title">
-        </activity>
-        <activity android:name="ChartFullScreen"
+        <activity android:name="com.drcir.weighttracker.ChartFullScreen"
             android:screenOrientation="landscape"
             android:configChanges="orientation">
         </activity>

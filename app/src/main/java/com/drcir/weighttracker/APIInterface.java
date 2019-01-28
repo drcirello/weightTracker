@@ -11,7 +11,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-interface APIInterface {
+public interface APIInterface {
 
     @FormUrlEncoded
     @POST("/rest-auth/login/")
