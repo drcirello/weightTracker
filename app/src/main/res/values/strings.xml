@@ -31,7 +31,7 @@
 
     <!-- Navigation Bar -->
     <string name="navigate_charts">Charts</string>
-    <string name="navigate_create">Enter Weight</string>
+    <string name="navigate_create">Create</string>
     <string name="navigate_view">Entries</string>
     <string name="navigate_settings">Settings</string>
 
