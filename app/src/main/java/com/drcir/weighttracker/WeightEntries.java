@@ -45,7 +45,7 @@ public class WeightEntries extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager;
 
         setContentView(R.layout.weight_entries_recycler);
-        Toolbar myTitlebar = (Toolbar) findViewById(R.id.titleBar);
+        Toolbar myTitlebar = findViewById(R.id.titleBar);
         setSupportActionBar(myTitlebar);
         BottomNavigationView navBar = findViewById(R.id.navBar);
         navBar.setSelectedItemId(R.id.action_view);
@@ -80,10 +80,10 @@ public class WeightEntries extends AppCompatActivity {
 
         entriesFailedMessage = findViewById(R.id.failedMessage);
         pBar = findViewById(R.id.pBar);
-        entriesFrame = (RelativeLayout) findViewById(R.id.entriesFrame);
+        entriesFrame = findViewById(R.id.entriesFrame);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.weight_entries_recycler_view);
-        emptyView = (RelativeLayout) findViewById(R.id.empty_view);
+        mRecyclerView = findViewById(R.id.weight_entries_recycler_view);
+        emptyView = findViewById(R.id.empty_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
@@ -157,7 +157,7 @@ public class WeightEntries extends AppCompatActivity {
             noDataLineOne.setText(R.string.no_connection_message);
             noDataLineTwo.setText("");
         }
-    };
+    }
 
     public void refreshToken() {
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);

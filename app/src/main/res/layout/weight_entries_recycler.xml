@@ -76,12 +76,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        style="@style/WeightEntryHelperText"
-        android:text="@string/entries_helper"/>
-
     <android.support.design.widget.BottomNavigationView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

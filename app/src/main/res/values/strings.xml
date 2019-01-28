@@ -32,13 +32,12 @@
     <!-- Navigation Bar -->
     <string name="navigate_charts">Charts</string>
     <string name="navigate_create">Enter Weight</string>
-    <string name="navigate_view">View Entries</string>
+    <string name="navigate_view">Entries</string>
     <string name="navigate_settings">Settings</string>
 
     <!-- Weight Entry Page -->
     <string name="entries_date">Date:\u0020</string>
     <string name="entries_weight">Weight:\u0020</string>
-    <string name="entries_helper">Note: Inactive Entries will not be displayed in charts</string>
     <string name="entries_delete_button">Delete</string>
     <string name="no_data_available_line_one">Looks like you haven\'t entered any weights!</string>
     <string name="no_data_available_line_two">Make some entries and check back here.</string>

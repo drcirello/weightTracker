@@ -24,7 +24,7 @@ public class Utils {
     //converts to Month DD, YYYY format
     public static String formatDate(long unixDate){
         Date date = new java.util.Date(unixDate);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMM dd, yyyy", Locale.US);
         return sdf.format(date);
     }
 

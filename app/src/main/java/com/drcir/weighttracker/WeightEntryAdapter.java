@@ -30,9 +30,9 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
 
         public WeightEntryViewHolder(final View v) {
             super(v);
-            this.mDate = (TextView) v.findViewById(R.id.entries_date_response);
-            this.mWeight = (TextView) v.findViewById(R.id.entries_weight_response);
-            this.mDelete = (Button) v.findViewById(R.id.entries_delete_entry);
+            this.mDate = v.findViewById(R.id.entries_date_response);
+            this.mWeight = v.findViewById(R.id.entries_weight_response);
+            this.mDelete = v.findViewById(R.id.entries_delete_entry);
         }
     }
 
