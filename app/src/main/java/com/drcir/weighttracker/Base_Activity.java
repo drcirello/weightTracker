@@ -13,9 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class Base_Activity extends AppCompatActivity {
+public class Base_Activity extends AppCompatActivity implements FragmentSwapListener {
     FragmentManager fragmentManager;
-
+    Toolbar myTitlebar;
+    BottomNavigationView navBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,52 +29,15 @@ public class Base_Activity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragment_container, new ChartsFragment());
         fragmentTransaction.commit();
 
-        final Toolbar myTitlebar = findViewById(R.id.titleBar);
+        myTitlebar = findViewById(R.id.titleBar);
         myTitlebar.setTitle(getString(R.string.charts_title));
-        BottomNavigationView navBar = findViewById(R.id.navBar);
+        navBar = findViewById(R.id.navBar);
         navBar.setSelectedItemId(R.id.action_charts);
         navBar.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int id = item.getItemId();
-
-                        Fragment fragment = null;
-                        String title;
-                        Class fragmentClass;
-                        switch (id) {
-
-                            case R.id.action_charts:
-                                fragmentClass = ChartsFragment.class;
-                                title = getString(R.string.charts_title);
-                                break;
-                            case R.id.action_create:
-                                fragmentClass = EnterWeightFragment.class;
-                                title = getString(R.string.enter_weight_title);
-                                break;
-                            case R.id.action_view:
-                                fragmentClass = WeightEntriesFragment.class;
-                                title = getString(R.string.entries_title);
-                                break;
-                            case R.id.action_settings:
-                                fragmentClass = SettingsFragment.class;
-                                title = getString(R.string.settings_title);
-                                break;
-                            default:
-                                fragmentClass = ChartsFragment.class;
-                                title = getString(R.string.charts_title);
-                                break;
-                        }
-
-                        try {
-                            fragment = (Fragment) fragmentClass.newInstance();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                        item.setChecked(true);
-                        myTitlebar.setTitle(title);
+                        swapFragment(item.getItemId());
                         return true;
                     }
                 });
@@ -88,5 +52,44 @@ public class Base_Activity extends AppCompatActivity {
             Intent intent = new Intent(Base_Activity.this, Main.class);
             Utils.refreshToken(mSharedPreferences, Base_Activity.this, intent);
         }
+    }
+
+    @Override
+    public void swapFragment(int id){
+        Fragment fragment = null;
+        String title;
+        Class fragmentClass;
+        switch (id) {
+            case R.id.action_charts:
+                fragmentClass = ChartsFragment.class;
+                title = getString(R.string.charts_title);
+                break;
+            case R.id.action_create:
+                fragmentClass = EnterWeightFragment.class;
+                title = getString(R.string.enter_weight_title);
+                break;
+            case R.id.action_view:
+                fragmentClass = WeightEntriesFragment.class;
+                title = getString(R.string.entries_title);
+                break;
+            case R.id.action_settings:
+                fragmentClass = SettingsFragment.class;
+                title = getString(R.string.settings_title);
+                break;
+            default:
+                fragmentClass = ChartsFragment.class;
+                title = getString(R.string.charts_title);
+                break;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        navBar.getMenu().findItem(id).setChecked(true);
+        myTitlebar.setTitle(title);
     }
 }

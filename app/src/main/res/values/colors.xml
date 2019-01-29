@@ -51,7 +51,8 @@
     <color name="colorCalendarSubmitButtonEnabled">#4FC3F7</color>
     <color name="colorCalendarSubmitButtonDisabled">#E04FC3F7</color>
     <color name="colorWeekdayBar">#6A686B</color>
-    <color name="chartsNoDataText">#ff5f03</color>
+    <color name="chartsNoDataText">@android:color/white</color>
+    <color name="chartsNoDataBackground">#CC0099FF</color>
 
 </resources>
 

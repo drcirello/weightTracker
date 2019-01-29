@@ -120,7 +120,7 @@
     <string name="no_data_year_low">171</string>
     <string name="no_data_six_mo_change">-16</string>
     <string name="no_data_year_change">-8</string>
-    <string name="charts_no_data_helper">Add some data to see your charts!</string>
+    <string name="charts_no_data_helper">Add a few weights to start\n seeing your charts!</string>
 
 
 </resources>

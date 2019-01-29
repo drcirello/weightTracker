@@ -40,6 +40,8 @@ import retrofit2.Response;
 
 public class ChartsFragment extends Fragment {
 
+    private FragmentSwapListener fragmentSwapListener;
+
     LineChart chart;
     XAxis xAxis;
     YAxis leftAxis;
@@ -87,6 +89,15 @@ public class ChartsFragment extends Fragment {
     Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
     SharedPreferences sharedPrefToken;
     SharedPreferences sharedPrefRange;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            fragmentSwapListener = (FragmentSwapListener) context;
+        } catch (ClassCastException castException) {
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -417,7 +428,7 @@ public class ChartsFragment extends Fragment {
                         pBar.setVisibility(View.VISIBLE);
                         charts_failed_message.setVisibility(View.GONE);
                         dataSet = response.body();
-                        if (dataSet.isEmpty()) {
+                        if (dataSet.size() <= 1) {
                             dataSet = ExampleData.getFakedData();
                             setFakeChartStatistics();
                             createChart();
@@ -453,6 +464,12 @@ public class ChartsFragment extends Fragment {
                 .into(noDataImage);
         mainView.setVisibility(View.GONE);
         noDataView.setVisibility(View.VISIBLE);
+        noDataView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentSwapListener.swapFragment(R.id.action_create);
+            }
+        });
     }
 }
 
