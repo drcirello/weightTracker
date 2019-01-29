@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/noData"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:visibility="gone">
         <ImageView
@@ -29,7 +29,7 @@
     <LinearLayout
         android:id="@+id/mainView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -44,7 +44,7 @@
             style="@style/CurrentWeightTitleText"
             android:text="@string/charts_current" />
         <View
-            android:id="@+id/divider"
+            android:id="@+id/divider_1"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginRight="5dp"
@@ -102,7 +102,13 @@
                     android:text="@string/charts_api_failed_message_part2" />
             </LinearLayout>
         </RelativeLayout>
-
+        <View
+            android:id="@+id/chartDivider"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/white" />
         <LinearLayout
             android:id="@+id/buttonBar"
             android:layout_width="match_parent"
@@ -111,66 +117,93 @@
             android:background="@color/colorChartBackground"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            style="?android:attr/buttonBarStyle"
             android:visibility="invisible">
             <Button
                 android:id="@+id/viewOneWeek"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_one_week" />
             <Button
                 android:id="@+id/viewOneMonth"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_one_month" />
             <Button
                 android:id="@+id/viewThreeMonth"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_three_month" />
             <Button
                 android:id="@+id/viewSixMonth"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_six_month" />
             <Button
                 android:id="@+id/viewYear"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_one_year" />
             <Button
                 android:id="@+id/viewYtd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_ytd" />
             <Button
                 android:id="@+id/viewMax"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minHeight="0dp"
+                android:textColor="@color/colorTitleBarText"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorChartButtonBackground"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/button_max" />
         </LinearLayout>
-
+        <View
+            android:id="@+id/divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorDivider" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -182,7 +215,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -247,7 +279,6 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 style="@style/StatsText">
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

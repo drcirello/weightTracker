@@ -53,7 +53,7 @@ public class ChartStatistics {
             timePeriod = cal.get(Calendar.DAY_OF_YEAR);
         }
         //Max
-        if(timePeriod == 0 || timePeriod > dataSize)
+        if(timePeriod == 0 || timePeriod > dataSize - 1)
             difference = currentWeight - dataset.get(0).getWeight();
         else
             difference = currentWeight - dataset.get(dataSize - 1 - timePeriod).getWeight();

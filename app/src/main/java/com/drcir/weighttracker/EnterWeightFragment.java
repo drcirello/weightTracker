@@ -17,12 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.drcir.weighttracker.APIClient;
-import com.drcir.weighttracker.APIInterface;
-import com.drcir.weighttracker.Main;
-import com.drcir.weighttracker.R;
-import com.drcir.weighttracker.Utils;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +33,8 @@ import ru.cleverpumpkin.calendar.CalendarDate;
 import ru.cleverpumpkin.calendar.CalendarView;
 
 public class EnterWeightFragment extends Fragment {
+
+    private FragmentSwapListener fragmentSwapListener;
     Long selectedDate;
     TextView selectedDateView;
     int enteredWeight;
@@ -48,6 +44,15 @@ public class EnterWeightFragment extends Fragment {
     SharedPreferences sharedPrefToken;
     String token;
     APIInterface apiInterface;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            fragmentSwapListener = (FragmentSwapListener) context;
+        } catch (ClassCastException castException) {
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -81,6 +86,8 @@ public class EnterWeightFragment extends Fragment {
         calendarView.setupCalendar(initialDate, null, null, CalendarView.SelectionMode.SINGLE, preselectedDates, firstDayOfWeek, false);
         selectedDate = initialDate.getTimeInMillis();
         selectedDateView.setText(Utils.formatSelectedDate(selectedDate));
+
+        enteredWeightView.requestFocus();
 
         enteredWeightView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -135,8 +142,10 @@ public class EnterWeightFragment extends Fragment {
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            if (response.isSuccessful())
+                            if (response.isSuccessful()) {
+                                fragmentSwapListener.swapFragment(R.id.action_charts);
                                 Toast.makeText(getActivity(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
+                            }
                             else
                                 createFailed();
                         }

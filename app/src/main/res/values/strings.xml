@@ -32,7 +32,7 @@
 
     <!-- Navigation Bar -->
     <string name="navigate_charts">Charts</string>
-    <string name="navigate_create">Create</string>
+    <string name="navigate_create">Enter</string>
     <string name="navigate_view">Entries</string>
     <string name="navigate_settings">Settings</string>
 
@@ -45,10 +45,10 @@
 
     <!-- Charts Page -->
     <string name="charts_current">Current Weight</string>
-    <string name="charts_high">High</string>
-    <string name="charts_low">Low</string>
-    <string name="charts_year_high">52 wk. High</string>
-    <string name="charts_year_low">52 wk. Low</string>
+    <string name="charts_high">All-time High</string>
+    <string name="charts_low">All-time Low</string>
+    <string name="charts_year_high">1Y High</string>
+    <string name="charts_year_low">1Y Low</string>
     <string name="charts_change">\u0020Change</string>
     <string name="button_one_week">7D</string>
     <string name="button_one_month">1M</string>
@@ -60,11 +60,11 @@
     <string name="charts_api_failed_fields">---</string>
     <string name="charts_api_failed_message_part1">Failed to retrieve data.</string>
     <string name="charts_api_failed_message_part2">Click here to try again.</string>
-    <string name="over_time_one_week">7 d.</string>
-    <string name="over_time_one_month">1 mo.</string>
-    <string name="over_time_three_month">3 mo.</string>
-    <string name="over_time_six_month">6 mo.</string>
-    <string name="over_time_one_year">1 yr.</string>
+    <string name="over_time_one_week">7D</string>
+    <string name="over_time_one_month">1M</string>
+    <string name="over_time_three_month">3M</string>
+    <string name="over_time_six_month">6M</string>
+    <string name="over_time_one_year">1 Y</string>
     <string name="over_time_ytd">YTD</string>
     <string name="over_time_max">Max</string>
 

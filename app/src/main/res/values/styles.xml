@@ -105,7 +105,7 @@
     </style>
 
     <style name="StatsText">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
     </style>
 
@@ -162,7 +162,7 @@
     </style>
 
     <style name="AppTheme.DeleteButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@android:color/holo_red_dark</item>
+        <item name="colorButtonNormal">#990000</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -174,14 +174,20 @@
 
     <style name="EnterWeightTextStyle">
         <item name="android:background">@color/colorTitleBar</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
         <item name="android:padding">10dp</item>
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="EnterWeightViewStyle">
+        <item name="android:background">@color/colorTitleBar</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
     <style name="EnterWeightEditTextStyle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
