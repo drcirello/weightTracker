@@ -12,6 +12,7 @@
     <string name="send_password_reset">Send</string>
     <string name="create_password">Choose a Password</string>
     <string name="login_failed">Log in Failed. Please try again.</string>
+    <string name="creation_login_failed">Account Created. Error Logging in.</string>
     <string name="account_created">Account Created!</string>
     <string name="account_created_failed">Failed to create account. Please try again.</string>
     <string name="invalid_email">Invalid Email Entered</string>

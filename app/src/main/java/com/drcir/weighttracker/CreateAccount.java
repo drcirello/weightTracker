@@ -1,6 +1,8 @@
 package com.drcir.weighttracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -103,31 +107,41 @@ public class CreateAccount extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = userEmail.getText().toString();
-                String password = userPass.getText().toString();
+                final String email = userEmail.getText().toString();
+                final String password = userPass.getText().toString();
 
 
                 if(Utils.isEmailValid(email)) {
-                    APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                    final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
                     if (Utils.checkConnection(CreateAccount.this, getString(R.string.no_connection_message_create_account))) {
                         Call<JsonObject> call = apiInterface.createUser(email, email, password, password);
                         call.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if (response.isSuccessful()) {
-                                    Intent intent = new Intent(CreateAccount.this, Login.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    CreateAccount.this.startActivity(intent);
-                                    Toast.makeText(CreateAccount.this, getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                                    login(apiInterface, email, password);
                                     finish();
                                 } else {
-                                    createFailed();
+                                    try {
+                                        String message;
+                                        JSONObject errorMessage = new JSONObject(response.errorBody().string());
+                                        if(errorMessage.has("email"))
+                                            message = errorMessage.getJSONArray("email").getString(0);
+                                        else if(errorMessage.has("password1"))
+                                            message = errorMessage.getJSONArray("password1").getString(0);
+                                        else
+                                            message = getString(R.string.account_created_failed);
+                                        createFailed(message);
+                                    } catch (Exception e) {
+                                        createFailed(getString(R.string.account_created_failed));
+                                    }
+
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
-                                createFailed();
+                                createFailed(getString(R.string.account_created_failed));
                                 call.cancel();
                             }
                         });
@@ -141,7 +155,37 @@ public class CreateAccount extends AppCompatActivity {
 
     }
 
-    public void createFailed(){
-        Toast.makeText(getApplicationContext(), getString(R.string.account_created_failed), Toast.LENGTH_LONG).show();
+    public void login(APIInterface apiInterface, String username, String userpass){
+            Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
+            call.enqueue(new Callback<AccountManagement>() {
+                @Override
+                public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
+                    response.body();
+                    try {
+                        String token = response.body().getToken();
+                        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+                        mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
+                        mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
+                        mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
+                        Intent intent = new Intent(CreateAccount.this, Base_Activity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        CreateAccount.this.startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.creation_login_failed), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AccountManagement> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.creation_login_failed), Toast.LENGTH_LONG).show();
+                    call.cancel();
+                }
+            });
+        }
+
+    public void createFailed(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 }

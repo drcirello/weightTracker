@@ -123,7 +123,6 @@ public class Login extends AppCompatActivity {
                         response.body();
                         try {
                             token = response.body().getToken();
-                            user = response.body().getUser();
                             SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
                             SharedPreferences.Editor mEditor = mSharedPreferences.edit();
                             mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
