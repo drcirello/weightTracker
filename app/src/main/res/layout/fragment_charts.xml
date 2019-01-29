@@ -108,7 +108,8 @@
             android:layout_height="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@android:color/white" />
+            android:background="@android:color/white"
+            android:visibility="invisible" />
         <LinearLayout
             android:id="@+id/buttonBar"
             android:layout_width="match_parent"

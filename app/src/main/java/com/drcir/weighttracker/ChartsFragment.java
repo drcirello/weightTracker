@@ -77,7 +77,7 @@ public class ChartsFragment extends Fragment {
     TextView charts_change_over_time_2;
     LinearLayout charts_failed_message;
 
-
+    View divider;
     LinearLayout buttonBar;
     TextView messageText;
     LinearLayout mainView;
@@ -152,6 +152,7 @@ public class ChartsFragment extends Fragment {
         pBar = view.findViewById(R.id.pBar);
         chart = view.findViewById(R.id.lineChart);
         chartFrame = view.findViewById(R.id.chartFrame);
+        divider = view.findViewById(R.id.chartDivider);
         buttonBar = view.findViewById(R.id.buttonBar);
         messageText = view.findViewById(R.id.charts_api_failed_message_part1);
         mainView = view.findViewById(R.id.mainView);
@@ -389,6 +390,7 @@ public class ChartsFragment extends Fragment {
         chart.setVisibility(View.VISIBLE);
         pBar.setVisibility(View.GONE);
         charts_failed_message.setVisibility(View.GONE);
+        divider.setVisibility(View.VISIBLE);
         buttonBar.setVisibility(View.VISIBLE);
     }
 
