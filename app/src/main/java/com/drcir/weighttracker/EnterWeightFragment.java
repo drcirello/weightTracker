@@ -34,7 +34,7 @@ import ru.cleverpumpkin.calendar.CalendarView;
 
 public class EnterWeightFragment extends Fragment {
 
-    private FragmentSwapListener fragmentSwapListener;
+    private BaseActivityListener baseActivityListener;
     Long selectedDate;
     TextView selectedDateView;
     int enteredWeight;
@@ -49,7 +49,7 @@ public class EnterWeightFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            fragmentSwapListener = (FragmentSwapListener) context;
+            baseActivityListener = (BaseActivityListener) context;
         } catch (ClassCastException castException) {
         }
     }
@@ -143,7 +143,7 @@ public class EnterWeightFragment extends Fragment {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()) {
-                                fragmentSwapListener.swapFragment(R.id.action_charts);
+                                baseActivityListener.swapFragment(R.id.action_charts);
                                 Toast.makeText(getActivity(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
                             }
                             else

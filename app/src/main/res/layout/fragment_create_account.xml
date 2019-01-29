@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/account_management_wallpaper">
+
+    <ImageView
+        android:id="@+id/create_account_back"
+        style="@style/BackChevron"
+        android:src="@drawable/back_chevron" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:text="@string/create_account"
+            style="@style/AccountManagementHeaderText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            style="@style/AccountManagementSecondaryHeaderText"/>
+        <EditText
+            android:id="@+id/create_account_useremail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            style="@style/AccountManagementEditText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_password"
+            style="@style/AccountManagementSecondaryHeaderText" />
+        <EditText
+            android:id="@+id/create_account_userpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            style="@style/AccountManagementEditText" />
+     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/create_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:enabled="false"
+            android:background="@drawable/rounded_button"
+            style="@style/AccountManagementButtons" />
+    </LinearLayout>
+</LinearLayout>

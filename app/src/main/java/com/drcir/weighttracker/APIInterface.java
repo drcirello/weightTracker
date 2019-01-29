@@ -41,7 +41,7 @@ public interface APIInterface {
 
     @FormUrlEncoded
     @POST("/rest-auth/verify-token/")
-    Call<JsonObject> postLogin(@Field("token") String token);
+    Call<JsonObject> postVerify(@Field("token") String token);
 
     @POST("/tracker/weight/data/user/")
     Call<List<WeightEntry>> getWeightData(@Header("Authorization") String token);

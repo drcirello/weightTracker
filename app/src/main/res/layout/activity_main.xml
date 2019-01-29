@@ -1,78 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/account_management_wallpaper">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:text="Weight Tracker"
-            android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:textStyle="bold"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/account_management_blurb_1"
-                style="@style/AccountManagementBlurbText" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/account_management_blurb_2"
-                style="@style/AccountManagementBlurbText"/>
-        </LinearLayout>
-
-    </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="45dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/createAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                style="@style/AccountManagementButtons"
-                android:text="@string/create_account" />
-
-            <Button
-                android:id="@+id/login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:background="@drawable/rounded_button"
-                style="@style/AccountManagementButtons"
-                android:layout_marginTop="10dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
 </FrameLayout>

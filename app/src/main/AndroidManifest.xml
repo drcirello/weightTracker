@@ -20,18 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.drcir.weighttracker.Login"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation">
-        </activity>
-        <activity android:name="com.drcir.weighttracker.CreateAccount"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation">
-        </activity>
-        <activity android:name="com.drcir.weighttracker.ResetPassword"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation">
-        </activity>
         <activity android:name="com.drcir.weighttracker.Base_Activity"
             android:screenOrientation="portrait"
             android:configChanges="orientation">

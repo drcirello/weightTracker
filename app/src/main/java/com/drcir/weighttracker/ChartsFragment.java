@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class ChartsFragment extends Fragment {
 
-    private FragmentSwapListener fragmentSwapListener;
+    private BaseActivityListener baseActivityListener;
 
     LineChart chart;
     XAxis xAxis;
@@ -94,7 +94,7 @@ public class ChartsFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            fragmentSwapListener = (FragmentSwapListener) context;
+            baseActivityListener = (BaseActivityListener) context;
         } catch (ClassCastException castException) {
         }
     }
@@ -469,7 +469,7 @@ public class ChartsFragment extends Fragment {
         noDataView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentSwapListener.swapFragment(R.id.action_create);
+                baseActivityListener.swapFragment(R.id.action_create);
             }
         });
     }

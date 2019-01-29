@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class Base_Activity extends AppCompatActivity implements FragmentSwapListener {
+public class Base_Activity extends AppCompatActivity implements BaseActivityListener {
     FragmentManager fragmentManager;
     Toolbar myTitlebar;
     BottomNavigationView navBar;

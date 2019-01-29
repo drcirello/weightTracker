@@ -1,14 +1,14 @@
 package com.drcir.weighttracker;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,23 +17,50 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateAccount extends AppCompatActivity {
+public class CreateAccountFragment extends Fragment {
+
+    EditText userEmail;
+    EditText userPass;
+    Button createAccount;
+    ImageView back;
+    private AccountManagementListener accountManagementListener;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            accountManagementListener = (AccountManagementListener) context;
+        } catch (ClassCastException castException) {
+        }
+    }
 
-        final EditText userEmail = findViewById(R.id.create_account_useremail);
-        final EditText userPass = findViewById(R.id.create_account_userpass);
-        final Button createAccount = findViewById(R.id.create_account_button);
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_create_account, container, false);
+
+        userEmail = view.findViewById(R.id.create_account_useremail);
+        userPass = view.findViewById(R.id.create_account_userpass);
+        createAccount = view.findViewById(R.id.create_account_button);
+        back = view.findViewById(R.id.create_account_back);
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         userEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -92,17 +119,12 @@ public class CreateAccount extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        ImageView back = findViewById(R.id.create_account_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateAccount.this, Main.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                CreateAccount.this.startActivity(intent);
-                finish();
+                accountManagementListener.swapFragment(new AccountFragment());
             }
         });
-
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,17 +132,15 @@ public class CreateAccount extends AppCompatActivity {
                 final String email = userEmail.getText().toString();
                 final String password = userPass.getText().toString();
 
-
                 if(Utils.isEmailValid(email)) {
                     final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                    if (Utils.checkConnection(CreateAccount.this, getString(R.string.no_connection_message_create_account))) {
+                    if (Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create_account))) {
                         Call<JsonObject> call = apiInterface.createUser(email, email, password, password);
                         call.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if (response.isSuccessful()) {
-                                    login(apiInterface, email, password);
-                                    finish();
+                                    accountManagementListener.login(email, password);
                                 } else {
                                     try {
                                         String message;
@@ -135,7 +155,6 @@ public class CreateAccount extends AppCompatActivity {
                                     } catch (Exception e) {
                                         createFailed(getString(R.string.account_created_failed));
                                     }
-
                                 }
                             }
 
@@ -148,44 +167,18 @@ public class CreateAccount extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                    createFailed(getString(R.string.invalid_email));
                 }
             }
         });
-
     }
 
-    public void login(APIInterface apiInterface, String username, String userpass){
-            Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
-            call.enqueue(new Callback<AccountManagement>() {
-                @Override
-                public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-                    response.body();
-                    try {
-                        String token = response.body().getToken();
-                        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                        mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
-                        mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
-                        mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                        Intent intent = new Intent(CreateAccount.this, Base_Activity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        CreateAccount.this.startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.creation_login_failed), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AccountManagement> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.creation_login_failed), Toast.LENGTH_LONG).show();
-                    call.cancel();
-                }
-            });
-        }
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
 
     public void createFailed(String message){
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(),  message, Toast.LENGTH_LONG).show();
     }
 }

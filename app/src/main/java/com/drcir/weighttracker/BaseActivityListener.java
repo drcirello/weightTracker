@@ -1,5 +1,5 @@
 package com.drcir.weighttracker;
 
-public interface FragmentSwapListener {
+public interface BaseActivityListener {
     public void swapFragment(int fragment);
 }

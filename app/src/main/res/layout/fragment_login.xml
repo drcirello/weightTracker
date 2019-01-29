@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/account_management_wallpaper">
+
+        <ImageView
+            android:id="@+id/login_back"
+            style="@style/BackChevron"
+            android:src="@drawable/back_chevron" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+            <TextView
+                android:text="@string/login"
+                style="@style/AccountManagementHeaderText" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            style="@style/AccountManagementSecondaryHeaderText" />
+        <EditText
+            android:id="@+id/login_useremail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            style="@style/AccountManagementEditText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            style="@style/AccountManagementSecondaryHeaderText" />
+
+        <EditText
+            android:id="@+id/login_userpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            android:maxLength="20"
+            android:inputType="textPassword"
+            style="@style/AccountManagementEditText" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:background="@drawable/rounded_button"
+            style="@style/AccountManagementButtons"
+            android:layout_marginBottom="20dp"
+            android:enabled="false" />
+    </LinearLayout>
+</LinearLayout>
