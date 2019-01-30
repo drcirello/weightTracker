@@ -122,7 +122,7 @@ public class CreateAccountFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManagementListener.swapFragment(new AccountFragment());
+                accountManagementListener.back();
             }
         });
 

@@ -44,14 +44,14 @@ public class AccountFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManagementListener.swapFragment(new LoginFragment());
+                accountManagementListener.swapFragment(new LoginFragment(), true);
             }
         });
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManagementListener.swapFragment(new CreateAccountFragment());
+                accountManagementListener.swapFragment(new CreateAccountFragment(), true);
             }
         });
     }

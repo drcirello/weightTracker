@@ -57,7 +57,7 @@ public class ResetPasswordFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManagementListener.swapFragment(new LoginFragment());
+                accountManagementListener.back();
             }
         });
 
@@ -72,7 +72,7 @@ public class ResetPasswordFragment extends Fragment {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             if (response.isSuccessful()) {
-                                accountManagementListener.swapFragment(new LoginFragment());
+                                accountManagementListener.swapFragment(new LoginFragment(), true);
                                 Toast.makeText(getActivity(), "Password Reset Sent", Toast.LENGTH_SHORT).show();
                             } else {
                                 resetFailed();

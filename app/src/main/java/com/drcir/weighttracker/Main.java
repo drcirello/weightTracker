@@ -42,6 +42,11 @@ public class Main extends AppCompatActivity implements AccountManagementListener
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
+
     public void loginRequired(){
         setContentView(R.layout.activity_main);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -137,11 +142,16 @@ public class Main extends AppCompatActivity implements AccountManagementListener
         });
     }
 
-    public void swapFragment(Fragment fragment){
-        fragmentManager.beginTransaction().replace(R.id.fragment_container_main, fragment).commit();
+    public void swapFragment(Fragment fragment, boolean addToStack){
+         FragmentTransaction transaction = fragmentManager.beginTransaction().replace(R.id.fragment_container_main, fragment);
+         if(addToStack)
+            transaction.addToBackStack(null);
+         transaction.commit();
     }
 
     public void login(String username, String userpass){
         requestLogin(username, userpass);
     }
+
+    public void back(){onBackPressed();}
 }
