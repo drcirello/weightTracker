@@ -66,13 +66,15 @@
                 android:background="@color/colorChartBackground"
                 android:visibility="invisible"/>
             <ImageView
+                android:id="@+id/expand_button"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
                 android:layout_marginRight="30dp"
-                android:src="@drawable/expand_icon"/>
+                android:src="@drawable/expand_icon"
+                android:visibility="invisible" />
             <ProgressBar
                 android:id="@+id/pBar"
                 style="?android:attr/progressBarStyleLarge"

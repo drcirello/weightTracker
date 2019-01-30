@@ -78,6 +78,7 @@ public class ChartsFragment extends Fragment {
     LinearLayout charts_failed_message;
 
     View divider;
+    ImageView expandButton;
     LinearLayout buttonBar;
     TextView messageText;
     LinearLayout mainView;
@@ -152,6 +153,7 @@ public class ChartsFragment extends Fragment {
         pBar = view.findViewById(R.id.pBar);
         chart = view.findViewById(R.id.lineChart);
         chartFrame = view.findViewById(R.id.chartFrame);
+        expandButton = view.findViewById(R.id.expand_button);
         divider = view.findViewById(R.id.chartDivider);
         buttonBar = view.findViewById(R.id.buttonBar);
         messageText = view.findViewById(R.id.charts_api_failed_message_part1);
@@ -390,6 +392,7 @@ public class ChartsFragment extends Fragment {
         chart.setVisibility(View.VISIBLE);
         pBar.setVisibility(View.GONE);
         charts_failed_message.setVisibility(View.GONE);
+        expandButton.setVisibility(View.VISIBLE);
         divider.setVisibility(View.VISIBLE);
         buttonBar.setVisibility(View.VISIBLE);
     }
