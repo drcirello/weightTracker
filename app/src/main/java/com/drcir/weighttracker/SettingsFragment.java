@@ -17,11 +17,23 @@ import android.widget.TextView;
 import com.drcir.weighttracker.data.DataDefinitions;
 
 public class SettingsFragment extends Fragment {
+
+    private BaseActivityListener baseActivityListener;
     ArrayAdapter<CharSequence> adapterRange;
     int defaultChartRange;
     int defaultOverTime1;
     int defaultOverTime2;
     SparseIntArray ranges;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            baseActivityListener = (BaseActivityListener) context;
+        } catch (ClassCastException castException) {
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
 
@@ -36,14 +48,13 @@ public class SettingsFragment extends Fragment {
         ranges.append(DataDefinitions.YTD, 5);
         ranges.append(DataDefinitions.MAX, 6);
 
-        SharedPreferences sharedPrefRange = this.getActivity().getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefRange = baseActivityListener.getRangePref();
         defaultChartRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
 
         adapterRange = ArrayAdapter.createFromResource(this.getActivity(),
                 R.array.chart_ranges, android.R.layout.simple_spinner_item);
-
     }
 
 
@@ -66,8 +77,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int range = ranges.keyAt(ranges.indexOfValue(position));
-                SharedPreferences sharedPrefRange = SettingsFragment.this.getActivity().getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                SharedPreferences.Editor mEditorRange = baseActivityListener.getRangePref().edit();
                 mEditorRange.putInt(getResources().getString(R.string.chart_range_preference), range).apply();
             }
 
@@ -85,8 +95,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int range = ranges.keyAt(ranges.indexOfValue(position));
-                SharedPreferences sharedPrefRange = SettingsFragment.this.getActivity().getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                SharedPreferences.Editor mEditorRange = baseActivityListener.getRangePref().edit();
                 mEditorRange.putInt(getResources().getString(R.string.chart_over_time_preference_one), range).apply();
             }
 
@@ -104,8 +113,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int range = ranges.keyAt(ranges.indexOfValue(position));
-                SharedPreferences sharedPrefRange = SettingsFragment.this.getActivity().getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
-                SharedPreferences.Editor mEditorRange = sharedPrefRange.edit();
+                SharedPreferences.Editor mEditorRange = baseActivityListener.getRangePref().edit();
                 mEditorRange.putInt(getResources().getString(R.string.chart_over_time_preference_two), range).apply();
             }
 
@@ -119,9 +127,8 @@ public class SettingsFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPrefToken = SettingsFragment.this.getActivity().getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                Intent intent = new Intent(SettingsFragment.this.getActivity(), Main.class);
-                Utils.logout(sharedPrefToken, SettingsFragment.this.getActivity(), intent);
+                Intent intent = new Intent(getActivity(), Main.class);
+                Utils.logout(baseActivityListener.getTokenPref(), getActivity(), intent);
             }
         });
 

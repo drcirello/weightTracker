@@ -2,7 +2,6 @@ package com.drcir.weighttracker;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -41,9 +40,7 @@ public class EnterWeightFragment extends Fragment {
     EditText enteredWeightView;
     Button submit;
     CalendarView calendarView;
-    SharedPreferences sharedPrefToken;
     String token;
-    APIInterface apiInterface;
 
     @Override
     public void onAttach(Context context) {
@@ -57,10 +54,7 @@ public class EnterWeightFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        sharedPrefToken = getActivity().getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-
+        token = baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
     }
 
     @Override
@@ -137,8 +131,8 @@ public class EnterWeightFragment extends Fragment {
                 enteredWeight = Integer.parseInt(enteredWeightView.getText().toString());
                 if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create)) && verifyWeight()){
                     Intent intent = new Intent(getActivity(), Main.class);
-                    Utils.refreshToken(sharedPrefToken, getActivity(), intent);
-                    Call<Void> call = apiInterface.createWeight(token, modifiedDate, enteredWeight);
+                    Utils.refreshToken(baseActivityListener.getTokenPref(), getActivity(), intent);
+                    Call<Void> call = baseActivityListener.getApiInterface().createWeight(token, modifiedDate, enteredWeight);
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {

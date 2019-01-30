@@ -24,12 +24,21 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     boolean mDataSetChartsChanged;
     boolean mDataSetEntriesChanged;
 
+    SharedPreferences mSharedPrefToken;
+    SharedPreferences mSharedPrefRange;
+
+    APIInterface mApiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         mDataSetChartsChanged = true;
         mDataSetEntriesChanged = true;
+
+        mSharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+        mSharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+        mApiInterface = APIClient.getClient().create(APIInterface.class);
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -54,11 +63,14 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
+
+        mDataSetChartsChanged = true;
+        mDataSetEntriesChanged = true;
+        
+        Long tokenTime = mSharedPrefToken.getLong(getString(R.string.token_date_preference), 0);
         if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
             Intent intent = new Intent(Base_Activity.this, Main.class);
-            Utils.refreshToken(mSharedPreferences, Base_Activity.this, intent);
+            Utils.refreshToken(mSharedPrefToken, Base_Activity.this, intent);
         }
     }
 
@@ -168,5 +180,20 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     public void setUpdateDataSets(boolean update){
         mDataSetChartsChanged = update;
         mDataSetEntriesChanged = update;
+    }
+
+    @Override
+    public SharedPreferences getTokenPref(){
+        return mSharedPrefToken;
+    }
+
+    @Override
+    public SharedPreferences getRangePref() {
+        return mSharedPrefRange;
+    }
+
+    @Override
+    public APIInterface getApiInterface() {
+        return mApiInterface;
     }
 }

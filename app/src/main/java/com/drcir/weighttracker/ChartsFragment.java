@@ -88,8 +88,6 @@ public class ChartsFragment extends Fragment {
     ProgressBar pBar;
 
     Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
-    SharedPreferences sharedPrefToken;
-    SharedPreferences sharedPrefRange;
 
     @Override
     public void onAttach(Context context) {
@@ -105,8 +103,8 @@ public class ChartsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        sharedPrefToken = getActivity().getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        sharedPrefRange = getActivity().getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefToken = baseActivityListener.getTokenPref();
+        SharedPreferences sharedPrefRange = baseActivityListener.getRangePref();
         token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
@@ -245,7 +243,7 @@ public class ChartsFragment extends Fragment {
         int defaultRange;
         //Set Chart Range to Preference Size, default Max
         try {
-            defaultRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
+            defaultRange = baseActivityListener.getRangePref().getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
         }
         catch (Exception e){
             defaultRange = DataDefinitions.MAX;
@@ -426,11 +424,11 @@ public class ChartsFragment extends Fragment {
     }
 
     public void getWeightEntries(String token){
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+
         if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
             Intent intent = new Intent(getActivity(), Main.class);
-            Utils.refreshToken(sharedPrefToken, getActivity(), intent);
-            Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+            Utils.refreshToken(baseActivityListener.getTokenPref(), getActivity(), intent);
+            Call<List<WeightEntry>> call = baseActivityListener.getApiInterface().getWeightData(token);
             call.enqueue(new Callback<List<WeightEntry>>() {
                 @Override
                 public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {

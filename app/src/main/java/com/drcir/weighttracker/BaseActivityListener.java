@@ -1,5 +1,7 @@
 package com.drcir.weighttracker;
 
+import android.content.SharedPreferences;
+
 import java.util.List;
 
 public interface BaseActivityListener {
@@ -14,4 +16,9 @@ public interface BaseActivityListener {
     public void setDataSetEntries(List<WeightEntry> dataSet);
 
     public void setUpdateDataSets(boolean update);
+
+    public SharedPreferences getTokenPref();
+    public SharedPreferences getRangePref();
+
+    public APIInterface getApiInterface();
 }

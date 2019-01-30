@@ -1,31 +1,18 @@
 package com.drcir.weighttracker;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.drcir.weighttracker.data.DataDefinitions;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,8 +45,7 @@ public class WeightEntriesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPrefToken = WeightEntriesFragment.this.getActivity().getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
+        token = baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
     }
 
 
@@ -119,8 +105,7 @@ public class WeightEntriesFragment extends Fragment {
         pBar.setVisibility(View.VISIBLE);
         entriesFailedMessage.setVisibility(View.GONE);
         if(Utils.checkConnection(WeightEntriesFragment.this.getActivity(), getString(R.string.no_connection_message))) {
-            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call<List<WeightEntry>> call = apiInterface.getWeightEntries(token);
+            Call<List<WeightEntry>> call = baseActivityListener.getApiInterface().getWeightEntries(token);
             call.enqueue(new Callback<List<WeightEntry>>() {
                 @Override
                 public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {

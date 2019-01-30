@@ -84,10 +84,9 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     public void removeEntry(final Context context, final int position){
         int weightId = mDataSet.get(position).getWeightId();
 
-        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         SharedPreferences sharedPrefToken = context.getSharedPreferences(context.getString(R.string.token_preferences), Context.MODE_PRIVATE);
         String token = sharedPrefToken.getString(context.getString(R.string.token_JWT_preference), null);
-        Call<Void> call = apiInterface.deleteWeight(token, weightId);
+        Call<Void> call = baseActivityListener.getApiInterface().deleteWeight(token, weightId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
