@@ -45,7 +45,7 @@ public class ChartsFragment extends Fragment {
     LineChart chart;
     XAxis xAxis;
     YAxis leftAxis;
-    List<WeightEntry> dataSet;
+    List<WeightEntry> mDataSet;
     //Maximum chartSize
     float chartMaxSize;
     Button selectedButton = null;
@@ -118,7 +118,6 @@ public class ChartsFragment extends Fragment {
         ranges.put(DataDefinitions.ONE_YEAR, R.string.over_time_one_year);
         ranges.put(DataDefinitions.YTD, R.string.over_time_ytd);
         ranges.put(DataDefinitions.MAX, R.string.over_time_max);
-
     }
 
 
@@ -127,8 +126,6 @@ public class ChartsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_charts, container, false);
-
-
 
         viewOneWeek = view.findViewById(R.id.viewOneWeek);
         viewOneMonth = view.findViewById(R.id.viewOneMonth);
@@ -168,7 +165,6 @@ public class ChartsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getWeightEntries(token);
         charts_change_over_time_1.setText(getString(ranges.get(defaultOverTime1)));
         charts_change_over_time_2.setText(getString(ranges.get(defaultOverTime2)));
         viewOneWeek.setOnClickListener(new View.OnClickListener() {
@@ -219,13 +215,22 @@ public class ChartsFragment extends Fragment {
                 setViewport(viewMax);
             }
         });
-
-
     }
 
     @Override
     public void onPause(){
         super.onPause();
+    }
+
+    public void onResume(){
+        if(baseActivityListener.getUpdateDataSetCharts()) {
+            getWeightEntries(token);
+        }
+        else {
+            mDataSet = baseActivityListener.getDataSetCharts();
+            dataSetReceived();
+        }
+        super.onResume();
     }
 
     public void setInitialViewport(){
@@ -256,7 +261,7 @@ public class ChartsFragment extends Fragment {
     }
 
     public void setViewport(Button button){
-        if(dataSet != null) {
+        if(mDataSet != null) {
             if (selectedButton != null)
                 selectedButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorChartButtonBackground));
             selectedButton = button;
@@ -292,7 +297,7 @@ public class ChartsFragment extends Fragment {
     }
 
     public void chartButtonPressed(float timeMillis, int selectedbutton){
-        if(dataSet.size() != 1) {
+        if(mDataSet.size() != 1) {
             if (chartMaxSize < timeMillis || timeMillis == DataDefinitions.MAX){
                 chart.fitScreen();
                 timeMillis = chartMaxSize;
@@ -306,7 +311,7 @@ public class ChartsFragment extends Fragment {
     }
 
     public void setChartStatistics(){
-        stats = new ChartStatistics(dataSet, defaultOverTime1, defaultOverTime2);
+        stats = new ChartStatistics(mDataSet, defaultOverTime1, defaultOverTime2);
         DecimalFormat form = Utils.getDecimalFormat();
         charts_current_weight.setText(form.format(stats.getCurrentWeight()));
         charts_high_response.setText(form.format(stats.getHighMax()));
@@ -332,16 +337,16 @@ public class ChartsFragment extends Fragment {
     public void createChart(){
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
-        startDate = dataSet.get(0).getDate();
-        for(int i = 0; i < dataSet.size(); i++){
-            entries.add(i, new Entry(i * .1f, dataSet.get(i).getWeight()));
+        startDate = mDataSet.get(0).getDate();
+        for(int i = 0; i < mDataSet.size(); i++){
+            entries.add(i, new Entry(i * .1f, mDataSet.get(i).getWeight()));
         }
         LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
 
         //entriesSet options
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
-        if(dataSet.size() != 1)
+        if(mDataSet.size() != 1)
             entrySet.setDrawCircles(false);
         else
             entrySet.setCircleHoleRadius(10);
@@ -380,7 +385,7 @@ public class ChartsFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChartFullScreen.class);
                 Gson gson = new Gson();
-                String dataSetString = gson.toJson(dataSet);
+                String dataSetString = gson.toJson(mDataSet);
                 intent.putExtra("DATASET", dataSetString);
                 intent.putExtra("SELECTED_BUTTON", Integer.toString(selectedButtonRange));
                 startActivity(intent);
@@ -432,20 +437,9 @@ public class ChartsFragment extends Fragment {
                     if (response.isSuccessful()) {
                         pBar.setVisibility(View.VISIBLE);
                         charts_failed_message.setVisibility(View.GONE);
-                        dataSet = response.body();
-                        if (dataSet.size() <= 1) {
-                            dataSet = ExampleData.getFakedData();
-                            setFakeChartStatistics();
-                            createChart();
-                            setInitialViewport();
-                            removeLoadingScreen();
-                            addNoDataCover();
-                        } else {
-                            setChartStatistics();
-                            createChart();
-                            setInitialViewport();
-                            removeLoadingScreen();
-                        }
+                        mDataSet = response.body();
+                        baseActivityListener.setDataSetCharts(mDataSet);
+                        dataSetReceived();
                     }
                 }
 
@@ -461,6 +455,22 @@ public class ChartsFragment extends Fragment {
         }
     }
 
+    public void dataSetReceived() {
+        if (mDataSet.size() <= 1) {
+            mDataSet = ExampleData.getFakedData();
+            setFakeChartStatistics();
+            createChart();
+            setInitialViewport();
+            removeLoadingScreen();
+            addNoDataCover();
+        } else {
+            setChartStatistics();
+            createChart();
+            setInitialViewport();
+            removeLoadingScreen();
+        }
+    }
+
     public void addNoDataCover(){
         Blurry.with(getActivity())
                 .radius(25)
@@ -472,7 +482,7 @@ public class ChartsFragment extends Fragment {
         noDataView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                baseActivityListener.swapFragment(R.id.action_create);
+                baseActivityListener.swapFragment(R.id.action_create, true);
             }
         });
     }

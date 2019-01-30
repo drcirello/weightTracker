@@ -22,6 +22,7 @@ import retrofit2.Response;
 public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.WeightEntryViewHolder> {
 
     private List<WeightEntry> mDataSet;
+    private BaseActivityListener baseActivityListener;;
 
     public static class WeightEntryViewHolder extends RecyclerView.ViewHolder {
         private TextView mDate;
@@ -36,9 +37,10 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
         }
     }
 
-    public WeightEntryAdapter(List<WeightEntry> weightEntries) {
+    public WeightEntryAdapter(List<WeightEntry> weightEntries, Context context) {
         Collections.reverse(weightEntries);
         mDataSet = weightEntries;
+        baseActivityListener = (BaseActivityListener) context;
     }
 
     @Override
@@ -93,6 +95,7 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
                     mDataSet.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, mDataSet.size());
+                    baseActivityListener.setUpdateDataSets(true);
                     Toast.makeText(context, "Entry Deleted", Toast.LENGTH_LONG).show();
                 }
             }

@@ -33,7 +33,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WeightEntriesFragment extends Fragment {
-    static List<WeightEntry> dataSet;
+
+    private BaseActivityListener baseActivityListener;
+    static List<WeightEntry> mDataSet;
     String token;
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -45,13 +47,19 @@ public class WeightEntriesFragment extends Fragment {
     RecyclerView.LayoutManager mLayoutManager;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            baseActivityListener = (BaseActivityListener) context;
+        } catch (ClassCastException castException) {
+        }
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mLayoutManager = new LinearLayoutManager(getActivity());
         SharedPreferences sharedPrefToken = WeightEntriesFragment.this.getActivity().getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
         token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
-
     }
 
 
@@ -61,6 +69,7 @@ public class WeightEntriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weight_entries_recycler, container, false);
         mRecyclerView = rootView.findViewById(R.id.weight_entries_recycler_view);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
@@ -75,12 +84,22 @@ public class WeightEntriesFragment extends Fragment {
         pBar = getView().findViewById(R.id.pBar);
         entriesFrame = getView().findViewById(R.id.entriesFrame);
         emptyView = getView().findViewById(R.id.empty_view);
-        getWeightEntries(token);
     }
 
     @Override
     public void onPause(){
         super.onPause();
+    }
+
+    public void onResume(){
+        if(baseActivityListener.getUpdateDataSetEntries()) {
+            getWeightEntries(token);
+        }
+        else {
+            mDataSet = baseActivityListener.getDataSetEntries();
+            dataSetReceived();
+        }
+        super.onResume();
     }
 
     public void dataRetrievalFailure(){
@@ -106,19 +125,9 @@ public class WeightEntriesFragment extends Fragment {
                 @Override
                 public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
                     if (response.isSuccessful()) {
-                        dataSet = response.body();
-                        mAdapter = new WeightEntryAdapter(dataSet);
-                        mRecyclerView.setAdapter(mAdapter);
-                        if (dataSet.isEmpty()) {
-                            mRecyclerView.setVisibility(View.GONE);
-                            emptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            mRecyclerView.setVisibility(View.VISIBLE);
-                            emptyView.setVisibility(View.GONE);
-                        }
-
-                        pBar.setVisibility(View.GONE);
-                        entriesFailedMessage.setVisibility(View.GONE);
+                        mDataSet = response.body();
+                        baseActivityListener.setDataSetCharts(mDataSet);
+                        dataSetReceived();
                     }
                 }
 
@@ -138,6 +147,22 @@ public class WeightEntriesFragment extends Fragment {
             noDataLineOne.setText(R.string.no_connection_message);
             noDataLineTwo.setText("");
         }
+    }
+
+    public void dataSetReceived() {
+        mAdapter = new WeightEntryAdapter(mDataSet, getContext());
+        mRecyclerView.swapAdapter(mAdapter, false);
+
+        if (mDataSet.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
+        pBar.setVisibility(View.GONE);
+        entriesFailedMessage.setVisibility(View.GONE);
     }
 }
 

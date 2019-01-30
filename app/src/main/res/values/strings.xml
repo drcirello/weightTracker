@@ -17,7 +17,7 @@
     <string name="account_created_failed">Failed to create account. Please try again.</string>
     <string name="invalid_email">Invalid Email Entered</string>
     <string name="account_management_blurb_1">Track and Chart Your Weight.</string>
-    <string name="account_management_blurb_2">Made Simple and Easy.</string>
+    <string name="account_management_blurb_2">Simple and Easy.</string>
 
 
     <!-- Shared Preferences Strings-->
