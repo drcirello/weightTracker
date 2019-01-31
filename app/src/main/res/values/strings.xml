@@ -45,11 +45,11 @@
 
     <!-- Charts Page -->
     <string name="charts_current">Current Weight</string>
-    <string name="charts_high">All-time High</string>
-    <string name="charts_low">All-time Low</string>
-    <string name="charts_year_high">1Y High</string>
-    <string name="charts_year_low">1Y Low</string>
-    <string name="charts_change">\u0020Change</string>
+    <string name="charts_high">All-time High\u0020:\u0020</string>
+    <string name="charts_low">All-time Low\u0020:\u0020</string>
+    <string name="charts_year_high">1Y High\u0020:\u0020</string>
+    <string name="charts_year_low">1Y Low\u0020:\u0020</string>
+    <string name="charts_change">\u0020Change\u0020:\u0020</string>
     <string name="button_one_week">7D</string>
     <string name="button_one_month">1M</string>
     <string name="button_three_month">3M</string>
