@@ -113,7 +113,7 @@ public class WeightEntriesFragment extends Fragment {
                 public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
                     if (response.isSuccessful()) {
                         mDataSet = response.body();
-                        baseActivityListener.setDataSetCharts(mDataSet);
+                        baseActivityListener.setDataSetEntries(mDataSet);
                         dataSetReceived();
                     }
                 }
