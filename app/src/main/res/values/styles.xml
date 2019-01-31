@@ -73,7 +73,6 @@
 
     <!-- Weight Entry Style -->
     <style name="WeightEntry">
-        <item name="android:layout_marginTop">2dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorEntryPrimaryText</item>
     </style>
@@ -177,7 +176,7 @@
 
     <style name="EnterWeightTextStyle">
         <item name="android:background">@color/colorTitleBar</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
         <item name="android:padding">10dp</item>
         <item name="android:gravity">center</item>
@@ -190,7 +189,7 @@
     </style>
 
     <style name="EnterWeightEditTextStyle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
