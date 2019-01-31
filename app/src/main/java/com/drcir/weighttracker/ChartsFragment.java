@@ -462,11 +462,17 @@ public class ChartsFragment extends Fragment {
     }
 
     public void addNoDataCover(){
-        Blurry.with(getActivity())
-                .radius(25)
-                .sampling(1)
-                .capture(mainView)
-                .into(noDataImage);
+        if(baseActivityListener.getNoDataImage() == null) {
+            Blurry.with(getActivity())
+                    .radius(25)
+                    .sampling(1)
+                    .capture(mainView)
+                    .into(noDataImage);
+            baseActivityListener.setNoDataImage(noDataImage.getDrawable());
+        }
+        else{
+            noDataImage.setImageDrawable(baseActivityListener.getNoDataImage());
+        }
         mainView.setVisibility(View.GONE);
         noDataView.setVisibility(View.VISIBLE);
         noDataView.setOnClickListener(new View.OnClickListener() {

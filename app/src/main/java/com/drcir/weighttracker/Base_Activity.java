@@ -1,5 +1,6 @@
 package com.drcir.weighttracker;
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     List<WeightEntry> mDataSetEntries;
     boolean mDataSetChartsChanged;
     boolean mDataSetEntriesChanged;
+    Drawable mNoDataImage;
 
     SharedPreferences mSharedPrefToken;
     SharedPreferences mSharedPrefRange;
@@ -33,8 +35,10 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
         mDataSetChartsChanged = true;
         mDataSetEntriesChanged = true;
+        mNoDataImage = null;
 
         mSharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
         mSharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
@@ -195,5 +199,15 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     @Override
     public APIInterface getApiInterface() {
         return mApiInterface;
+    }
+
+    @Override
+    public Drawable getNoDataImage(){
+        return mNoDataImage;
+    }
+
+    @Override
+    public void setNoDataImage(Drawable image){
+        mNoDataImage = image;
     }
 }

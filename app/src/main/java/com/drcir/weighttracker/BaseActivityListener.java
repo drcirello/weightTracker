@@ -1,6 +1,7 @@
 package com.drcir.weighttracker;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface BaseActivityListener {
     public SharedPreferences getRangePref();
 
     public APIInterface getApiInterface();
+
+    public Drawable getNoDataImage();
+    public void setNoDataImage(Drawable image);
 }
