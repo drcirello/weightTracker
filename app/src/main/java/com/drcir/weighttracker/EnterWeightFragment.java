@@ -136,7 +136,7 @@ public class EnterWeightFragment extends Fragment {
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()) {
                                 baseActivityListener.setUpdateDataSets(true);
-                                baseActivityListener.swapFragment(R.id.action_charts, true);
+                                baseActivityListener.swapFragment(R.id.action_charts);
                                 Toast.makeText(getActivity(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
                             }
                             else

@@ -478,7 +478,7 @@ public class ChartsFragment extends Fragment {
         noDataView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                baseActivityListener.swapFragment(R.id.action_create, true);
+                baseActivityListener.swapFragment(R.id.action_create);
             }
         });
     }

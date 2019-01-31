@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import java.util.List;
 
 public interface BaseActivityListener {
-    public void swapFragment(int fragment, boolean addToStack);
+    public void swapFragment(int fragment);
 
     public boolean getUpdateDataSetCharts();
     public List<WeightEntry> getDataSetCharts();

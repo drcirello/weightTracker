@@ -58,7 +58,7 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        swapFragment(item.getItemId(), true);
+                        swapFragment(item.getItemId());
                         return true;
                     }
                 });
@@ -80,34 +80,41 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
 
     @Override
     public void onBackPressed(){
-        if(fragmentManager.getBackStackEntryCount() >= 1) {
-            String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-            setNavigation(Integer.parseInt(fragmentTag));
+        if(navBar.getSelectedItemId() != R.id.action_charts) {
+            swapFragment(R.id.action_charts);
         }
-        super.onBackPressed();
+        else {
+            super.onBackPressed();
+        }
     }
 
     @Override
-    public void swapFragment(int id, boolean addToStack){
+    public void swapFragment(int id){
         int currentId = navBar.getSelectedItemId();
         if(id != currentId) {
             Fragment fragment = null;
             Class fragmentClass;
+            String title;
             switch (id) {
                 case R.id.action_charts:
                     fragmentClass = ChartsFragment.class;
+                    title = getString(R.string.charts_title);
                     break;
                 case R.id.action_create:
                     fragmentClass = EnterWeightFragment.class;
+                    title = getString(R.string.enter_weight_title);
                     break;
                 case R.id.action_view:
                     fragmentClass = WeightEntriesFragment.class;
+                    title = getString(R.string.entries_title);
                     break;
                 case R.id.action_settings:
                     fragmentClass = SettingsFragment.class;
+                    title = getString(R.string.settings_title);
                     break;
                 default:
                     fragmentClass = ChartsFragment.class;
+                    title = getString(R.string.charts_title);
                     break;
             }
             try {
@@ -116,36 +123,10 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
                 e.printStackTrace();
             }
 
-            FragmentTransaction transaction = fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment);
-            if (addToStack)
-                transaction.addToBackStack(Integer.toString(currentId));
-            transaction.commit();
-
-            setNavigation(id);
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            navBar.getMenu().findItem(id).setChecked(true);
+            myTitlebar.setTitle(title);
         }
-    }
-
-    public void setNavigation(int id){
-        String title;
-        switch (id) {
-            case R.id.action_charts:
-                title = getString(R.string.charts_title);
-                break;
-            case R.id.action_create:
-                title = getString(R.string.enter_weight_title);
-                break;
-            case R.id.action_view:
-                title = getString(R.string.entries_title);
-                break;
-            case R.id.action_settings:
-                title = getString(R.string.settings_title);
-                break;
-            default:
-                title = getString(R.string.charts_title);
-                break;
-        }
-        navBar.getMenu().findItem(id).setChecked(true);
-        myTitlebar.setTitle(title);
     }
 
     @Override
