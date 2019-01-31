@@ -44,20 +44,16 @@ public class ChartsFragment extends Fragment {
 
     LineChart chart;
     XAxis xAxis;
-    YAxis leftAxis;
     List<WeightEntry> mDataSet;
-    //Maximum chartSize
     float chartMaxSize;
-    Button selectedButton = null;
-    ChartStatistics stats;
-    RelativeLayout chartFrame;
-    String token;
-    //Passed to Fullscreen Chart
+
+    Map<Integer, Integer> ranges;
     int selectedButtonRange;
     int defaultOverTime1;
     int defaultOverTime2;
     long startDate;
 
+    Button selectedButton;
     Button viewOneWeek;
     Button viewOneMonth;
     Button viewThreeMonth;
@@ -78,16 +74,14 @@ public class ChartsFragment extends Fragment {
     LinearLayout charts_failed_message;
 
     View divider;
-    ImageView expandButton;
-    LinearLayout buttonBar;
     TextView messageText;
+    LinearLayout buttonBar;
     LinearLayout mainView;
     RelativeLayout noDataView;
+    RelativeLayout chartFrame;
+    ImageView expandButton;
     ImageView noDataImage;
-
     ProgressBar pBar;
-
-    Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
 
     @Override
     public void onAttach(Context context) {
@@ -102,10 +96,10 @@ public class ChartsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-
-        SharedPreferences sharedPrefToken = baseActivityListener.getTokenPref();
+        selectedButton = null;
+        ranges = new HashMap<Integer, Integer>();
+        baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
         SharedPreferences sharedPrefRange = baseActivityListener.getRangePref();
-        token = sharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
 
@@ -118,45 +112,42 @@ public class ChartsFragment extends Fragment {
         ranges.put(DataDefinitions.MAX, R.string.over_time_max);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_charts, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_charts, container, false);
 
-        viewOneWeek = view.findViewById(R.id.viewOneWeek);
-        viewOneMonth = view.findViewById(R.id.viewOneMonth);
-        viewThreeMonth = view.findViewById(R.id.viewThreeMonth);
-        viewSixMonth = view.findViewById(R.id.viewSixMonth);
-        viewYear = view.findViewById(R.id.viewYear);
-        viewYtd = view.findViewById(R.id.viewYtd);
-        viewMax = view.findViewById(R.id.viewMax);
+        viewOneWeek = rootView.findViewById(R.id.viewOneWeek);
+        viewOneMonth = rootView.findViewById(R.id.viewOneMonth);
+        viewThreeMonth = rootView.findViewById(R.id.viewThreeMonth);
+        viewSixMonth = rootView.findViewById(R.id.viewSixMonth);
+        viewYear = rootView.findViewById(R.id.viewYear);
+        viewYtd = rootView.findViewById(R.id.viewYtd);
+        viewMax = rootView.findViewById(R.id.viewMax);
 
-        charts_current_weight = view.findViewById(R.id.currentWeight);
-        charts_high_response = view.findViewById(R.id.charts_high_response);
-        charts_low_response = view.findViewById(R.id.charts_low_response);
-        charts_year_high_response = view.findViewById(R.id.charts_year_high_response);
-        charts_year_low_response = view.findViewById(R.id.charts_year_low_response);
-        charts_change_over_time_1 = view.findViewById(R.id.charts_change_over_time_1);
-        charts_change_over_time_2 = view.findViewById(R.id.charts_change_over_time_2);
-        charts_change_over_time_1_response = view.findViewById(R.id.charts_change_over_time_1_response);
-        charts_change_over_time_2_response = view.findViewById(R.id.charts_change_over_time_2_response);
+        charts_current_weight = rootView.findViewById(R.id.currentWeight);
+        charts_high_response = rootView.findViewById(R.id.charts_high_response);
+        charts_low_response = rootView.findViewById(R.id.charts_low_response);
+        charts_year_high_response = rootView.findViewById(R.id.charts_year_high_response);
+        charts_year_low_response = rootView.findViewById(R.id.charts_year_low_response);
+        charts_change_over_time_1 = rootView.findViewById(R.id.charts_change_over_time_1);
+        charts_change_over_time_2 = rootView.findViewById(R.id.charts_change_over_time_2);
+        charts_change_over_time_1_response = rootView.findViewById(R.id.charts_change_over_time_1_response);
+        charts_change_over_time_2_response = rootView.findViewById(R.id.charts_change_over_time_2_response);
 
+        charts_failed_message = rootView.findViewById(R.id.failedMessage);
+        pBar = rootView.findViewById(R.id.pBar);
+        chart = rootView.findViewById(R.id.lineChart);
+        chartFrame = rootView.findViewById(R.id.chartFrame);
+        expandButton = rootView.findViewById(R.id.expand_button);
+        divider = rootView.findViewById(R.id.chartDivider);
+        buttonBar = rootView.findViewById(R.id.buttonBar);
+        messageText = rootView.findViewById(R.id.charts_api_failed_message_part1);
+        mainView = rootView.findViewById(R.id.mainView);
+        noDataView = rootView.findViewById(R.id.noData);
+        noDataImage = rootView.findViewById(R.id.noDataImage);
 
-        charts_failed_message = view.findViewById(R.id.failedMessage);
-        pBar = view.findViewById(R.id.pBar);
-        chart = view.findViewById(R.id.lineChart);
-        chartFrame = view.findViewById(R.id.chartFrame);
-        expandButton = view.findViewById(R.id.expand_button);
-        divider = view.findViewById(R.id.chartDivider);
-        buttonBar = view.findViewById(R.id.buttonBar);
-        messageText = view.findViewById(R.id.charts_api_failed_message_part1);
-        mainView = view.findViewById(R.id.mainView);
-        noDataView = view.findViewById(R.id.noData);
-        noDataImage = view.findViewById(R.id.noDataImage);
-
-        return view;
+        return rootView;
     }
 
     @Override
@@ -222,7 +213,7 @@ public class ChartsFragment extends Fragment {
 
     public void onResume(){
         if(baseActivityListener.getUpdateDataSetCharts()) {
-            getWeightEntries(token);
+            getWeightEntries(baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null));
         }
         else {
             mDataSet = baseActivityListener.getDataSetCharts();
@@ -309,7 +300,7 @@ public class ChartsFragment extends Fragment {
     }
 
     public void setChartStatistics(){
-        stats = new ChartStatistics(mDataSet, defaultOverTime1, defaultOverTime2);
+        ChartStatistics stats = new ChartStatistics(mDataSet, defaultOverTime1, defaultOverTime2);
         DecimalFormat form = Utils.getDecimalFormat();
         charts_current_weight.setText(form.format(stats.getCurrentWeight()));
         charts_high_response.setText(form.format(stats.getHighMax()));
@@ -360,6 +351,7 @@ public class ChartsFragment extends Fragment {
         l.setEnabled(false);
 
         //Axis options
+        YAxis leftAxis;
         leftAxis = chart.getAxisLeft();
         leftAxis.setGranularity(.5f);
         YAxis rightAxis = chart.getAxisRight();
@@ -418,7 +410,7 @@ public class ChartsFragment extends Fragment {
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getWeightEntries(token);
+                getWeightEntries(baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null));
             }
         });
     }

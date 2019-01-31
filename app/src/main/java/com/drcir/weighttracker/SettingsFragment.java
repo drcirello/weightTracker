@@ -25,6 +25,11 @@ public class SettingsFragment extends Fragment {
     int defaultOverTime2;
     SparseIntArray ranges;
 
+    Spinner spinnerChartRange;
+    Spinner spinnerOverTime1;
+    Spinner spinnerOverTime2;
+    TextView logout;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -55,6 +60,7 @@ public class SettingsFragment extends Fragment {
 
         adapterRange = ArrayAdapter.createFromResource(this.getActivity(),
                 R.array.chart_ranges, android.R.layout.simple_spinner_item);
+        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
 
@@ -62,15 +68,20 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        spinnerChartRange = rootView.findViewById(R.id.selectedRange);
+        spinnerOverTime1 = rootView.findViewById(R.id.selectedChangeTime1);
+        spinnerOverTime2 = rootView.findViewById(R.id.selectedChangeTime2);
+        logout = rootView.findViewById(R.id.logout);
+
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Spinner spinnerChartRange = getView().findViewById(R.id.selectedRange);
-        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChartRange.setAdapter(adapterRange);
         spinnerChartRange.setSelection(ranges.get(defaultChartRange));
         spinnerChartRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -87,8 +98,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        Spinner spinnerOverTime1 = getView().findViewById(R.id.selectedChangeTime1);
-        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerOverTime1.setAdapter(adapterRange);
         spinnerOverTime1.setSelection(ranges.get(defaultOverTime1));
         spinnerOverTime1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -105,8 +114,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        Spinner spinnerOverTime2 = getView().findViewById(R.id.selectedChangeTime2);
-        adapterRange.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerOverTime2.setAdapter(adapterRange);
         spinnerOverTime2.setSelection(ranges.get(defaultOverTime2));
         spinnerOverTime2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -123,7 +130,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        final TextView logout = getView().findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,9 +137,6 @@ public class SettingsFragment extends Fragment {
                 Utils.logout(baseActivityListener.getTokenPref(), getActivity(), intent);
             }
         });
-
-
-
     }
 
     @Override

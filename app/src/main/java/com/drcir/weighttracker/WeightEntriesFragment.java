@@ -22,15 +22,15 @@ import retrofit2.Response;
 public class WeightEntriesFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
-    static List<WeightEntry> mDataSet;
+    List<WeightEntry> mDataSet;
     String token;
+
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RelativeLayout emptyView;
     RelativeLayout entriesFrame;
     LinearLayout entriesFailedMessage;
     ProgressBar pBar;
-    int i;
     RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -48,28 +48,30 @@ public class WeightEntriesFragment extends Fragment {
         token = baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_weight_entries_recycler, container, false);
+
+        //Setup recycler
         mRecyclerView = rootView.findViewById(R.id.weight_entries_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(this.getResources().getDrawable(R.drawable.recycler_divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        entriesFailedMessage = rootView.findViewById(R.id.failedMessage);
+        pBar = rootView.findViewById(R.id.pBar);
+        entriesFrame = rootView.findViewById(R.id.entriesFrame);
+        emptyView = rootView.findViewById(R.id.empty_view);
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        entriesFailedMessage = getView().findViewById(R.id.failedMessage);
-        pBar = getView().findViewById(R.id.pBar);
-        entriesFrame = getView().findViewById(R.id.entriesFrame);
-        emptyView = getView().findViewById(R.id.empty_view);
     }
 
     @Override

@@ -35,12 +35,13 @@ public class EnterWeightFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
     Long selectedDate;
-    TextView selectedDateView;
+    String token;
     int enteredWeight;
+
+    TextView selectedDateView;
     EditText enteredWeightView;
     Button submit;
     CalendarView calendarView;
-    String token;
 
     @Override
     public void onAttach(Context context) {
@@ -60,12 +61,12 @@ public class EnterWeightFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_enter_weight, container, false);
-        enteredWeightView = view.findViewById(R.id.enteredWeight);
-        submit = view.findViewById(R.id.submit);
-        calendarView = view.findViewById(R.id.calendarView);
-        selectedDateView = view.findViewById(R.id.selectedDate);
-        return view;
+        View rootView = inflater.inflate(R.layout.fragment_enter_weight, container, false);
+        enteredWeightView = rootView.findViewById(R.id.enteredWeight);
+        submit = rootView.findViewById(R.id.submit);
+        calendarView = rootView.findViewById(R.id.calendarView);
+        selectedDateView = rootView.findViewById(R.id.selectedDate);
+        return rootView;
     }
 
     @Override
@@ -82,7 +83,6 @@ public class EnterWeightFragment extends Fragment {
         selectedDateView.setText(Utils.formatSelectedDate(selectedDate));
 
         enteredWeightView.requestFocus();
-
         enteredWeightView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -124,8 +124,6 @@ public class EnterWeightFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Date date = new Date(selectedDate);
                 String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
                 enteredWeight = Integer.parseInt(enteredWeightView.getText().toString());
@@ -177,7 +175,6 @@ public class EnterWeightFragment extends Fragment {
             createInvalid(getString(R.string.enter_weight_invalid));
             verified = false;
         }
-
         return verified;
     }
 }
