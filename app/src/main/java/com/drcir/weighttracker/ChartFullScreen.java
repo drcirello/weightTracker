@@ -257,18 +257,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
     @Override
     public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        float highViewX = chart.getHighestVisibleX();
-        float lowViewX = chart.getLowestVisibleX();
-        if(highViewX > dataSetLength - .1)
-            highViewX = dataSetLength;
 
-        float newViewSize = highViewX - lowViewX;
-        float rangeDifference = currentViewSize - newViewSize;
-
-        if(rangeDifference <= -TimeConversions.ONE_DAY_FLOAT || rangeDifference >= TimeConversions.ONE_DAY_FLOAT) {
-            xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
-            currentViewSize = newViewSize;
-        }
     }
 
     @Override
@@ -293,7 +282,18 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
     @Override
     public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+        float highViewX = chart.getHighestVisibleX();
+        float lowViewX = chart.getLowestVisibleX();
+        if(highViewX > dataSetLength - .1)
+            highViewX = dataSetLength;
 
+        float newViewSize = highViewX - lowViewX;
+        float rangeDifference = currentViewSize - newViewSize;
+
+        if(rangeDifference <= -TimeConversions.ONE_DAY_FLOAT || rangeDifference >= TimeConversions.ONE_DAY_FLOAT) {
+            xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
+            currentViewSize = newViewSize;
+        }
     }
 
     @Override
