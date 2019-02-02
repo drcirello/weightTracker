@@ -332,6 +332,7 @@ public class ChartsFragment extends Fragment {
         LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
 
         //entriesSet options
+        entrySet.setFillFormatter(new CustomFillFormatter());
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
         if(mDataSet.size() != 1)
@@ -353,9 +354,9 @@ public class ChartsFragment extends Fragment {
         YAxis leftAxis;
         leftAxis = chart.getAxisLeft();
         leftAxis.setGranularity(.5f);
+        leftAxis.setDrawZeroLine(true);
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
-        leftAxis.setSpaceBottom(3);
 
         xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);

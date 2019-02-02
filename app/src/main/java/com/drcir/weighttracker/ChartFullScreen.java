@@ -78,6 +78,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
         chart = findViewById(R.id.lineChart);
         //entriesSet options
+        entrySet.setFillFormatter(new CustomFillFormatter());
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
         if(dataSet.size() != 1)
@@ -99,8 +100,8 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setGranularity(1);
         leftAxis.setGranularityEnabled(true);
+        leftAxis.setDrawZeroLine(true);
         rightAxis.setEnabled(false);
-        leftAxis.setSpaceBottom(3);
 
         xAxis  = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
