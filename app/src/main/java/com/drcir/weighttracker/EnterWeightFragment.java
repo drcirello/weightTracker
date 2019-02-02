@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,7 +73,7 @@ public class EnterWeightFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
         CalendarDate initialDate = new CalendarDate(calendar.getTime());
         int firstDayOfWeek = Calendar.SUNDAY;

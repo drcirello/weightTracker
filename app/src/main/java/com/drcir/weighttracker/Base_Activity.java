@@ -47,13 +47,13 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.replace(R.id.fragment_container, new ChartsFragment());
+        fragmentTransaction.replace(R.id.fragment_container, new EnterWeightFragment());
         fragmentTransaction.commit();
 
         myTitlebar = findViewById(R.id.titleBar);
-        myTitlebar.setTitle(getString(R.string.charts_title));
+        myTitlebar.setTitle(getString(R.string.enter_weight_title));
         navBar = findViewById(R.id.navBar);
-        navBar.setSelectedItemId(R.id.action_charts);
+        navBar.setSelectedItemId(R.id.action_create);
         navBar.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
