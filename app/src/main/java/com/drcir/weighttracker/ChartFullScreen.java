@@ -97,7 +97,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         //Axis options
         YAxis rightAxis = chart.getAxisRight();
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setGranularity(.5f);
+        leftAxis.setGranularity(1);
         leftAxis.setGranularityEnabled(true);
         rightAxis.setEnabled(false);
 
