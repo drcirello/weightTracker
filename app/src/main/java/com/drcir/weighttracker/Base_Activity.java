@@ -67,10 +67,6 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     @Override
     protected void onResume() {
         super.onResume();
-
-        mDataSetChartsChanged = true;
-        mDataSetEntriesChanged = true;
-        
         Long tokenTime = mSharedPrefToken.getLong(getString(R.string.token_date_preference), 0);
         if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
             Intent intent = new Intent(Base_Activity.this, Main.class);

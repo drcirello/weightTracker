@@ -73,7 +73,7 @@ public class EnterWeightFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
         CalendarDate initialDate = new CalendarDate(calendar.getTime());
         int firstDayOfWeek = Calendar.SUNDAY;
@@ -84,6 +84,7 @@ public class EnterWeightFragment extends Fragment {
         selectedDateView.setText(Utils.formatSelectedDate(selectedDate));
 
         enteredWeightView.requestFocus();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         enteredWeightView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

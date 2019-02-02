@@ -33,7 +33,7 @@ public class ChartUtils {
         return chart;
     }
 
-    public static LineChart updateChartViewportFullscreen(LineChart chart, float scale){
+    public static LineChart updateChartViewportFullscreen(LineChart chart, float scale, boolean ytd){
         //get current right side of viewport
         float highViewX = chart.getHighestVisibleX();
         //resets entire chart
@@ -42,6 +42,8 @@ public class ChartUtils {
         chart.setVisibleXRangeMaximum(scale);
         if(highViewX - scale < 0f)
             chart.moveViewToX(0f);
+        else if(ytd)
+            chart.moveViewToX((float)(chart.getData().getEntryCount() - 1) / 10);
         else
             chart.moveViewToX(highViewX - scale);
         //gets the maximum possible x value

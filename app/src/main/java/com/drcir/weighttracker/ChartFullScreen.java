@@ -100,6 +100,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         leftAxis.setGranularity(1);
         leftAxis.setGranularityEnabled(true);
         rightAxis.setEnabled(false);
+        leftAxis.setSpaceBottom(3);
 
         xAxis  = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -198,41 +199,41 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             button.setBackgroundColor(ContextCompat.getColor(ChartFullScreen.this, R.color.colorTitleBar));
             switch (button.getId()) {
                 case R.id.viewOneWeek:
-                    chartButtonPressed(TimeConversions.SEVEN_DAYS_FLOAT);
+                    chartButtonPressed(TimeConversions.SEVEN_DAYS_FLOAT, false);
                     break;
                 case R.id.viewOneMonth:
-                    chartButtonPressed(TimeConversions.ONE_MONTH_FLOAT);
+                    chartButtonPressed(TimeConversions.ONE_MONTH_FLOAT, false);
                     break;
                 case R.id.viewThreeMonth:
-                    chartButtonPressed(TimeConversions.THREE_MONTHS_FLOAT);
+                    chartButtonPressed(TimeConversions.THREE_MONTHS_FLOAT, false);
                     break;
                 case R.id.viewSixMonth:
-                    chartButtonPressed(TimeConversions.SIX_MONTHS_FLOAT);
+                    chartButtonPressed(TimeConversions.SIX_MONTHS_FLOAT, false);
                     break;
                 case R.id.viewYear:
-                    chartButtonPressed(TimeConversions.ONE_YEAR_FLOAT);
+                    chartButtonPressed(TimeConversions.ONE_YEAR_FLOAT, false);
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
                     int days = cal.get(Calendar.DAY_OF_YEAR);
                     float ytd = (days - 1) * TimeConversions.ONE_DAY_FLOAT;
-                    chartButtonPressed(ytd);
+                    chartButtonPressed(ytd, true);
                     break;
                 case R.id.viewMax:
-                    chartButtonPressed(DataDefinitions.MAX);
+                    chartButtonPressed(DataDefinitions.MAX, false);
                 default:
                     break;
             }
         }
     }
 
-    public void chartButtonPressed(float timeMillis){
+    public void chartButtonPressed(float timeMillis, boolean ytd){
         if(dataSet.size() != 1) {
             if (chartMaxValue < timeMillis || timeMillis == 0) {
                 chart.fitScreen();
                 timeMillis = chartMaxValue;
             } else {
-                chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis);
+                chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis, ytd);
             }
         }
         xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataStartDate);

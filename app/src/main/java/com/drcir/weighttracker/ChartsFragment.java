@@ -217,7 +217,6 @@ public class ChartsFragment extends Fragment {
         }
         else {
             mDataSet = baseActivityListener.getDataSetCharts();
-            dataSetReceived();
         }
         super.onResume();
     }
@@ -356,6 +355,7 @@ public class ChartsFragment extends Fragment {
         leftAxis.setGranularity(.5f);
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setEnabled(false);
+        leftAxis.setSpaceBottom(3);
 
         xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
