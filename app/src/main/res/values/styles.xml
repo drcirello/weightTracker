@@ -217,8 +217,7 @@
     <style name="ChartsTitleBar">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/chartsTitleText</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:background">@color/colorMainBackground</item>
+        <item name="android:background">@android:color/black</item>
         <item name="android:gravity">center</item>
     </style>
 
