@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.drcir.weighttracker.data.DataDefinitions;
 import com.github.mikephil.charting.charts.LineChart;
@@ -25,11 +26,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class ChartFullScreen extends AppCompatActivity implements OnChartGestureListener {
@@ -54,6 +56,9 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     Button viewYtd;
     Button viewMax;
 
+    TextView chartTitle;
+    SimpleDateFormat mFormat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +68,9 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         dataSetLength = dataSet.size() *.1f;
         dataStartDate = dataSet.get(0).getDate();
         sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+
+        chartTitle = findViewById(R.id.chartTitle);
+        mFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
 
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
@@ -233,16 +241,24 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     }
 
     public void chartButtonPressed(float timeMillis, int selectedbutton){
-        chart.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
+        stopChartMovement();
+        boolean ytd = false;
+        if(selectedbutton == DataDefinitions.YTD)
+            ytd = true;
+        currentViewSize = timeMillis;
+        float chartTitleHigh = chart.getHighestVisibleX();
+        if(ytd){
+            chartTitleHigh = chartMaxValue;
+        }
+        float chartTitleLow = chartTitleHigh - timeMillis;
+        updateTitle(chartTitleLow, chartTitleHigh);
         sharedPrefRange.edit().putInt(getResources().getString(R.string.chart_range_preference), selectedbutton).apply();
         if(dataSet.size() != 1) {
-            boolean ytd = false;
             if (chartMaxValue < timeMillis || timeMillis == 0) {
                 chart.fitScreen();
                 timeMillis = chartMaxValue;
             } else {
-                if(selectedbutton == DataDefinitions.YTD)
-                    ytd = true;
+
                 chart = ChartUtils.updateChartViewportFullscreen(chart, timeMillis, ytd);
             }
         }
@@ -303,10 +319,33 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
             currentViewSize = newViewSize;
         }
+        updateTitle(chart.getLowestVisibleX(), chart.getHighestVisibleX());
     }
 
     @Override
     public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        updateTitle(chart.getLowestVisibleX(), chart.getHighestVisibleX());
+    }
 
+    public void updateTitle(float chartLow, float chartHigh){
+        if(chartHigh - chartLow < currentViewSize + .05) {
+            if(chartLow <= 0){
+                chartLow = 0;
+                chartHigh = currentViewSize;
+            }
+            else{
+                if(chartHigh > chartMaxValue)
+                    chartHigh = chartMaxValue;
+                chartLow = chartHigh - currentViewSize;
+            }
+        }
+        String high = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * (chartHigh + .01F));
+        String low = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * chartLow);
+        String dateRange = low + " - " + high;
+        chartTitle.setText(dateRange);
+    }
+
+    public void stopChartMovement(){
+        chart.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
     }
 }

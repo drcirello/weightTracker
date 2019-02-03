@@ -53,6 +53,8 @@
     <color name="colorWeekdayBar">#6A686B</color>
     <color name="chartsNoDataText">@android:color/white</color>
     <color name="chartsNoDataBackground">#CC0099FF</color>
+    <color name="chartsTitleBackground">@color/colorTitleBar</color>
+    <color name="chartsTitleText">@color/colorTitleBarText</color>
 
 </resources>
 
