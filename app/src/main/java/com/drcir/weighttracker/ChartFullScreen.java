@@ -67,6 +67,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         dataSet = new Gson().fromJson(getIntent().getStringExtra("DATASET"), listType);
         dataSetLength = dataSet.size() *.1f;
         dataStartDate = dataSet.get(0).getDate();
+        dataStartDate = dataStartDate / TimeConversions.ONE_DAY_MILLI * TimeConversions.ONE_DAY_MILLI + TimeConversions.ONE_DAY_MILLI / 2;
         sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
 
         chartTitle = findViewById(R.id.chartTitle);
