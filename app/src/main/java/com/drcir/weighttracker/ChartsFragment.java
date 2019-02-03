@@ -52,6 +52,7 @@ public class ChartsFragment extends Fragment {
     int defaultOverTime1;
     int defaultOverTime2;
     long startDate;
+    SharedPreferences sharedPrefRange;
 
     Button selectedButton;
     Button viewOneWeek;
@@ -99,7 +100,7 @@ public class ChartsFragment extends Fragment {
         selectedButton = null;
         ranges = new HashMap<Integer, Integer>();
         baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
-        SharedPreferences sharedPrefRange = baseActivityListener.getRangePref();
+        sharedPrefRange = baseActivityListener.getRangePref();
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
 
@@ -216,7 +217,9 @@ public class ChartsFragment extends Fragment {
             getWeightEntries(baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null));
         }
         else {
+            addLoadingScreen();
             mDataSet = baseActivityListener.getDataSetCharts();
+            dataSetReceived();
         }
         super.onResume();
     }
@@ -285,6 +288,7 @@ public class ChartsFragment extends Fragment {
     }
 
     public void chartButtonPressed(float timeMillis, int selectedbutton){
+        sharedPrefRange.edit().putInt(getResources().getString(R.string.chart_range_preference), selectedbutton).apply();
         if(mDataSet.size() != 1) {
             if (chartMaxSize < timeMillis || timeMillis == DataDefinitions.MAX){
                 chart.fitScreen();
@@ -382,6 +386,16 @@ public class ChartsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+
+    public void addLoadingScreen(){
+        chart.setVisibility(View.INVISIBLE);
+        pBar.setVisibility(View.VISIBLE);
+        charts_failed_message.setVisibility(View.GONE);
+        expandButton.setVisibility(View.INVISIBLE);
+        divider.setVisibility(View.INVISIBLE);
+        buttonBar.setVisibility(View.INVISIBLE);
     }
 
     public void removeLoadingScreen(){

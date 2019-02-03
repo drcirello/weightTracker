@@ -20,12 +20,10 @@ public class SettingsFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
     ArrayAdapter<CharSequence> adapterRange;
-    int defaultChartRange;
     int defaultOverTime1;
     int defaultOverTime2;
     SparseIntArray ranges;
 
-    Spinner spinnerChartRange;
     Spinner spinnerOverTime1;
     Spinner spinnerOverTime2;
     TextView logout;
@@ -54,7 +52,6 @@ public class SettingsFragment extends Fragment {
         ranges.append(DataDefinitions.MAX, 6);
 
         SharedPreferences sharedPrefRange = baseActivityListener.getRangePref();
-        defaultChartRange = sharedPrefRange.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX);
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
 
@@ -70,7 +67,6 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        spinnerChartRange = rootView.findViewById(R.id.selectedRange);
         spinnerOverTime1 = rootView.findViewById(R.id.selectedChangeTime1);
         spinnerOverTime2 = rootView.findViewById(R.id.selectedChangeTime2);
         logout = rootView.findViewById(R.id.logout);
@@ -81,22 +77,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        spinnerChartRange.setAdapter(adapterRange);
-        spinnerChartRange.setSelection(ranges.get(defaultChartRange));
-        spinnerChartRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int range = ranges.keyAt(ranges.indexOfValue(position));
-                SharedPreferences.Editor mEditorRange = baseActivityListener.getRangePref().edit();
-                mEditorRange.putInt(getResources().getString(R.string.chart_range_preference), range).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         spinnerOverTime1.setAdapter(adapterRange);
         spinnerOverTime1.setSelection(ranges.get(defaultOverTime1));

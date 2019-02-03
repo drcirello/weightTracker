@@ -84,7 +84,6 @@
     <string name="enter_weight_invalid">\u0020\u0020\u0020Invalid Weight Entered.\nMust be between 0 and 999.</string>
 
     <!-- Settings Page -->
-    <string name="settings_chart_range">Default Chart Range</string>
     <string name="settings_chart_change_one">Charts Change Over Time #1</string>
     <string name="settings_chart_change_two">Charts Change Over Time #2</string>
     <string name="settings_logout">Logout</string>
