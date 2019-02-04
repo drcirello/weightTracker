@@ -38,7 +38,8 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     }
 
     public WeightEntryAdapter(List<WeightEntry> weightEntries, Context context) {
-        Collections.reverse(weightEntries);
+        if(weightEntries.get(0).getDate() < weightEntries.get(weightEntries.size()-1).getDate())
+            Collections.reverse(weightEntries);
         mDataSet = weightEntries;
         baseActivityListener = (BaseActivityListener) context;
     }

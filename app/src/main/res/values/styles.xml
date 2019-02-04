@@ -106,11 +106,22 @@
         <item name="android:layout_marginTop">-5dp</item>
     </style>
 
-    <style name="StatsText">
+    <style name="StatsTextLabel">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentStart">true</item>
     </style>
 
+    <style name="StatsTextResponse">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
 
     <style name="SettingsOptionsHeaderText">
         <item name="android:textSize">16sp</item>

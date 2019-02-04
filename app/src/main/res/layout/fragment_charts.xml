@@ -217,47 +217,45 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        style="@style/StatsTextLabel"
                         android:text="@string/charts_high" />
                     <TextView
                         android:id="@+id/charts_high_response"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
                 <View
                     android:layout_height="match_parent"
                     android:layout_width="1dp"
                     android:gravity="center"
                     style="@style/EnterWeightVertDivider" />
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        style="@style/StatsTextLabel"
                         android:text="@string/charts_low" />
                     <TextView
                         android:id="@+id/charts_low_response"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -270,47 +268,45 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        style="@style/StatsTextLabel"
                         android:text="@string/charts_year_high" />
                     <TextView
                         android:id="@+id/charts_year_high_response"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
                 <View
                     android:layout_height="match_parent"
                     android:layout_width="1dp"
                     android:gravity="center"
                     style="@style/EnterWeightVertDivider" />
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        style="@style/StatsTextLabel"
                         android:text="@string/charts_year_low" />
                     <TextView
                         android:id="@+id/charts_year_low_response"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -323,57 +319,63 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:id="@+id/charts_change_over_time_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText" />
+
+                        style="@style/StatsTextLabel" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorWhiteText"
+                        android:layout_toRightOf="@id/charts_change_over_time_1"
+                        android:layout_toEndOf="@id/charts_change_over_time_1"
                         android:text="@string/charts_change"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
-                        android:id="@+id/charts_change_over_time_1_response"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:id="@+id/charts_change_over_time_1_response"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
                 <View
                     android:layout_height="match_parent"
                     android:layout_width="1dp"
                     android:gravity="center"
                     style="@style/EnterWeightVertDivider" />
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center">
                     <TextView
                         android:id="@+id/charts_change_over_time_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText" />
+                        style="@style/StatsTextLabel"
+                        android:text=""/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorWhiteText"
+                        android:layout_toRightOf="@id/charts_change_over_time_2"
+                        android:layout_toEndOf="@id/charts_change_over_time_2"
                         android:text="@string/charts_change"/>
                     <TextView
                         android:id="@+id/charts_change_over_time_2_response"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/StatsText"/>
-                </LinearLayout>
+                        style="@style/StatsTextResponse"
+                        android:text="@string/charts_stats_loading"/>
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

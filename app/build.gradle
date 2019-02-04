@@ -1,15 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 1
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.drcir.weighttracker"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    applicationVariants.all { variant ->
+        resValue "string", "app_version", "${defaultConfig.versionName}"
     }
     buildTypes {
         release {
