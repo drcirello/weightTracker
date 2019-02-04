@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/</item>
+        <item>@font/montserrat</item>
+        <item>@font/pragati_narrow</item>
+        <item>@font/pragati_narrow_bold</item>
+        <item>@font/work_sans_medium</item>
+        <item>@font/work_sans_semibold</item>
+        <item>@font/yantramanav_bold</item>
+    </array>
+</resources>

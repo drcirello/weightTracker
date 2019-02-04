@@ -12,6 +12,13 @@
     <color name="colorBlueButtonDisabled">#9E039BE5</color>
     <color name="colorBlueButtonBorder">#FF404040</color>
 
+    <!-- Blue Button States -->
+    <color name="colorWhiteButtonUnfocused">#FFFFFF</color>
+    <color name="colorWhiteButtonPressed">#D6FFFFFF</color>
+    <color name="colorWhiteButtonFocused">#E0FFFFFF</color>
+    <color name="colorWhiteButtonDisabled">#9EFFFFFF</color>
+    <color name="colorWhiteButtonBorder">#FF404040</color>
+
     <!-- Edit Text -->
     <color name="colorEditTextBackgroundUnfocused">#D6FFFFFF</color>
     <color name="colorEditTextBackgroundFocused">#FFFFFF</color>
