@@ -329,8 +329,7 @@ public class ChartsFragment extends Fragment {
     public void createChart(){
         //Set Chart Entries
         List<Entry> entries = new ArrayList<Entry>();
-        startDate = mDataSet.get(0).getDate();
-        startDate = startDate / TimeConversions.ONE_DAY_MILLI * TimeConversions.ONE_DAY_MILLI + TimeConversions.ONE_DAY_MILLI / 2;
+        startDate = mDataSet.get(0).getDate() / TimeConversions.ONE_DAY_MILLI * TimeConversions.ONE_DAY_MILLI + TimeConversions.ONE_DAY_MILLI / 2;
         for(int i = 0; i < mDataSet.size(); i++){
             entries.add(i, new Entry(i * .1f, mDataSet.get(i).getWeight()));
         }
