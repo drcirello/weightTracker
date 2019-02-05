@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -339,10 +340,7 @@ public class ChartsFragment extends Fragment {
         entrySet.setFillFormatter(new CustomFillFormatter());
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
-        if(mDataSet.size() != 1)
-            entrySet.setDrawCircles(false);
-        else
-            entrySet.setCircleHoleRadius(10);
+        entrySet.setDrawCircles(false);
 
         LineData lineData = new LineData(entrySet);
         //chart options
@@ -369,12 +367,12 @@ public class ChartsFragment extends Fragment {
         xAxis.setGranularity(TimeConversions.ONE_DAY_FLOAT);
 
         chart.setData(lineData);
-        chartMaxSize = chart.getHighestVisibleX();
         chart.setDrawBorders(true);
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
         chart.setExtraOffsets(2, 0, 20, 0);
         chart.setAutoScaleMinMaxEnabled(true);
+        chartMaxSize = chart.getHighestVisibleX();
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -472,7 +470,14 @@ public class ChartsFragment extends Fragment {
             setChartStatistics();
             createChart();
             setInitialViewport();
-            removeLoadingScreen();
+            //chart requires slight delay to render properly
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    selectedButton.performClick();
+                    removeLoadingScreen();
+                }
+            }, 100);
         }
     }
 

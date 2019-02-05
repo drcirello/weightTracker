@@ -10,11 +10,12 @@
         <item name="android:windowBackground">@color/colorMainBackground</item>
         <item name="android:colorBackground">@color/colorMainBackground</item>
     </style>
-
+a
 
     <style name="TitleBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:background">@color/colorTitleBar</item>
         <item name="android:textColorPrimary">@color/colorTitleBarText</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!-- Account Management Styles -->

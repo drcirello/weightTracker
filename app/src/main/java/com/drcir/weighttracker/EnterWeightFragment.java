@@ -76,10 +76,12 @@ public class EnterWeightFragment extends Fragment {
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
         CalendarDate initialDate = new CalendarDate(calendar.getTime());
+        //Minium date set to 01/01/2008
+        CalendarDate minDate = new CalendarDate(1199188800000L);
         int firstDayOfWeek = Calendar.SUNDAY;
         List<CalendarDate> preselectedDates = new ArrayList<>();
         preselectedDates.add(initialDate);
-        calendarView.setupCalendar(initialDate, null, null, CalendarView.SelectionMode.SINGLE, preselectedDates, firstDayOfWeek, false);
+        calendarView.setupCalendar(initialDate, minDate, initialDate, CalendarView.SelectionMode.SINGLE, preselectedDates, firstDayOfWeek, false);
         selectedDate = initialDate.getTimeInMillis();
         selectedDateView.setText(Utils.formatSelectedDate(selectedDate));
 

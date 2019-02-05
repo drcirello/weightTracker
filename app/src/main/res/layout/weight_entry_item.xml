@@ -17,25 +17,27 @@
                 android:layout_width="wrap_content"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 style="@style/WeightEntry"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:layout_marginRight="8dp"
-                android:layout_alignParentRight="true">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/WeightEntry"
-                    android:text="@string/entries_weight"/>
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
                 <TextView
                     android:id="@+id/entries_weight_response"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/WeightEntry"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/WeightEntry"
+                    android:text="@string/entries_weight_label"/>
             </LinearLayout>
     </RelativeLayout>
     <View

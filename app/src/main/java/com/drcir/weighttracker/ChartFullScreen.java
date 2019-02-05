@@ -92,10 +92,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         entrySet.setFillFormatter(new CustomFillFormatter());
         entrySet.setDrawValues(false);
         entrySet.setDrawFilled(true);
-        if(dataSet.size() != 1)
-            entrySet.setDrawCircles(false);
-        else
-            entrySet.setCircleHoleRadius(10);
+        entrySet.setDrawCircles(false);
 
         LineData lineData = new LineData(entrySet);
         //chart options
