@@ -13,11 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+        <ProgressBar
+            android:id="@+id/pBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"/>
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorChartBackground" />
+            android:background="@color/colorChartBackground"
+            android:visibility="invisible"/>
     </FrameLayout>
     <View
         android:id="@+id/chartDivider"

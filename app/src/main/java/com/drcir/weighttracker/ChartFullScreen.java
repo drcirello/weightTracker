@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.drcir.weighttracker.data.DataDefinitions;
@@ -34,6 +35,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChartFullScreen extends AppCompatActivity implements OnChartGestureListener {
 
     List<WeightEntry> dataSet;
@@ -57,6 +62,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     Button viewMax;
 
     TextView chartTitle;
+    ProgressBar pBar;
     SimpleDateFormat mFormat;
 
     @Override
@@ -64,20 +70,20 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart_fullscreen);
         Type listType = new TypeToken<ArrayList<WeightEntry>>(){}.getType();
-        dataSet = new Gson().fromJson(getIntent().getStringExtra("DATASET"), listType);
-        dataSetLength = dataSet.size() *.1f;
-        dataStartDate = dataSet.get(0).getDate() / TimeConversions.ONE_DAY_MILLI * TimeConversions.ONE_DAY_MILLI + TimeConversions.ONE_DAY_MILLI / 2;
-        sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+
+        try {
+            Bundle b = getIntent().getExtras();
+            DataString p = (DataString) b.getParcelable("dataSet");
+            String d = p.getDataset();
+            dataSet = new Gson().fromJson(d, listType);
+            dataReceived();
+        }catch (Exception e){
+            getWeights();
+        }
 
         chartTitle = findViewById(R.id.chartTitle);
+        pBar = findViewById(R.id.pBar);
         mFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
-
-        //Set Chart Entries
-        List<Entry> entries = new ArrayList<Entry>();
-        for(int i = 0; i < dataSet.size(); i++){
-            entries.add(i, new Entry(i * .1f, dataSet.get(i).getWeight()));
-        }
-        LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
 
         viewOneWeek = findViewById(R.id.viewOneWeek);
         viewOneMonth = findViewById(R.id.viewOneMonth);
@@ -86,63 +92,6 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         viewYear = findViewById(R.id.viewYear);
         viewYtd = findViewById(R.id.viewYtd);
         viewMax = findViewById(R.id.viewMax);
-
-        chart = findViewById(R.id.lineChart);
-        //entriesSet options
-        entrySet.setFillFormatter(new CustomFillFormatter());
-        entrySet.setDrawValues(false);
-        entrySet.setDrawFilled(true);
-        entrySet.setDrawCircles(false);
-
-        LineData lineData = new LineData(entrySet);
-        //chart options
-        chart.getDescription().setEnabled(false);
-        chart.setScaleXEnabled(true);
-        chart.setScaleYEnabled(false);
-
-        Legend l = chart.getLegend();
-        l.setEnabled(false);
-
-        //Axis options
-        YAxis rightAxis = chart.getAxisRight();
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setGranularity(1);
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setDrawZeroLine(true);
-        rightAxis.setEnabled(false);
-
-        xAxis  = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(true);
-
-        chart.setData(lineData);
-        chartMaxValue = chart.getHighestVisibleX();
-        //more chart options
-        chart.setDrawBorders(true);
-        chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
-        chart.setBorderWidth(1);
-        chart.setExtraOffsets(2, 0, 20, 0);
-        chart.setAutoScaleMinMaxEnabled(true);
-        chart.setOnChartGestureListener(this);
-        chart.setHardwareAccelerationEnabled(true);
-        currentViewSize = chart.getHighestVisibleX() - chart.getLowestVisibleX();
-
-        Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
-        ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
-        ranges.put(DataDefinitions.ONE_MONTH, R.id.viewOneMonth);
-        ranges.put(DataDefinitions.THREE_MONTHS, R.id.viewThreeMonth);
-        ranges.put(DataDefinitions.SIX_MONTHS, R.id.viewSixMonth);
-        ranges.put(DataDefinitions.ONE_YEAR, R.id.viewYear);
-        ranges.put(DataDefinitions.YTD, R.id.viewYtd);
-        ranges.put(DataDefinitions.MAX, R.id.viewMax);
-
-        try {
-            int resource_id = ranges.get(Integer.parseInt(getIntent().getStringExtra("SELECTED_BUTTON")));
-            setViewport((Button) findViewById(resource_id));
-        }
-        catch (Exception e){
-            setViewport(viewMax);
-        }
 
         viewOneWeek.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +141,6 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
                 setViewport(viewMax);
             }
         });
-
     }
 
     @Override
@@ -248,6 +196,8 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             chartTitleHigh = chartMaxValue;
         }
         float chartTitleLow = chartTitleHigh - timeMillis;
+        if(timeMillis == 0)
+            chartTitleLow = 0;
         updateTitle(chartTitleLow, chartTitleHigh);
         sharedPrefRange.edit().putInt(getResources().getString(R.string.chart_range_preference), selectedbutton).apply();
         if(dataSet.size() != 1) {
@@ -340,6 +290,103 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         String low = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * chartLow);
         String dateRange = low + " - " + high;
         chartTitle.setText(dateRange);
+    }
+
+    public void getWeights(){
+        if(Utils.checkConnection(this, getString(R.string.no_connection_message))) {
+            SharedPreferences mSharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+            String token = mSharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+            call.enqueue(new Callback<List<WeightEntry>>() {
+                @Override
+                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                    if (response.isSuccessful()) {
+                        dataSet = response.body();
+                        dataReceived();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                    call.cancel();
+                }
+            });
+        }
+    }
+
+    public void dataReceived(){
+        dataSetLength = dataSet.size() *.1f;
+        dataStartDate = dataSet.get(0).getDate() / TimeConversions.ONE_DAY_MILLI * TimeConversions.ONE_DAY_MILLI + TimeConversions.ONE_DAY_MILLI / 2;
+        sharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+
+        //Set Chart Entries
+        List<Entry> entries = new ArrayList<Entry>();
+        for(int i = 0; i < dataSet.size(); i++){
+            entries.add(i, new Entry(i * .1f, dataSet.get(i).getWeight()));
+        }
+        LineDataSet entrySet = new LineDataSet(entries, null); // add entries to dataset
+
+        chart = findViewById(R.id.lineChart);
+        //entriesSet options
+        entrySet.setFillFormatter(new CustomFillFormatter());
+        entrySet.setDrawValues(false);
+        entrySet.setDrawFilled(true);
+        entrySet.setDrawCircles(false);
+
+        LineData lineData = new LineData(entrySet);
+        //chart options
+        chart.getDescription().setEnabled(false);
+        chart.setScaleXEnabled(true);
+        chart.setScaleYEnabled(false);
+
+        Legend l = chart.getLegend();
+        l.setEnabled(false);
+
+        //Axis options
+        YAxis rightAxis = chart.getAxisRight();
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setGranularity(1);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setDrawZeroLine(true);
+        rightAxis.setEnabled(false);
+
+        xAxis  = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(true);
+
+        chart.setData(lineData);
+        chartMaxValue = chart.getHighestVisibleX();
+        //more chart options
+        chart.setDrawBorders(true);
+        chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
+        chart.setBorderWidth(1);
+        chart.setExtraOffsets(2, 0, 20, 0);
+        chart.setAutoScaleMinMaxEnabled(true);
+        chart.setOnChartGestureListener(this);
+        chart.setHardwareAccelerationEnabled(true);
+        currentViewSize = chart.getHighestVisibleX() - chart.getLowestVisibleX();
+
+        Map<Integer, Integer> ranges = new HashMap<Integer, Integer>();
+        ranges.put(DataDefinitions.ONE_WEEK, R.id.viewOneWeek);
+        ranges.put(DataDefinitions.ONE_MONTH, R.id.viewOneMonth);
+        ranges.put(DataDefinitions.THREE_MONTHS, R.id.viewThreeMonth);
+        ranges.put(DataDefinitions.SIX_MONTHS, R.id.viewSixMonth);
+        ranges.put(DataDefinitions.ONE_YEAR, R.id.viewYear);
+        ranges.put(DataDefinitions.YTD, R.id.viewYtd);
+        ranges.put(DataDefinitions.MAX, R.id.viewMax);
+        int defaultRange;
+        //Set Chart Range to Preference Size, default Max
+        try {
+            SharedPreferences mRangePref = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+            defaultRange = ranges.get(mRangePref.getInt(getString(R.string.chart_range_preference), DataDefinitions.MAX));
+        }
+        catch (Exception e){
+            defaultRange = DataDefinitions.MAX;
+        }
+        setViewport((Button) findViewById(defaultRange));
+        pBar.setVisibility(View.INVISIBLE);
+        chart.setVisibility(View.VISIBLE);
     }
 
     public void stopChartMovement(){

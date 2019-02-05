@@ -376,12 +376,19 @@ public class ChartsFragment extends Fragment {
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ChartFullScreen.class);
-                Gson gson = new Gson();
-                String dataSetString = gson.toJson(mDataSet);
-                intent.putExtra("DATASET", dataSetString);
-                intent.putExtra("SELECTED_BUTTON", Integer.toString(selectedButtonRange));
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(getActivity(), ChartFullScreen.class);
+                    Gson gson = new Gson();
+                    String dataSetString = gson.toJson(mDataSet);
+                    DataString p = new DataString();
+                    p.setDataset(dataSetString);
+                    intent.putExtra("dataSet", p);
+                    startActivity(intent);
+                }catch(Exception e){
+                    Intent intent = new Intent(getActivity(), ChartFullScreen.class);
+                    startActivity(intent);
+                }
+
             }
         });
     }
