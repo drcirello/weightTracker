@@ -515,7 +515,9 @@ public class ChartsFragment extends Fragment {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
+                    selectedButton.setSoundEffectsEnabled(false);
                     selectedButton.performClick();
+                    selectedButton.setSoundEffectsEnabled(true);
                     removeLoadingScreen();
                 }
             }, 100);

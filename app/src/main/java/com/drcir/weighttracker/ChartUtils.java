@@ -21,6 +21,7 @@ public class ChartUtils {
     }
 
     public static LineChart updateChartViewport(LineChart chart, float scale){
+        scale -= .1F;
         //resets entire chart
         chart.fitScreen();
         //gets the maximum possible x value
@@ -34,6 +35,7 @@ public class ChartUtils {
     }
 
     public static LineChart updateChartViewportFullscreen(LineChart chart, float scale, boolean ytd){
+        scale -= .1F;
         //get current right side of viewport
         float highViewX = chart.getHighestVisibleX();
         //resets entire chart

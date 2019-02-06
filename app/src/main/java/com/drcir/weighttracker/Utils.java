@@ -25,7 +25,7 @@ public class Utils {
 
     public static String formatSelectedDate(long unixDate){
         Date date = new java.util.Date(unixDate);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("EEE, MMMM dd yyyy", Locale.US);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         return sdf.format(date);
     }
 

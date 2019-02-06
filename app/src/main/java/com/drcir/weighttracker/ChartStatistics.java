@@ -56,7 +56,7 @@ public class ChartStatistics {
         if(timePeriod == 0 || timePeriod > dataSize - 1)
             difference = currentWeight - dataset.get(0).getWeight();
         else
-            difference = currentWeight - dataset.get(dataSize - 1 - timePeriod).getWeight();
+            difference = currentWeight - dataset.get(dataSize - timePeriod).getWeight();
 
         return difference;
     }

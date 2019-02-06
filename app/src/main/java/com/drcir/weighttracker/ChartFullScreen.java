@@ -288,7 +288,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
     public void updateTitle(float chartLow, float chartHigh){
         if(chartHigh - chartLow < currentViewSize + .05) {
-            if(chartLow <= 0){
+            if(chartLow < .1){
                 chartLow = 0;
                 chartHigh = currentViewSize;
                 if(chartHigh > chartMaxValue)
@@ -297,7 +297,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             else{
                 if(chartHigh > chartMaxValue)
                     chartHigh = chartMaxValue;
-                chartLow = chartHigh - currentViewSize;
+                chartLow = chartHigh - currentViewSize + .1F;;
                 if(chartHigh < 0)
                     chartLow = 0;
             }
