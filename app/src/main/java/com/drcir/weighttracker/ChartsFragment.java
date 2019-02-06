@@ -47,6 +47,7 @@ public class ChartsFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
 
+    private boolean mPaused;
     LineChart chart;
     XAxis xAxis;
     List<WeightEntry> mDataSet;
@@ -102,6 +103,7 @@ public class ChartsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
+        mPaused = false;
         selectedButton = null;
         ranges = new HashMap<Integer, Integer>();
         sharedPrefRange = baseActivityListener.getRangePref();
@@ -213,10 +215,12 @@ public class ChartsFragment extends Fragment {
 
     @Override
     public void onPause(){
+        mPaused = true;
         super.onPause();
     }
 
     public void onResume(){
+        mPaused = false;
         if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
             baseActivityListener.getCurrentUser().getIdToken(true)
                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
@@ -482,7 +486,8 @@ public class ChartsFragment extends Fragment {
                     charts_failed_message.setVisibility(View.GONE);
                     mDataSet = response.body();
                     baseActivityListener.setDataSetCharts(mDataSet);
-                    dataSetReceived();
+                    if(!mPaused)
+                        dataSetReceived();
                 }
             }
 
