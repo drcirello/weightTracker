@@ -3,6 +3,7 @@ package com.drcir.weighttracker;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +41,6 @@ public class EnterWeightFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
     Long selectedDate;
-    String token;
     int enteredWeight;
 
     TextView selectedDateView;
@@ -56,7 +60,6 @@ public class EnterWeightFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        token = baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
     }
 
     @Override
@@ -128,31 +131,41 @@ public class EnterWeightFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date(selectedDate);
-                String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
                 enteredWeight = Integer.parseInt(enteredWeightView.getText().toString());
                 if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create)) && verifyWeight()){
-                    Intent intent = new Intent(getActivity(), Main.class);
-                    Utils.refreshToken(baseActivityListener.getTokenPref(), getActivity(), intent);
-                    Call<Void> call = baseActivityListener.getApiInterface().createWeight(token, modifiedDate, enteredWeight);
-                    call.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            if (response.isSuccessful()) {
-                                baseActivityListener.setUpdateDataSets(true);
-                                baseActivityListener.swapFragment(R.id.action_charts);
-                                Toast.makeText(getActivity(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
-                            }
-                            else
-                                createFailed();
-                        }
+                        baseActivityListener.getCurrentUser().getIdToken(true)
+                            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                    if (task.isSuccessful()) {
+                                        String token = task.getResult().getToken();
+                                        Date date = new Date(selectedDate);
+                                        String modifiedDate= new SimpleDateFormat("MM/dd/yyyy").format(date);
+                                        Call<Void> call = baseActivityListener.getApiInterface().createWeight(token, modifiedDate, enteredWeight);
+                                        call.enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                                if (response.isSuccessful()) {
+                                                    baseActivityListener.setUpdateDataSets(true);
+                                                    baseActivityListener.swapFragment(R.id.action_charts);
+                                                    Toast.makeText(getActivity(), getString(R.string.enter_weight_created), Toast.LENGTH_LONG).show();
+                                                }
+                                                else
+                                                    createFailed();
+                                            }
 
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            createFailed();
-                            call.cancel();
-                        }
-                    });
+                                            @Override
+                                            public void onFailure(Call<Void> call, Throwable t) {
+                                                createFailed();
+                                                call.cancel();
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        Intent intent = new Intent(getActivity(), Main.class);
+                                        Utils.logout(getActivity(), intent);
+                                    }
+                                }
+                            });
                 }
                 enteredWeightView.setText(null);
             }

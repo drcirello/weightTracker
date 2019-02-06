@@ -2,7 +2,7 @@ package com.drcir.weighttracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +42,11 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     }
 
     public WeightEntryAdapter(List<WeightEntry> weightEntries, Context context) {
-        if(weightEntries.get(0).getDate() < weightEntries.get(weightEntries.size()-1).getDate())
-            Collections.reverse(weightEntries);
+        int size = weightEntries.size();
+        if(size > 1){
+            if(weightEntries.get(0).getDate() < weightEntries.get(size-1).getDate())
+                Collections.reverse(weightEntries);
+        }
         mDataSet = weightEntries;
         baseActivityListener = (BaseActivityListener) context;
     }
@@ -83,31 +90,37 @@ public class WeightEntryAdapter extends RecyclerView.Adapter<WeightEntryAdapter.
     }
 
     public void removeEntry(final Context context, final int position){
-        int weightId = mDataSet.get(position).getWeightId();
+        if(Utils.checkConnection(context, context.getString(R.string.no_connection_message))) {
+            baseActivityListener.getCurrentUser().getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String token = task.getResult().getToken();
+                            int weightId = mDataSet.get(position).getWeightId();
+                            Call<Void> call = baseActivityListener.getApiInterface().deleteWeight(token, weightId);
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    if(response.isSuccessful()) {
+                                        mDataSet.remove(position);
+                                        notifyItemRemoved(position);
+                                        notifyItemRangeChanged(position, mDataSet.size());
+                                        baseActivityListener.setUpdateDataSets(true);
+                                        Toast.makeText(context, "Entry Deleted", Toast.LENGTH_LONG).show();
+                                    }
+                                }
 
-        SharedPreferences sharedPrefToken = context.getSharedPreferences(context.getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        String token = sharedPrefToken.getString(context.getString(R.string.token_JWT_preference), null);
-        Call<Void> call = baseActivityListener.getApiInterface().deleteWeight(token, weightId);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()) {
-                    mDataSet.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, mDataSet.size());
-                    baseActivityListener.setUpdateDataSets(true);
-                    Toast.makeText(context, "Entry Deleted", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t)
-            {
-                Toast.makeText(context, "Error Deleting Entry", Toast.LENGTH_LONG).show();
-                call.cancel();
-            }
-        });
-
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t)
+                                {
+                                    Toast.makeText(context, "Error Deleting Entry", Toast.LENGTH_LONG).show();
+                                    call.cancel();
+                                }
+                            });
+                        }
+                    }
+                });
+        }
     }
 
 }

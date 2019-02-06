@@ -65,7 +65,7 @@ public class ResetPasswordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String email = useremail.getText().toString();
-
+/*
                 if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_reset))) {
                     Call<JsonObject> call = apiInterface.resetPassword(email);
                     call.enqueue(new Callback<JsonObject>() {
@@ -85,7 +85,7 @@ public class ResetPasswordFragment extends Fragment {
                             call.cancel();
                         }
                     });
-                }
+                }*/
             }
         });
 

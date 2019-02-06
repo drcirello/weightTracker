@@ -14,6 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+
 import java.util.List;
 
 public class Base_Activity extends AppCompatActivity implements BaseActivityListener {
@@ -26,7 +32,9 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     boolean mDataSetEntriesChanged;
     Drawable mNoDataImage;
 
-    SharedPreferences mSharedPrefToken;
+    private FirebaseAuth mAuth;
+    FirebaseUser mCurrentUser;
+
     SharedPreferences mSharedPrefRange;
 
     APIInterface mApiInterface;
@@ -36,11 +44,13 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
         mDataSetChartsChanged = true;
         mDataSetEntriesChanged = true;
         mNoDataImage = null;
 
-        mSharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
+
         mSharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
         mApiInterface = APIClient.getClient().create(APIInterface.class);
 
@@ -67,10 +77,19 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     @Override
     protected void onResume() {
         super.onResume();
-        Long tokenTime = mSharedPrefToken.getLong(getString(R.string.token_date_preference), 0);
-        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
-            Intent intent = new Intent(Base_Activity.this, Main.class);
-            Utils.refreshToken(mSharedPrefToken, Base_Activity.this, intent);
+        mSharedPrefRange = getSharedPreferences(getString(R.string.range_preferences), Context.MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
+        if(Utils.checkConnection(this, getString(R.string.no_connection_message))) {
+            mCurrentUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (!task.isSuccessful()) {
+                            Intent intent = new Intent(Base_Activity.this, Main.class);
+                            Utils.logout(Base_Activity.this, intent);
+                        }
+                    }
+                });
         }
     }
 
@@ -164,11 +183,6 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     }
 
     @Override
-    public SharedPreferences getTokenPref(){
-        return mSharedPrefToken;
-    }
-
-    @Override
     public SharedPreferences getRangePref() {
         return mSharedPrefRange;
     }
@@ -186,5 +200,10 @@ public class Base_Activity extends AppCompatActivity implements BaseActivityList
     @Override
     public void setNoDataImage(Drawable image){
         mNoDataImage = image;
+    }
+
+    @Override
+    public FirebaseUser getCurrentUser(){
+        return mCurrentUser;
     }
 }

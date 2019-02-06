@@ -1,7 +1,9 @@
 package com.drcir.weighttracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,7 +30,6 @@ public class WeightEntriesFragment extends Fragment {
 
     private BaseActivityListener baseActivityListener;
     List<WeightEntry> mDataSet;
-    String token;
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -45,7 +51,6 @@ public class WeightEntriesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        token = baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
     }
 
     @Override
@@ -81,7 +86,24 @@ public class WeightEntriesFragment extends Fragment {
 
     public void onResume(){
         if(baseActivityListener.getUpdateDataSetEntries()) {
-            getWeightEntries(token);
+            if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
+                baseActivityListener.getCurrentUser().getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String token = task.getResult().getToken();
+                                getWeightEntries(token);
+                            }
+                            else{
+                                Intent intent = new Intent(getActivity(), Main.class);
+                                Utils.logout(getActivity(), intent);
+                            }
+                        }
+                    });
+            }
+            else {
+                setNoConnection();
+            }
         }
         else {
             mDataSet = baseActivityListener.getDataSetEntries();
@@ -97,10 +119,37 @@ public class WeightEntriesFragment extends Fragment {
         entriesFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getWeightEntries(token);
-                entriesFrame.setOnClickListener(null);
+            if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
+                baseActivityListener.getCurrentUser().getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String token = task.getResult().getToken();
+                                getWeightEntries(token);
+                            }
+                            else{
+                                Intent intent = new Intent(getActivity(), Main.class);
+                                Utils.logout(getActivity(), intent);
+                            }
+                        }
+                    });
+            }
+            else {
+                setNoConnection();
+            }
+            entriesFrame.setOnClickListener(null);
             }
         });
+    }
+
+    public void setNoConnection(){
+        mRecyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+        pBar.setVisibility(View.GONE);
+        TextView noDataLineOne = getView().findViewById(R.id.no_data_available_line_one);
+        TextView noDataLineTwo = getView().findViewById(R.id.no_data_available_line_two);
+        noDataLineOne.setText(R.string.no_connection_message);
+        noDataLineTwo.setText("");
     }
 
     public void getWeightEntries(String token){

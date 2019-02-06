@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -23,6 +24,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,6 +56,8 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     float dataSetLength;
     float currentViewSize;
     SharedPreferences sharedPrefRange;
+    private FirebaseAuth mAuth;
+    FirebaseUser mCurrentUser;
 
     Button selectedButton = null;
 
@@ -68,6 +76,8 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
         setContentView(R.layout.activity_chart_fullscreen);
         Type listType = new TypeToken<ArrayList<WeightEntry>>(){}.getType();
 
@@ -146,7 +156,19 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
     @Override
     protected void onResume() {
         super.onResume();
-        refreshToken();
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
+        if(Utils.checkConnection(this, getString(R.string.no_connection_message))) {
+            mCurrentUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (!task.isSuccessful()) {
+                            Intent intent = new Intent(ChartFullScreen.this, Main.class);
+                            Utils.logout(ChartFullScreen.this, intent);
+                        }
+                    }
+                });
+        }
     }
 
     public void setViewport(Button button){
@@ -212,16 +234,6 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
         xAxis = ChartUtils.setXaxisScale(xAxis, timeMillis, dataStartDate);
     }
 
-    public void refreshToken(){
-        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        Long tokenTime = mSharedPreferences.getLong(getString(R.string.token_date_preference), 0);
-        if(System.currentTimeMillis() - tokenTime > TimeConversions.TOKEN_REFRESH_TIME){
-            Intent intent = new Intent(ChartFullScreen.this, Main.class);
-            Utils.refreshToken(mSharedPreferences, ChartFullScreen.this, intent);
-        }
-    }
-
-
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
 
@@ -279,11 +291,15 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
             if(chartLow <= 0){
                 chartLow = 0;
                 chartHigh = currentViewSize;
+                if(chartHigh > chartMaxValue)
+                    chartHigh = chartMaxValue;
             }
             else{
                 if(chartHigh > chartMaxValue)
                     chartHigh = chartMaxValue;
                 chartLow = chartHigh - currentViewSize;
+                if(chartHigh < 0)
+                    chartLow = 0;
             }
         }
         String high = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * (chartHigh + .01F));
@@ -294,24 +310,30 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
     public void getWeights(){
         if(Utils.checkConnection(this, getString(R.string.no_connection_message))) {
-            SharedPreferences mSharedPrefToken = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-            String token = mSharedPrefToken.getString(getString(R.string.token_JWT_preference), null);
-            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
-            call.enqueue(new Callback<List<WeightEntry>>() {
-                @Override
-                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
-                    if (response.isSuccessful()) {
-                        dataSet = response.body();
-                        dataReceived();
-                    }
-                }
+            mCurrentUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String token = task.getResult().getToken();
+                            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                            Call<List<WeightEntry>> call = apiInterface.getWeightData(token);
+                            call.enqueue(new Callback<List<WeightEntry>>() {
+                                @Override
+                                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                                    if (response.isSuccessful()) {
+                                        dataSet = response.body();
+                                        dataReceived();
+                                    }
+                                }
 
-                @Override
-                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
-                    call.cancel();
-                }
-            });
+                                @Override
+                                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                                    call.cancel();
+                                }
+                            });
+                        }
+                    }
+                });
         }
     }
 

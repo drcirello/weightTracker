@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -25,6 +26,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -100,7 +104,6 @@ public class ChartsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         selectedButton = null;
         ranges = new HashMap<Integer, Integer>();
-        baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null);
         sharedPrefRange = baseActivityListener.getRangePref();
         defaultOverTime1 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_one), DataDefinitions.SIX_MONTHS);
         defaultOverTime2 = sharedPrefRange.getInt(getString(R.string.chart_over_time_preference_two), DataDefinitions.MAX);
@@ -214,13 +217,30 @@ public class ChartsFragment extends Fragment {
     }
 
     public void onResume(){
-        if(baseActivityListener.getUpdateDataSetCharts()) {
-            getWeightEntries(baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null));
+        if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
+            baseActivityListener.getCurrentUser().getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String token = task.getResult().getToken();
+                            if(baseActivityListener.getUpdateDataSetCharts()) {
+                                getWeightEntries(token);
+                            }
+                            else {
+                                addLoadingScreen();
+                                mDataSet = baseActivityListener.getDataSetCharts();
+                                dataSetReceived();
+                            }
+                        }
+                        else{
+                            Intent intent = new Intent(getActivity(), Main.class);
+                            Utils.logout(getActivity(), intent);
+                        }
+                    }
+                });
         }
-        else {
-            addLoadingScreen();
-            mDataSet = baseActivityListener.getDataSetCharts();
-            dataSetReceived();
+        else{
+            dataRetrievalFailure(getString(R.string.no_connection_message));
         }
         super.onResume();
     }
@@ -430,39 +450,48 @@ public class ChartsFragment extends Fragment {
         chartFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getWeightEntries(baseActivityListener.getTokenPref().getString(getString(R.string.token_JWT_preference), null));
+            if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
+                baseActivityListener.getCurrentUser().getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String token = task.getResult().getToken();
+                                getWeightEntries(token);
+                            }
+                            else{
+                                Intent intent = new Intent(getActivity(), Main.class);
+                                Utils.logout(getActivity(), intent);
+                            }
+                        }
+                    });
             }
+            else{
+                dataRetrievalFailure(getString(R.string.no_connection_message));
+            }
+        }
         });
     }
 
     public void getWeightEntries(String token){
-
-        if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message))) {
-            Intent intent = new Intent(getActivity(), Main.class);
-            Utils.refreshToken(baseActivityListener.getTokenPref(), getActivity(), intent);
-            Call<List<WeightEntry>> call = baseActivityListener.getApiInterface().getWeightData(token);
-            call.enqueue(new Callback<List<WeightEntry>>() {
-                @Override
-                public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
-                    if (response.isSuccessful()) {
-                        pBar.setVisibility(View.VISIBLE);
-                        charts_failed_message.setVisibility(View.GONE);
-                        mDataSet = response.body();
-                        baseActivityListener.setDataSetCharts(mDataSet);
-                        dataSetReceived();
-                    }
+        Call<List<WeightEntry>> call = baseActivityListener.getApiInterface().getWeightData(token);
+        call.enqueue(new Callback<List<WeightEntry>>() {
+            @Override
+            public void onResponse(Call<List<WeightEntry>> call, Response<List<WeightEntry>> response) {
+                if (response.isSuccessful()) {
+                    pBar.setVisibility(View.VISIBLE);
+                    charts_failed_message.setVisibility(View.GONE);
+                    mDataSet = response.body();
+                    baseActivityListener.setDataSetCharts(mDataSet);
+                    dataSetReceived();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
-                    call.cancel();
-                    dataRetrievalFailure(getString(R.string.charts_api_failed_message_part1));
-                }
-            });
-        }
-        else{
-            dataRetrievalFailure(getString(R.string.no_connection_message));
-        }
+            @Override
+            public void onFailure(Call<List<WeightEntry>> call, Throwable t) {
+                call.cancel();
+                dataRetrievalFailure(getString(R.string.charts_api_failed_message_part1));
+            }
+        });
     }
 
     public void dataSetReceived() {

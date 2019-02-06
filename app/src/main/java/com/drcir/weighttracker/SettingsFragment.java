@@ -114,7 +114,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Main.class);
-                Utils.logout(baseActivityListener.getTokenPref(), getActivity(), intent);
+                Utils.logout(getActivity(), intent);
             }
         });
     }

@@ -2,9 +2,11 @@ package com.drcir.weighttracker;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-import org.json.JSONObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -129,46 +135,25 @@ public class CreateAccountFragment extends Fragment {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = userEmail.getText().toString();
-                final String password = userPass.getText().toString();
-
-                if(Utils.isEmailValid(email)) {
-                    final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                    if (Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create_account))) {
-                        Call<JsonObject> call = apiInterface.createUser(email, email, password, password);
-                        call.enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                if (response.isSuccessful()) {
-                                    accountManagementListener.login(email, password);
-                                } else {
-                                    try {
-                                        String message;
-                                        JSONObject errorMessage = new JSONObject(response.errorBody().string());
-                                        if(errorMessage.has("email"))
-                                            message = errorMessage.getJSONArray("email").getString(0);
-                                        else if(errorMessage.has("password1"))
-                                            message = errorMessage.getJSONArray("password1").getString(0);
-                                        else
-                                            message = getString(R.string.account_created_failed);
-                                        createFailed(message);
-                                    } catch (Exception e) {
-                                        createFailed(getString(R.string.account_created_failed));
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
-                                createFailed(getString(R.string.account_created_failed));
-                                call.cancel();
-                            }
-                        });
-                    }
-                }
-                else{
-                    createFailed(getString(R.string.invalid_email));
-                }
+            final String email = userEmail.getText().toString();
+            final String password = userPass.getText().toString();
+            final FirebaseAuth mAuth = accountManagementListener.getFirebaseAuth();
+            if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create_account)) && Utils.isEmailValid(getActivity(), email)) {
+                mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("CreateAccount", "createUserWithEmail:success");
+                            accountManagementListener.setFirebaseUser(mAuth.getCurrentUser());
+                            createOnServer(email, password);
+                        } else {
+                            Log.w("CreateAccount", "createUserWithEmail:failure", task.getException());
+                            createFailed(getString(R.string.account_created_failed));
+                        }
+                        }
+                    });
+            }
             }
         });
     }
@@ -176,6 +161,54 @@ public class CreateAccountFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
+    }
+
+    public void createOnServer(final String email, final String password){
+        FirebaseUser user = accountManagementListener.getFirebaseAuth().getCurrentUser();
+        user.getIdToken(true)
+            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                if (task.isSuccessful()) {
+                    String token = task.getResult().getToken();
+                    APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                    Call<Void> call = apiInterface.createUserFirebase(token);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                accountManagementListener.login(email, password);
+                                Toast.makeText(getActivity(), "ACCOUNT CREATED", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            call.cancel();
+                            removeFromFirebase();
+                            createFailed(getString(R.string.account_created_failed));
+                        }
+                    });
+                }
+                else{
+                    removeFromFirebase();
+                    createFailed(getString(R.string.account_created_failed));
+                }
+                }
+            });
+    }
+
+    //If server create fails remove from firebase so email is not tagged used.
+    public void removeFromFirebase(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.delete()
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("CreateAccount", "User account deleted due to server failure.");
+                }
+                }
+            });
     }
 
     public void createFailed(String message){

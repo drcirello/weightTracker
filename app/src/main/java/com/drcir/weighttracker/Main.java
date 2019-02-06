@@ -3,43 +3,42 @@ package com.drcir.weighttracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.drcir.weighttracker.data.DataDefinitions;
-import com.google.gson.JsonObject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 public class Main extends AppCompatActivity implements AccountManagementListener {
 
     FragmentManager fragmentManager;
     APIInterface apiInterface;
-    String token;
-    Long tokenDate;
-    SharedPreferences mSharedPreferences;
+    private FirebaseAuth mAuth;
+    FirebaseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
         fragmentManager = getSupportFragmentManager();
-        mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-        token = mSharedPreferences.getString(getString(R.string.token_preference), null);
-        tokenDate = mSharedPreferences.getLong(getString(R.string.token_date_preference), System.currentTimeMillis());
         apiInterface = APIClient.getClient().create(APIInterface.class);
-        if(token != null && Utils.checkConnection(this, getString(R.string.no_connection_message))){
+
+        if(mCurrentUser != null && Utils.checkConnection(this, getString(R.string.no_connection_message)))
             validateToken();
-        }
-        else{
+        else
             loginRequired();
-        }
     }
 
     @Override
@@ -52,94 +51,44 @@ public class Main extends AppCompatActivity implements AccountManagementListener
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_main, new AccountFragment());
         fragmentTransaction.commit();
-        SharedPreferences.Editor mEditorToken = mSharedPreferences.edit();
-        mEditorToken.clear();
-        mEditorToken.commit();
     }
 
     public void validateToken(){
-        Call<JsonObject> call = apiInterface.postVerify(token);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful() && response.code() == 200) {
-                    performLogin();
+        mCurrentUser.getIdToken(true)
+            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        performLogin();
+                    } else {
+                        loginRequired();
+                    }
                 }
-                else{
-                    loginRequired();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                call.cancel();
-                loginRequired();
-            }
-        });
+            });
     }
 
     public void performLogin(){
-        if((System.currentTimeMillis() - tokenDate) > DataDefinitions.ONE_WEEK){
-            refreshToken();
-        }
         Intent i = new Intent(Main.this, Base_Activity.class);
         Main.this.startActivity(i);
         finish();
     }
 
-    public void requestLogin(String username, String userpass){
-        if(Utils.checkConnection(Main.this, getString(R.string.no_connection_message_login))) {
-            Call<AccountManagement> call = apiInterface.postLogin(username, userpass);
-            call.enqueue(new Callback<AccountManagement>() {
-                @Override
-                public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-                    response.body();
-                    try {
-                        token = response.body().getToken();
-                        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                        mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
-                        mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
-                        mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                        Intent intent = new Intent(Main.this, Base_Activity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        Main.this.startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
+    public void requestLogin(String useremail, String userpass){
+        if(Utils.checkConnection(this, getString(R.string.no_connection_message))){
+            mAuth.signInWithEmailAndPassword(useremail, userpass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(this.getClass().getName(), "signInWithEmail:success");
+                            mCurrentUser = mAuth.getCurrentUser();
+                            performLogin();
+                        } else {
+                            Log.w(this.getClass().getName(), "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-
-                @Override
-                public void onFailure(Call<AccountManagement> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.login_failed), Toast.LENGTH_LONG).show();
-                    call.cancel();
-                }
-            });
+                });
         }
-    }
-
-    public void refreshToken(){
-        Call<AccountManagement> call = apiInterface.postRefreshToken(token);
-        call.enqueue(new Callback<AccountManagement>() {
-            @Override
-            public void onResponse(Call<AccountManagement> call, Response<AccountManagement> response) {
-                try{
-                    token = response.body().getToken();
-                    SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.token_preferences), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                    mEditor.putString(getResources().getString(R.string.token_preference), token).apply();
-                    mEditor.putString(getResources().getString(R.string.token_JWT_preference), "JWT " + token).apply();
-                    mEditor.putLong(getResources().getString(R.string.token_date_preference), System.currentTimeMillis()).apply();
-                }
-                catch (Exception e){}
-            }
-
-            @Override
-            public void onFailure(Call<AccountManagement> call, Throwable t) {
-                call.cancel();
-            }
-        });
     }
 
     public void swapFragment(Fragment fragment, boolean addToStack){
@@ -154,4 +103,14 @@ public class Main extends AppCompatActivity implements AccountManagementListener
     }
 
     public void back(){onBackPressed();}
+
+    @Override
+    public FirebaseAuth getFirebaseAuth(){
+        return mAuth;
+    }
+
+    @Override
+    public void setFirebaseUser(FirebaseUser user){
+        mCurrentUser = user;
+    }
 }
