@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
 
-    static final String BASE_URL = "https://www.pokergraph.net";
+    static final String BASE_URL = "https://www.weighttrackerapp.net";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
