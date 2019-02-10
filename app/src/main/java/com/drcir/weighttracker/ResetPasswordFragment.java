@@ -72,7 +72,7 @@ public class ResetPasswordFragment extends Fragment {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             if (response.isSuccessful()) {
-                                accountManagementListener.swapFragment(new LoginFragment(), true);
+                                accountManagementListener.swapFragment(new EmailLoginFragment(), true);
                                 Toast.makeText(getActivity(), "Password Reset Sent", Toast.LENGTH_SHORT).show();
                             } else {
                                 resetFailed();

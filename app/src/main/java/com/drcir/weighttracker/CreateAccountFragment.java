@@ -135,8 +135,8 @@ public class CreateAccountFragment extends Fragment {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            final String email = userEmail.getText().toString();
-            final String password = userPass.getText().toString();
+            final String email = userEmail.getText().toString().trim();
+            final String password = userPass.getText().toString().trim();
             final FirebaseAuth mAuth = accountManagementListener.getFirebaseAuth();
             if(Utils.checkConnection(getActivity(), getString(R.string.no_connection_message_create_account)) && Utils.isEmailValid(getActivity(), email)) {
                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -176,7 +176,7 @@ public class CreateAccountFragment extends Fragment {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()) {
-                                accountManagementListener.login(email, password);
+                                accountManagementListener.email_login(email, password);
                                 Toast.makeText(getActivity(), "ACCOUNT CREATED", Toast.LENGTH_LONG).show();
                             }
                         }

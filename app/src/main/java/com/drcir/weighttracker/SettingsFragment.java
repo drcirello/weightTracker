@@ -115,6 +115,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Main.class);
                 Utils.logout(getActivity(), intent);
+                getActivity().finish();
             }
         });
     }

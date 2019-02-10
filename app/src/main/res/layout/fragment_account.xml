@@ -50,9 +50,17 @@
             android:background="@drawable/rounded_button_blue"
             style="@style/AccountManagementButtons"
             android:text="@string/sign_up" />
-
         <Button
-            android:id="@+id/login"
+            android:id="@+id/sms_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_button_white"
+            android:text="@string/sms_login"
+            style="@style/AccountManagementButtons"
+            android:textColor="@android:color/black" />
+        <Button
+            android:id="@+id/email_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

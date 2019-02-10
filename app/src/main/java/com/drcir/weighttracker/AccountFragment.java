@@ -10,7 +10,8 @@ import android.widget.Button;
 
 public class AccountFragment extends Fragment {
 
-    Button login;
+    Button email_login;
+    Button sms_login;
     Button createAccount;
     private AccountManagementListener accountManagementListener;
 
@@ -33,7 +34,8 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         createAccount = view.findViewById(R.id.createAccount);
-        login = view.findViewById(R.id.login);
+        email_login = view.findViewById(R.id.email_login);
+        sms_login = view.findViewById(R.id.sms_login);
         return view;
     }
 
@@ -41,10 +43,17 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        email_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accountManagementListener.swapFragment(new LoginFragment(), true);
+                accountManagementListener.swapFragment(new EmailLoginFragment(), true);
+            }
+        });
+
+        sms_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accountManagementListener.swapFragment(new SmsLoginFragment(), true);
             }
         });
 

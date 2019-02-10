@@ -4,6 +4,9 @@
 
     <!-- Account Management -->
     <string name="login">Log in</string>
+    <string name="login_email">Email Log in</string>
+    <string name="login_phone">Phone Log in</string>
+    <string name="sms_login">Log in with phone</string>
     <string name="create_account">Create account</string>
     <string name="sign_up">Sign Up Free</string>
     <string name="email">Email Address</string>
@@ -22,6 +25,14 @@
     <string name="account_management_blurb_1">Track Your Weight.</string>
     <string name="account_management_blurb_2">Simple and Easy.</string>
 
+    <!-- SMS Login Strings-->
+    <string name="phone_number">Phone Number</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="phone_number_hint">(555)555-5555</string>
+    <string name="send_button">Send Code</string>
+    <string name="resend_button">Resend Code</string>
+    <string name="verify_button">Submit Code</string>
+    <string name="auto_verify">Verification Received</string>
 
     <!-- Shared Preferences Strings-->
     <string name="token_preferences">com.drcir.weighttracker.TOKEN_PREFERENCES</string>

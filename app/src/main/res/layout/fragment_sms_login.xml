@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/account_management_wallpaper">
+
+    <ImageView
+        android:id="@+id/login_back"
+        style="@style/BackChevron"
+        android:src="@drawable/back_chevron" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+            <TextView
+                android:text="@string/login_phone"
+                style="@style/AccountManagementHeaderText" />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone_number"
+            style="@style/AccountManagementSecondaryHeaderText" />
+        <EditText
+            android:id="@+id/phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            android:inputType="phone"
+            android:digits="1234567890()-"
+            android:maxLength="14"
+            android:textColorHint="@color/color_phone_hint"
+            android:hint="@string/phone_number_hint"
+            style="@style/AccountManagementEditText" />
+            <TextView
+                android:id="@+id/verification_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verification_code"
+                style="@style/AccountManagementSecondaryHeaderText"
+                android:visibility="gone"/>
+        <EditText
+            android:id="@+id/verification_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/account_management_edittext"
+            style="@style/AccountManagementEditText"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/send_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_button"
+            android:background="@drawable/rounded_button_blue"
+            style="@style/AccountManagementButtons"
+            android:layout_marginBottom="20dp"
+            android:enabled="false" />
+        <Button
+            android:id="@+id/verify_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/verify_button"
+            android:background="@drawable/rounded_button_blue"
+            style="@style/AccountManagementButtons"
+            android:layout_marginBottom="20dp"
+            android:enabled="false"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/resend_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/resend_button"
+            android:background="@drawable/rounded_button_blue"
+            style="@style/AccountManagementButtons"
+            android:layout_marginBottom="20dp"
+            android:enabled="false"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>

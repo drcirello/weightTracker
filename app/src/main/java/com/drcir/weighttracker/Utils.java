@@ -49,6 +49,7 @@ public class Utils {
 
     public static void logout(final Context context, final Intent intent){
         FirebaseAuth.getInstance().signOut();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

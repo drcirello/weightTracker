@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class LoginFragment extends Fragment {
+public class EmailLoginFragment extends Fragment {
 
     EditText useremail;
     EditText userpass;
@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_email_login, container, false);
 
         useremail = view.findViewById(R.id.login_useremail);
         userpass = view.findViewById(R.id.login_userpass);
@@ -124,7 +124,7 @@ public class LoginFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Hide keyboard at login
+                //Hide keyboard at email_login
                 Activity activity = getActivity();
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
                 View view = activity.getCurrentFocus();
@@ -132,7 +132,7 @@ public class LoginFragment extends Fragment {
                     view = new View(activity);
                 }
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                accountManagementListener.login(useremail.getText().toString(), userpass.getText().toString());
+                accountManagementListener.email_login(useremail.getText().toString().trim(), userpass.getText().toString().trim());
             }
         });
     }
