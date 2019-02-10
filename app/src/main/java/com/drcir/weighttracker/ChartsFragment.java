@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -300,6 +301,7 @@ public class ChartsFragment extends Fragment {
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date(mDataSet.get(mDataSet.size() - 1).getDate()));
                     int days = cal.get(Calendar.DAY_OF_YEAR);
                     float ytd = days * TimeConversions.ONE_DAY_FLOAT;
                     chartButtonPressed(ytd, DataDefinitions.YTD);

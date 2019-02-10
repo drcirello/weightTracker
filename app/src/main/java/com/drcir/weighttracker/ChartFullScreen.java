@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -195,6 +196,7 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
                     break;
                 case R.id.viewYtd:
                     Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date(dataSet.get(dataSet.size()-1).getDate()));
                     int days = cal.get(Calendar.DAY_OF_YEAR);
                     float ytd = (days - 1) * TimeConversions.ONE_DAY_FLOAT;
                     chartButtonPressed(ytd, DataDefinitions.YTD);
