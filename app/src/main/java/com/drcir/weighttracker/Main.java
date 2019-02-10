@@ -19,6 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.PhoneAuthCredential;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Main extends AppCompatActivity implements AccountManagementListener {
 
     private static final String TAG = Main.class.getName();
@@ -108,7 +112,7 @@ public class Main extends AppCompatActivity implements AccountManagementListener
         }
     }
 
-    public void requestSMSLogin(PhoneAuthCredential credential){
+    public void requestSMSLogin(final PhoneAuthCredential credential){
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -116,6 +120,7 @@ public class Main extends AppCompatActivity implements AccountManagementListener
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
                             mCurrentUser = mAuth.getCurrentUser();
+                            createOnServer(credential);
                             performLogin();
                         } else {
                             // Sign in failed
@@ -133,6 +138,28 @@ public class Main extends AppCompatActivity implements AccountManagementListener
          if(addToStack)
             transaction.addToBackStack(null);
          transaction.commit();
+    }
+
+    public void createOnServer(final PhoneAuthCredential credential){
+        mCurrentUser.getIdToken(true)
+            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult().getToken();
+                        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+                        Call<Void> call = apiInterface.createUserFirebase(token);
+                        //Login regardless of create status for consistency with email
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {}
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                call.cancel();
+                            }
+                        });
+                    }
+                }
+            });
     }
 
     public void email_login(String username, String userpass){

@@ -221,7 +221,7 @@ public class SmsLoginFragment extends Fragment {
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createOnServer(PhoneAuthProvider.getCredential(mVerificationId, verificationCode.getText().toString()));
+                accountManagementListener.sms_login(PhoneAuthProvider.getCredential(mVerificationId, verificationCode.getText().toString()));
             }
         });
 
@@ -252,33 +252,6 @@ public class SmsLoginFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-    }
-
-    public void createOnServer(final PhoneAuthCredential credential){
-        FirebaseUser user = accountManagementListener.getFirebaseAuth().getCurrentUser();
-        user.getIdToken(true)
-            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                public void onComplete(@NonNull Task<GetTokenResult> task) {
-                    if (task.isSuccessful()) {
-                        String token = task.getResult().getToken();
-                        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
-                        Call<Void> call = apiInterface.createUserFirebase(token);
-                        //Login regardless of create status for consistency with email
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {}
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                call.cancel();
-                            }
-                        });
-                        accountManagementListener.sms_login(credential);
-                    }
-                    else{
-                        Toast.makeText(getActivity(), getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
     }
 
     private String formatPhoneNumber(String number){
