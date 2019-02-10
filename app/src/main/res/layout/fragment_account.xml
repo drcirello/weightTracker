@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_button_white"
-            android:text="@string/login"
+            android:text="@string/email_login_button"
             style="@style/AccountManagementButtons"
             android:textColor="@android:color/black" />
     </LinearLayout>

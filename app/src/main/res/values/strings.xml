@@ -7,6 +7,7 @@
     <string name="login_email">Email Log in</string>
     <string name="login_phone">Phone Log in</string>
     <string name="sms_login">Log in with phone</string>
+    <string name="email_login_button">Log in with email</string>
     <string name="create_account">Create account</string>
     <string name="sign_up">Sign Up Free</string>
     <string name="email">Email Address</string>
@@ -24,6 +25,8 @@
     <string name="account_management_title">Weight Tracker</string>
     <string name="account_management_blurb_1">Track Your Weight.</string>
     <string name="account_management_blurb_2">Simple and Easy.</string>
+    <string name="create_swap_to_phone_1">Want to sign up using</string>
+    <string name="create_swap_to_phone_2">your phone? Click here.</string>
 
     <!-- SMS Login Strings-->
     <string name="phone_number">Phone Number</string>

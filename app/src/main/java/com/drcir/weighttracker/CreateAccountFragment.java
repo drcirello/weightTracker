@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class CreateAccountFragment extends Fragment {
     EditText userEmail;
     EditText userPass;
     Button createAccount;
+    LinearLayout phoneCreateSwap;
     ImageView back;
     private AccountManagementListener accountManagementListener;
 
@@ -59,6 +61,7 @@ public class CreateAccountFragment extends Fragment {
         userEmail = view.findViewById(R.id.create_account_useremail);
         userPass = view.findViewById(R.id.create_account_userpass);
         createAccount = view.findViewById(R.id.create_account_button);
+        phoneCreateSwap = view.findViewById(R.id.phone_create_swap);
         back = view.findViewById(R.id.create_account_back);
 
         return view;
@@ -156,6 +159,14 @@ public class CreateAccountFragment extends Fragment {
             }
             }
         });
+
+        phoneCreateSwap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accountManagementListener.swapFragment(new SmsLoginFragment(), true);
+            }
+        });
+
     }
 
     @Override
