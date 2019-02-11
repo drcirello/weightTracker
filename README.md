@@ -1,4 +1,4 @@
-# weightTracker
+# WeightTracker
 Weight Tracking Android App
 
 Android app for tracking a users daily weight. Provides charting and statistics so users can view their changes over time.
@@ -12,6 +12,6 @@ Features:
 
 Screens:
 
-<img src="https://imgur.com/9l4LDBW" width="250" />&nbsp;
-<img src="https://imgur.com/WIGmByI" width="250" />&nbsp;
-<img src="https://imgur.com/wbFekKj" width="250" />&nbsp;
+<img src="https://imgur.com/9l4LDBW.png" width="250" />&nbsp;
+<img src="https://imgur.com/WIGmByI.png" width="250" />&nbsp;
+<img src="https://imgur.com/wbFekKj.png" width="250" />&nbsp;
