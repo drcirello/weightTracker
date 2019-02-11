@@ -3,7 +3,6 @@ package com.drcir.weighttracker;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
@@ -21,21 +20,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SmsLoginFragment extends Fragment {
 
@@ -80,9 +71,9 @@ public class SmsLoginFragment extends Fragment {
             public void onVerificationCompleted(PhoneAuthCredential credential) {
                 // This callback will be invoked in two situations Instant verification and Auto-retrieval
                 Log.d(TAG, "onVerificationCompleted:" + credential);
-                accountManagementListener.sms_login(credential);
-                accountManagementListener.setVerificationFlag(false);
                 Toast.makeText(getActivity(), getString(R.string.auto_verify), Toast.LENGTH_SHORT).show();
+                accountManagementListener.setVerificationFlag(false);
+                accountManagementListener.sms_login(credential);
             }
 
             @Override
