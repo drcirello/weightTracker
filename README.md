@@ -12,6 +12,6 @@ Features:
 
 Screens:
 
-<img src="https://imgur.com/9NBiVIj" width="250" />&nbsp;
+<img src="https://imgur.com/9NBiVIj.png" width="250" />&nbsp;
 <img src="https://imgur.com/WIGmByI.png" width="250" />&nbsp;
 <img src="https://imgur.com/wbFekKj.png" width="250" />&nbsp;
