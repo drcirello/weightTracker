@@ -10,11 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -53,6 +53,12 @@ public class Main extends AppCompatActivity implements AccountManagementListener
     public void onSaveInstanceState(Bundle bundle) {
         bundle.putBoolean("verifying", verificationInProgress);
         super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    public void onResume() {
+        mAuth = FirebaseAuth.getInstance();
+        super.onResume();
     }
 
     @Override
@@ -124,10 +130,10 @@ public class Main extends AppCompatActivity implements AccountManagementListener
                             performLogin();
                         } else {
                             // Sign in failed
+                            Crashlytics.logException(new Exception("Instant Verification failure: " + task.getException().getMessage()));
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(getApplicationContext(), "Invalid Verification Code", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getApplicationContext(), "Invalid Verification Code", Toast.LENGTH_SHORT).show();
+                            mAuth = FirebaseAuth.getInstance();
                         }
                     }
                 });
