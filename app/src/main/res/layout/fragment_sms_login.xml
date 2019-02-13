@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/account_management_edittext"
-            android:digits="1234567890()-"
+            android:inputType="phone"
             android:maxLength="14"
             android:textColorHint="@color/color_phone_hint"
             android:hint="@string/phone_number_hint"
@@ -88,7 +88,6 @@
             android:background="@drawable/rounded_button_blue"
             style="@style/AccountManagementButtons"
             android:layout_marginBottom="20dp"
-            android:enabled="false"
             android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>

@@ -278,17 +278,12 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
 
         if(rangeDifference <= -TimeConversions.ONE_DAY_FLOAT || rangeDifference >= TimeConversions.ONE_DAY_FLOAT) {
             xAxis = ChartUtils.setXaxisScale(xAxis, highViewX - lowViewX, dataStartDate);
-            currentViewSize = newViewSize;
         }
-        updateTitle(chart.getLowestVisibleX(), chart.getHighestVisibleX());
-    }
 
-    @Override
-    public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        updateTitle(chart.getLowestVisibleX(), chart.getHighestVisibleX());
-    }
+        float chartLow = chart.getLowestVisibleX();
+        float chartHigh = chart.getHighestVisibleX();
 
-    public void updateTitle(float chartLow, float chartHigh){
+        //Calculate chart title dates
         if(chartHigh - chartLow < currentViewSize + .05) {
             if(chartLow < .1){
                 chartLow = 0;
@@ -304,6 +299,29 @@ public class ChartFullScreen extends AppCompatActivity implements OnChartGesture
                     chartLow = 0;
             }
         }
+        currentViewSize = chartHigh - chartLow;
+        updateTitle(chartLow, chartHigh);
+    }
+
+    @Override
+    public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        float chartLow = chart.getLowestVisibleX();
+        float chartHigh = chart.getHighestVisibleX();
+
+        //Calculate chart title dates
+        if (chartLow < .1) {
+            chartLow = 0;
+            chartHigh = currentViewSize;
+        }
+        else if (chartHigh > chartMaxValue - .01){
+            chartHigh = chartMaxValue;
+            chartLow = chartHigh - currentViewSize + .1F;
+        }
+
+        updateTitle(chartLow, chartHigh);
+    }
+
+    public void updateTitle(float chartLow, float chartHigh){
         String high = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * (chartHigh + .01F));
         String low = mFormat.format(dataStartDate + TimeConversions.ONE_DAY_MILLI * 10 * chartLow);
         String dateRange = low + " - " + high;

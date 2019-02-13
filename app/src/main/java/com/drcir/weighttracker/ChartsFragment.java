@@ -217,6 +217,9 @@ public class ChartsFragment extends Fragment {
     @Override
     public void onPause(){
         mPaused = true;
+        chart.setData(null);
+        chart.notifyDataSetChanged();
+        chart.invalidate();
         super.onPause();
     }
 
@@ -232,7 +235,6 @@ public class ChartsFragment extends Fragment {
                                 getWeightEntries(token);
                             }
                             else {
-                                addLoadingScreen();
                                 mDataSet = baseActivityListener.getDataSetCharts();
                                 dataSetReceived();
                             }
@@ -369,11 +371,13 @@ public class ChartsFragment extends Fragment {
         entrySet.setDrawCircles(false);
 
         LineData lineData = new LineData(entrySet);
+        chart.setData(lineData);
         //chart options
         //Disable Chart Interactions
         chart.setTouchEnabled(false);
         chart.getDescription().setEnabled(false);
         chart.setScaleEnabled(false);
+        chart.setNoDataText("");
 
         Legend l = chart.getLegend();
         l.setEnabled(false);
@@ -392,7 +396,6 @@ public class ChartsFragment extends Fragment {
 
         xAxis.setGranularity(TimeConversions.ONE_DAY_FLOAT);
 
-        chart.setData(lineData);
         chart.setDrawBorders(true);
         chart.setBorderColor(getResources().getColor(R.color.colorChartBorder));
         chart.setBorderWidth(1);
@@ -417,8 +420,8 @@ public class ChartsFragment extends Fragment {
 
             }
         });
+        setInitialViewport();
     }
-
 
     public void addLoadingScreen(){
         chart.setVisibility(View.INVISIBLE);
@@ -439,7 +442,6 @@ public class ChartsFragment extends Fragment {
     }
 
     public void dataRetrievalFailure(String message){
-
         String failedText = getString(R.string.charts_api_failed_fields);
         charts_current_weight.setText(failedText);
         charts_high_response.setText(failedText);
@@ -487,9 +489,10 @@ public class ChartsFragment extends Fragment {
                     pBar.setVisibility(View.VISIBLE);
                     charts_failed_message.setVisibility(View.GONE);
                     mDataSet = response.body();
-                    baseActivityListener.setDataSetCharts(mDataSet);
-                    if(!mPaused)
+                    if(!mPaused) {
+                        baseActivityListener.setDataSetCharts(mDataSet);
                         dataSetReceived();
+                    }
                 }
             }
 
@@ -512,15 +515,16 @@ public class ChartsFragment extends Fragment {
         } else {
             setChartStatistics();
             createChart();
-            setInitialViewport();
             //chart requires slight delay to render properly
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    selectedButton.setSoundEffectsEnabled(false);
-                    selectedButton.performClick();
-                    selectedButton.setSoundEffectsEnabled(true);
-                    removeLoadingScreen();
+                    if(!mPaused) {
+                        selectedButton.setSoundEffectsEnabled(false);
+                        selectedButton.performClick();
+                        selectedButton.setSoundEffectsEnabled(true);
+                        removeLoadingScreen();
+                    }
                 }
             }, 100);
         }
