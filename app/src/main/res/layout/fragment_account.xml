@@ -41,7 +41,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="45dp"
+        android:layout_marginBottom="25dp"
         android:orientation="vertical">
         <Button
             android:id="@+id/createAccount"
@@ -68,5 +68,37 @@
             android:text="@string/email_login_button"
             style="@style/AccountManagementButtons"
             android:textColor="@android:color/black" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/terms_service_1"
+        style="@style/TermsOfService"
+        android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/terms_service_hyperlink"
+            style="@style/TermsOfService"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/terms_service_2"
+            style="@style/TermsOfService" />
+        <TextView
+            android:id="@+id/privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy_policy_hyperlink"
+            style="@style/TermsOfService"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

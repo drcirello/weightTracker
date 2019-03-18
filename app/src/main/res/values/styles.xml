@@ -242,4 +242,9 @@ a
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="TermsOfService">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

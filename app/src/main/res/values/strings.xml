@@ -139,5 +139,10 @@
     <string name="no_data_year_change">-8</string>
     <string name="charts_no_data_helper">Enter two weights to start\n seeing your charts!</string>
 
+    <!-- Terms of Service -->
+    <string name="terms_service_1">By tapping Sign Up, you agree to our</string>
+    <string name="terms_service_hyperlink"><u>Terms of Service</u>\u0020</string>
+    <string name="terms_service_2">and our\u0020</string>
+    <string name="privacy_policy_hyperlink"><u>Privacy Policy</u>.</string>
 
 </resources>
