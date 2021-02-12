@@ -1,16 +1,16 @@
 package com.drcir.weighttracker;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -18,6 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -130,7 +133,7 @@ public class Main extends AppCompatActivity implements AccountManagementListener
                             performLogin();
                         } else {
                             // Sign in failed
-                            Crashlytics.logException(new Exception("Instant Verification failure: " + task.getException().getMessage()));
+                            FirebaseCrashlytics.getInstance().recordException(new Exception("Instant Verification failure: " + Objects.requireNonNull(task.getException()).getMessage()));
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Invalid Verification Code", Toast.LENGTH_SHORT).show();
                             mAuth = FirebaseAuth.getInstance();
